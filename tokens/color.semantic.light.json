@@ -1,0 +1,74 @@
+{
+  "$description": "Anlamsal renkler, açık tema. Bileşenler ve Tailwind sınıfları YALNIZCA bunları kullanır. Dark mode geldiğinde aynı yapıda color.semantic.dark.json eklenir. Kaynak: DESIGN.md §2.2–§2.7, §9.2.1",
+  "color": {
+    "brand": {
+      "primary": { "$type": "color", "$value": "{primitive.teal.700}" },
+      "primary-hover": { "$type": "color", "$value": "{primitive.teal.800}" },
+      "primary-subtle": { "$type": "color", "$value": "{primitive.teal.100}" },
+      "accent": { "$type": "color", "$value": "{primitive.teal.500}", "$description": "Metin rengi olarak kullanılmaz (DESIGN §9.2)" }
+    },
+    "text": {
+      "primary": { "$type": "color", "$value": "{primitive.neutral.900}" },
+      "secondary": { "$type": "color", "$value": "{primitive.neutral.500}" },
+      "tertiary": { "$type": "color", "$value": "{primitive.neutral.400}" },
+      "inverse": { "$type": "color", "$value": "{primitive.white}" },
+      "inverse-secondary": { "$type": "color", "$value": "{primitive.neutral.300}" },
+      "brand": { "$type": "color", "$value": "{primitive.teal.700}" },
+      "success": { "$type": "color", "$value": "{primitive.green.700}" },
+      "danger": { "$type": "color", "$value": "{primitive.red.600}" },
+      "warning": { "$type": "color", "$value": "{primitive.amber.700}" },
+      "info": { "$type": "color", "$value": "{primitive.blue.600}" },
+      "on-task": { "$type": "color", "$value": "{primitive.indigo.700}" },
+      "on-payment": { "$type": "color", "$value": "{primitive.rose.700}" },
+      "on-warning": { "$type": "color", "$value": "{primitive.amber.800}" }
+    },
+    "surface": {
+      "page": { "$type": "color", "$value": "{primitive.neutral.50}" },
+      "card": { "$type": "color", "$value": "{primitive.white}" },
+      "muted": { "$type": "color", "$value": "{primitive.neutral.100}" },
+      "selected": { "$type": "color", "$value": "{primitive.teal.100}" }
+    },
+    "border": {
+      "default": { "$type": "color", "$value": "{primitive.neutral.200}" },
+      "subtle": { "$type": "color", "$value": "{primitive.neutral.100}" },
+      "strong": { "$type": "color", "$value": "{primitive.neutral.300}" },
+      "focus": { "$type": "color", "$value": "{primitive.teal.700}" },
+      "error": { "$type": "color", "$value": "{primitive.red.600}" },
+      "success": { "$type": "color", "$value": "{primitive.green.700}" }
+    },
+    "status": {
+      "success": { "$type": "color", "$value": "{primitive.green.700}" },
+      "danger": { "$type": "color", "$value": "{primitive.red.600}" },
+      "warning": { "$type": "color", "$value": "{primitive.amber.600}", "$description": "İkon/nokta/çerçeve için. Küçük metinde text.warning kullanılır" },
+      "info": { "$type": "color", "$value": "{primitive.blue.600}" },
+      "success-subtle": { "$type": "color", "$value": "{primitive.green.100}" },
+      "danger-subtle": { "$type": "color", "$value": "{primitive.red.100}" },
+      "warning-subtle": { "$type": "color", "$value": "{primitive.orange.100}" },
+      "info-subtle": { "$type": "color", "$value": "{primitive.blue.100}" }
+    },
+    "action": {
+      "primary-pressed": { "$type": "color", "$value": "{primitive.teal.900}", "$extensions": { "pickaly": { "status": "proposed" } } },
+      "secondary-hover": { "$type": "color", "$value": "{primitive.teal.200}", "$extensions": { "pickaly": { "status": "proposed" } } },
+      "tertiary-hover": { "$type": "color", "$value": "{primitive.neutral.50}" },
+      "danger-hover": { "$type": "color", "$value": "{primitive.red.700}", "$extensions": { "pickaly": { "status": "proposed" } } }
+    },
+    "category": {
+      "teal": { "$type": "color", "$value": "{primitive.teal.100}" },
+      "blue": { "$type": "color", "$value": "{primitive.blue.100}" },
+      "violet": { "$type": "color", "$value": "{primitive.violet.100}" },
+      "pink": { "$type": "color", "$value": "{primitive.pink.100}" },
+      "orange": { "$type": "color", "$value": "{primitive.orange.100}" },
+      "amber": { "$type": "color", "$value": "{primitive.amber.100}" },
+      "green": { "$type": "color", "$value": "{primitive.green.100}" },
+      "red": { "$type": "color", "$value": "{primitive.red.100}" },
+      "slate": { "$type": "color", "$value": "{primitive.neutral.200}" }
+    },
+    "chart": {
+      "income": { "$type": "color", "$value": "{primitive.green.600}" },
+      "expense": { "$type": "color", "$value": "{primitive.rose.600}" },
+      "savings": { "$type": "color", "$value": "{primitive.teal.600}" },
+      "balance": { "$type": "color", "$value": "{primitive.indigo.500}" },
+      "neutral": { "$type": "color", "$value": "{primitive.neutral.300}" }
+    }
+  }
+}
