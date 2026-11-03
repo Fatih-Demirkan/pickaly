@@ -1,0 +1,49 @@
+# --- Ortam değişkenleri ve sırlar (TECH_STACK §13.3) ---
+# Değer içeren hiçbir .env dosyası commit edilmez. Yalnızca .env.example repoda durur.
+.env
+.env.*
+!.env.example
+
+# --- Bağımlılıklar ---
+node_modules/
+.pnpm-store/
+
+# --- Next.js / build çıktıları ---
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# --- Vercel ---
+.vercel/
+
+# --- Supabase (yerel) ---
+supabase/.branches/
+supabase/.temp/
+supabase/.env
+
+# --- Test ve kapsam çıktıları ---
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# --- Loglar ---
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Sentry ---
+.sentryclirc
+
+# --- İşletim sistemi / editör ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
