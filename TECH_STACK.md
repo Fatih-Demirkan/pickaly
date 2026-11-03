@@ -8,6 +8,7 @@
 > - Sürüm 2.4: Dile bağlı biçimlendirme (§3.4), hukuki metinlerin yayın engeli olduğu (§6.6, R5), CI'da kabul kriteri kontrolleri (§9.2), D-25'e tüm gün hatırlatma saati.
 > - Sürüm 2.5: Kategori arşivleme (D-32, §5.2, §5.6, §4.1). Kurulum planı (§13, D-33): onay noktaları, ortam ayrımı, ortam değişkenleri ve sırlar, güvenlik/RLS kontrol listesi, test verisi politikası, bölge ve KVKK notu.
 > - Sürüm 2.6: Kurulum ilerlemesi (S-1…S-3). Branch koruması tek geliştiriciye göre güncellendi (§9.1: PR zorunlu, onay 0).
+> - Sürüm 2.7: S-4 ve S-5 tamamlandı. Production bölgesi eu-west-1 (D-21a).
 > **Durum:** Mimari analiz dokümanı. Kod, paket kurulumu veya proje iskeleti içermez.
 > **İlgili doküman:** [RESPONSIVE.md](RESPONSIVE.md)
 > **Tasarım kaynağı:** Figma `Fatih-Test` dosyasının yalnızca **Pages** ve **Components** sekmeleri. AI Pages kapsam dışıdır.
@@ -35,7 +36,7 @@
 2. **Para tutarları kuruş cinsinden tam sayı (`bigint`)** olarak saklanır. Zamanlar `timestamptz` tipindedir (§5.3).
 3. **Design token'lar tek bir JSON kaynağından** üretilir. Akış tek yönlüdür: Figma → JSON → CSS değişkenleri / Tailwind (§8).
 4. **Tek uygulamalı repo** kullanılır. Klasörler katmanlı tutulur, monorepo'ya bölünmesi gerekirse mekanik bir taşımayla yapılabilir (§2).
-5. **Veri bölgesi AB'dir** (Frankfurt). Supabase ve Vercel aynı bölgeye yakın çalışır (§6.6).
+5. **Veri bölgesi AB'dir:** staging Frankfurt (eu-central-1), production İrlanda (eu-west-1) [D-21a]. Vercel fonksiyonları her ortamda kendi veritabanına yakın çalışır (§6.6).
 
 **İlk sürümü (v1.0) şekillendiren ürün kararları:**
 
@@ -455,7 +456,7 @@ Pre-commit ve CI'da sır taraması çalışır (açık kaynaklı tarayıcı, ör
 - **Doğrulama:** İstemcide Zod, veritabanında `CHECK`. İkisi birbirinin yerine geçmez.
 
 ### 6.6 Gizlilik ve uyumluluk
-- **Bölge:** Supabase AB (Frankfurt), Vercel fonksiyon bölgesi `fra1` [D-21].
+- **Bölge:** Supabase AB; staging Frankfurt (eu-central-1), production İrlanda (eu-west-1). Vercel fonksiyon bölgesi production'da `dub1` (Dublin), Preview'da `fra1` [D-21a].
 - **Kişisel veri:** Loglarda ve Sentry'de tutar, başlık, not, adres gibi kişisel veriler yazdırılmaz (Sentry `beforeSend` filtresi).
 - **Hesap silme:** Kullanıcının tüm satırları ve Storage dosyaları **anında** silinir. Yedeklerdeki kopyalar, sağlayıcının yedek saklama süresi sonunda kendiliğinden düşer [D-10]. Bu süre gizlilik metninde belirtilir.
 - **[Hukuki]** KVKK kapsamında aydınlatma metni, yurt dışına (AB) veri aktarımı için açık rıza ihtiyacı ve kullanım koşulları. Profil'deki "Kullanım koşulları ve gizlilik" satırı [Figma] bu metinlere bağlanır. Teknik taraf metinlerden bağımsız hazırlanacak: kayıtta onay kutusu, onay zamanı ve metin sürümü saklanır. **Metinler henüz yazılmadı ve hukuki onay almadı.** Hukuk uzmanı onayı yayın engelidir (PRD §1.8, LB-01). Bu dokümandaki hukuki ifadeler hukuki görüş değildir.
@@ -675,9 +676,10 @@ iOS ve Android uygulamaları **çok ileri bir aşamada Expo (React Native)** ile
 | D-18 | Toast ve geri al | Toast 4 sn. "Görevi tamamla" ve "Ödendi olarak işaretle" için 5 sn "Geri al". Silmede geri al yok (onaylı) | Tek dokunuşluk aksiyonlar kazara yapılabilir. Silme zaten onaylı |
 | D-19 | Kaydedilmemiş değişiklik | Tüm formlarda kapatırken onay | Uzun formlarda veri kaybını önler |
 | D-20 | Dil | ~~v1.0 yalnızca Türkçe~~ → **D-31 ile revize edildi** | – |
-| D-21 | Veri bölgesi | AB (Frankfurt), Vercel `fra1`. **Bölge seçimi tek başına KVKK uyumu sağlamaz** (§13.7, PRD LB-01) | Gecikme. Hukuki değerlendirme ayrıca yapılır |
+| D-21 | Veri bölgesi | AB (Frankfurt), Vercel `fra1`. **Bölge seçimi tek başına KVKK uyumu sağlamaz** (§13.7, PRD LB-01). → **D-21a ile revize edildi** | Gecikme. Hukuki değerlendirme ayrıca yapılır |
+| D-21a | Veri bölgesi *(D-21'in revizyonu)* | **Staging: eu-central-1 (Frankfurt). Production: eu-west-1 (İrlanda).** İkisi de AB. Vercel fonksiyon bölgesi production'da `dub1`, Preview'da `fra1`. KVKK notu aynen geçerli | Supabase'in proje oluşturma ekranı belirli bölge yerine yalnızca bölge grubu ("Central EU") seçtiriyor; production iki denemede de eu-west-1'e atandı. Ürün sahibi kararıyla kabul edildi (2026-11-03) |
 | D-32 | Kategori arşivleme | Kullanılmış kategori silinmez, arşivlenir. Son aktif kategori korunur (PRD BR-CAT-002…008) | Ürün sahibi onayı. Geçmiş kayıt ve rapor bütünlüğü |
-| D-33 | Kurulum | GitHub (private) + Supabase staging/prod (Frankfurt) + Vercel. Ücretli veya geri dönüşü zor her adım ayrıca onaylanır (§13) | Ürün sahibi onayı |
+| D-33 | Kurulum | GitHub (private) + Supabase staging (Frankfurt) / prod (İrlanda) [D-21a] + Vercel. Ücretli veya geri dönüşü zor her adım ayrıca onaylanır (§13) | Ürün sahibi onayı |
 | D-22 | Yedek | Günlük yedek. PITR büyümeyle | Maliyet / risk dengesi |
 | D-23 | Planlar | Production'da Supabase Pro + Vercel Pro | Duraklatma ve ticari kullanım kısıtları |
 | D-24 | Bildirim ikonu | Uygulama içi Bildirimler panelini açar, okunmamış rozeti gösterir | İkon Pages'ta var, hedefi yoktu |
@@ -704,14 +706,16 @@ iOS ve Android uygulamaları **çok ileri bir aşamada Expo (React Native)** ile
 
 ## 13. Kurulum Planı (GitHub · Supabase · Vercel) [Karar: ürün sahibi onayı]
 
-> **Durum (2026-11-03):** S-1, S-2 ve S-3 tamamlandı. Diğer adımlar bekliyor. Henüz hiçbir Supabase / Vercel projesi ve ücretli kaynak oluşturulmadı.
+> **Durum (2026-11-03):** S-1…S-5 tamamlandı. Supabase projeleri ücretsiz planda. Vercel projesi ve ücretli kaynak henüz yok.
 >
 > | Adım | Durum | Not |
 > |---|---|---|
 > | S-1 | ✅ | Yerel git, `main` dalı, `.gitignore`, `.env.example`, ilk commit |
 > | S-2 | ✅ | Private repo `Fatih-Demirkan/pickaly`. Commit kimliği GitHub noreply adresiyle |
 > | S-3 | ✅ | Ruleset `main-protection` (silme ve force push engeli, PR zorunlu, onay 0). Environments: `staging` (korumasız), `production` (zorunlu onaylayıcı: Fatih-Demirkan, yalnızca `main`). Ücretli plan gerekmedi |
-> | S-4 – S-9 | ⏳ | Bekliyor |
+> | S-4 | ✅ | Organizasyon `Pickaly` (Free). `pickaly-staging` eu-central-1, `pickaly-prod` eu-west-1 (D-21a). Production ilk denemede yanlış bölgede açıldı, boşken silinip yeniden oluşturuldu; ikinci denemede de eu-west-1 atandı |
+> | S-5 | ✅ | İki projede: Email açık, diğer sağlayıcılar kapalı, Confirm email açık, OTP 600 sn / 6 hane, minimum şifre 8. **Production'da yeni kayıtlar kapalı.** "Prevent use of leaked passwords" yalnızca Pro planda, açılmadı. Site URL / Redirect URL (S-6 sonrası) ve iki dilli e-posta şablonları (S-8) bekliyor |
+> | S-6 – S-9 | ⏳ | Bekliyor. Not: Supabase projelerinde GitHub entegrasyonu bağlı görünüyor; migration akışıyla (§9.3) çakışmaması için S-8 öncesi gözden geçirilecek |
 >
 > **Kurallar:**
 > 1. **Gerçek kullanıcı verisi kullanılmaz.** Tüm ortamlarda yalnızca sentetik test verisi bulunur. Yayın engelleri (PRD §1.8) kapanana kadar production ortamı gerçek kullanıcıya açılmaz.
@@ -725,7 +729,7 @@ iOS ve Android uygulamaları **çok ileri bir aşamada Expo (React Native)** ile
 | K-1 | **GitHub hesabı / organizasyonu ve repo adı** | Repo hangi hesapta duracak? Kişisel hesap mı, bir organizasyon mu? Sonradan taşınabilir ama bağlantılar (Vercel, Actions) yeniden kurulur | Kişisel hesapta **private** repo: `pickaly` |
 | K-2 | **GitHub branch koruması ve environment onay kuralları** | Private repolarda branch protection / ruleset ve environment koruma kuralları GitHub'ın ücretsiz planında sınırlı olabilir; tam kullanım için **ücretli plan (Pro/Team)** gerekebilir. Kurulumda plan seviyesi kontrol edilir | Önce ücretsiz planda ne açılabildiği kontrol edilir. Ücretli plan gerekiyorsa **ayrıca onay istenir**. Onay yoksa CI kontrolleri + "doğrudan `main`'e push yapılmaz" ekip kuralı ile ilerlenir |
 | K-3 | **Supabase organizasyonu ve 2 proje** (`pickaly-staging`, `pickaly-prod`) | Supabase ücretsiz planında kuruluş başına sınırlı sayıda ücretsiz proje var ve hareketsiz projeler duraklatılır | Geliştirme süresince iki proje de **ücretsiz planda** açılır |
-| K-4 | **Supabase bölgesi** | Proje bölgesi **oluşturulduktan sonra değiştirilemez** (geri dönüşü zor) | **AB – Frankfurt (eu-central-1)**, iki proje için de. Oluşturmadan önce son kez teyit istenir |
+| K-4 | **Supabase bölgesi** | Proje bölgesi **oluşturulduktan sonra değiştirilemez** (geri dönüşü zor) | ~~İki proje de Frankfurt~~ → **Sonuç:** staging eu-central-1, production eu-west-1 (D-21a) |
 | K-5 | **Supabase production planı (Pro)** | Ücretli abonelik. Yedekleme ve duraklatmama için gerekli (D-23) | Geliştirme sırasında **yükseltilmez.** Yayın engelleri kapanmaya yaklaşınca ayrıca onay istenir |
 | K-6 | **Vercel planı** | Ücretsiz plan (Hobby) kişisel / ticari olmayan kullanım içindir. Ticari yayın ve ekip kullanımı için **ücretli plan (Pro)** gerekir (D-23) | Geliştirme ve preview için mevcut hesap. Ticari yayından önce Pro için ayrıca onay istenir |
 | K-7 | **E-posta gönderimi (SMTP)** | Supabase'in yerleşik e-posta servisi düşük gönderim limitli ve geliştirme amaçlıdır. Production'da OTP e-postaları (D-1) için harici bir e-posta servisi gerekir. Servis seçimine göre **ücretli** olabilir | Staging'de yerleşik servis. Production için servis seçimi ve maliyeti ayrıca onaya sunulur |
@@ -739,7 +743,7 @@ iOS ve Android uygulamaları **çok ileri bir aşamada Expo (React Native)** ile
 | | Local | Staging | Production |
 |---|---|---|---|
 | Amaç | Geliştirici makinesi | PR önizlemeleri, test, kabul (PRD AC) | Yayın. LB'ler kapanana kadar gerçek kullanıcıya kapalı |
-| Supabase | Supabase CLI ile yerel (Docker) | `pickaly-staging` (Frankfurt) | `pickaly-prod` (Frankfurt) |
+| Supabase | Supabase CLI ile yerel (Docker) | `pickaly-staging` (Frankfurt, eu-central-1) | `pickaly-prod` (İrlanda, eu-west-1) [D-21a] |
 | Vercel | `pnpm dev` | **Preview** ortamı (her PR) | **Production** ortamı (`main`) |
 | Veri | `seed.sql` sentetik veri | Sentetik test verisi ve test kullanıcıları | Boş. Yayına kadar yalnızca kabul testi için sentetik hesap |
 | Auth ayarları | Yerel | Kendi Site URL / Redirect URL listesi (yalnızca preview adresleri) | Kendi Site URL / Redirect URL listesi (yalnızca production adresi) |
@@ -795,7 +799,7 @@ Kurulumun her ortamda tamamlanmış sayılması için:
 | S-1 | Yerel klasörde git başlatma, `.gitignore`, `.env.example`, mevcut dokümanların ilk commit'i | Claude (yerel) | Ücretsiz, geri alınabilir | – |
 | S-2 | GitHub'da **private** repo oluşturma ve ilk push | Claude (`gh` CLI, kullanıcının oturumuyla) veya kullanıcı | Ücretsiz | **K-1 onayı** |
 | S-3 | Branch / ruleset ve Actions environment'larını (`staging`, `production`) kurma | Claude veya kullanıcı | Plan seviyesine bağlı (K-2) | S-2, gerekiyorsa **K-2 onayı** |
-| S-4 | Supabase organizasyonu ve **iki proje** (Frankfurt) | **Kullanıcı** (dashboard; hesap ve ödeme bilgisi kullanıcıya ait) | Ücretsiz plan; **bölge geri alınamaz** | **K-3, K-4 teyidi** |
+| S-4 | Supabase organizasyonu ve **iki proje** (AB; bkz. D-21a) | **Kullanıcı** (dashboard; hesap ve ödeme bilgisi kullanıcıya ait) | Ücretsiz plan; **bölge geri alınamaz** | **K-3, K-4 teyidi** |
 | S-5 | Supabase Auth ayarları (URL'ler, e-posta doğrulama, OTP) ve MFA | Kullanıcı (Claude adım adım yönlendirir) | Ücretsiz | S-4 |
 | S-6 | Vercel projesi, GitHub reposuna bağlama, ortam kapsamlı değişkenler | Kullanıcı (hesap girişi) + Claude yönlendirme | Mevcut plan (K-6) | S-2, S-4 |
 | S-7 | Proje iskeleti: Next.js, Tailwind, Supabase istemcileri, token build, lint/test araçları (**paket kurulumu**) | Claude (yerel) | Ücretsiz | **Ayrı onay:** kod ve paket kurulumuna geçiş |
@@ -810,6 +814,6 @@ Kurulumun her ortamda tamamlanmış sayılması için:
 - **Test hesapları:** Yalnızca test amaçlı e-posta adresleriyle açılır. Production'daki kabul testi hesapları yayından önce silinir.
 
 ### 13.7 Veri bölgesi ve KVKK
-- **Bölge seçimi:** Supabase projeleri **AB (Frankfurt)** bölgesinde açılır [D-21].
+- **Bölge seçimi:** Supabase projeleri **AB** bölgesindedir: staging Frankfurt, production İrlanda [D-21a].
 - **[Hukuki] Bölge seçimi tek başına KVKK uyumu sağlamaz.** AB bölgesi Türkiye dışındadır; yurt dışına veri aktarımına ilişkin hukuki gereklilikler, aydınlatma ve açık rıza metinleri, veri işleme sözleşmeleri ve saklama/silme süreleri ayrıca değerlendirilmelidir.
 - Bu değerlendirme hukuk uzmanı tarafından yapılır ve **yayın engelidir** (PRD LB-01). Bu doküman hukuki görüş değildir.
