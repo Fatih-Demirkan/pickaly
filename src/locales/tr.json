@@ -1,0 +1,40 @@
+{
+  "app": {
+    "name": "Pickaly",
+    "tagline": "Life & Money Planner",
+    "description": "Görevlerinizi, takviminizi, gelir-giderlerinizi ve birikimlerinizi tek yerde planlayın."
+  },
+  "common": {
+    "loading": "Yükleniyor…",
+    "retry": "Tekrar dene",
+    "backHome": "Ana sayfaya dön",
+    "skipToContent": "İçeriğe geç"
+  },
+  "locale": {
+    "label": "Dil",
+    "tr": "Türkçe",
+    "en": "English"
+  },
+  "environment": {
+    "local": "Yerel ortam",
+    "staging": "STAGING",
+    "production": "Production"
+  },
+  "start": {
+    "title": "Pickaly hazırlanıyor",
+    "body": "Bu ekran geliştirme sürecinin başlangıç ekranıdır. Uygulama modülleri sonraki aşamalarda eklenecek.",
+    "foundationTitle": "Hazır olan altyapı",
+    "items": {
+      "tokens": "Tasarım token'ları",
+      "i18n": "Türkçe ve İngilizce dil desteği",
+      "icons": "Lucide ikon sistemi",
+      "responsive": "Mobil, tablet ve masaüstü yerleşimi"
+    }
+  },
+  "errors": {
+    "notFoundTitle": "Sayfa bulunamadı",
+    "notFoundBody": "Aradığınız sayfa taşınmış ya da hiç var olmamış olabilir.",
+    "genericTitle": "Bir şeyler ters gitti",
+    "genericBody": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin."
+  }
+}
