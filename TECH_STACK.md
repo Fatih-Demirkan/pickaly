@@ -9,6 +9,7 @@
 > - Sürüm 2.5: Kategori arşivleme (D-32, §5.2, §5.6, §4.1). Kurulum planı (§13, D-33): onay noktaları, ortam ayrımı, ortam değişkenleri ve sırlar, güvenlik/RLS kontrol listesi, test verisi politikası, bölge ve KVKK notu.
 > - Sürüm 2.6: Kurulum ilerlemesi (S-1…S-3). Branch koruması tek geliştiriciye göre güncellendi (§9.1: PR zorunlu, onay 0).
 > - Sürüm 2.7: S-4 ve S-5 tamamlandı. Production bölgesi eu-west-1 (D-21a).
+> - Sürüm 2.8: Phase 1 (proje altyapısı) uygulama notları ve plandan sapmalar (§14).
 > **Durum:** Mimari analiz dokümanı. Kod, paket kurulumu veya proje iskeleti içermez.
 > **İlgili doküman:** [RESPONSIVE.md](RESPONSIVE.md)
 > **Tasarım kaynağı:** Figma `Fatih-Test` dosyasının yalnızca **Pages** ve **Components** sekmeleri. AI Pages kapsam dışıdır.
@@ -817,3 +818,26 @@ Kurulumun her ortamda tamamlanmış sayılması için:
 - **Bölge seçimi:** Supabase projeleri **AB** bölgesindedir: staging Frankfurt, production İrlanda [D-21a].
 - **[Hukuki] Bölge seçimi tek başına KVKK uyumu sağlamaz.** AB bölgesi Türkiye dışındadır; yurt dışına veri aktarımına ilişkin hukuki gereklilikler, aydınlatma ve açık rıza metinleri, veri işleme sözleşmeleri ve saklama/silme süreleri ayrıca değerlendirilmelidir.
 - Bu değerlendirme hukuk uzmanı tarafından yapılır ve **yayın engelidir** (PRD LB-01). Bu doküman hukuki görüş değildir.
+
+---
+
+## 14. Phase 1 – Uygulama Notları ve Plandan Sapmalar
+
+> Phase 1'de (proje altyapısı) kurulan yapı ve bu dokümandaki plandan bilinçli farklar. Ürün kararı içermez.
+
+| # | Konu | Plan (bu doküman) | Uygulama | Gerekçe |
+|---|---|---|---|---|
+| P1-1 | Next.js sürümü | Güncel kararlı | **16.4.4** | 16.4.5 kurulum günü yayınlandı; pnpm 12'nin tedarik zinciri politikası (en az 1 gün bekleme) reddetti. Politika gevşetilmedi |
+| P1-2 | Paket yöneticisi | pnpm | pnpm **12.16.1**, Node ile gelen **Corepack** üzerinden (`package.json` → `packageManager`). Global kurulum yok | Makinede pnpm kurulu değildi |
+| P1-3 | Oturum yenileme dosyası | `src/middleware.ts` | Next.js 16'da adı **`src/proxy.ts`**. Auth aşamasında eklenecek; Phase 1'de yok | Next.js 16 değişikliği |
+| P1-4 | Cache Components | – | Açık (Next.js 16 varsayılanı). Dil cookie'den okunduğu için çeviri kullanan içerik kök layout'ta `<Suspense>` içinde; `<html lang>` satır içi script ile boyamadan önce ayarlanıyor | Next.js 16 resmi kalıbı |
+| P1-5 | Çeviri dosyaları | `src/i18n/tr.json · en.json` | Metinler **`src/locales/`**, yapılandırma **`src/i18n/`** (config, request, actions) | Metin ile yapılandırmayı ayırmak |
+| P1-6 | Dil yönlendirmesi | – | URL'de dil öneki **yok**; dil `pickaly_locale` cookie'sinden. Profil ayarına bağlanmaya hazır (`setLocale` server action) | §2'deki öneksiz adreslerle uyum |
+| P1-7 | Token üretimi | Style Dictionary | **Bağımlılıksız betik** (`scripts/build-tokens.mjs`). `pnpm tokens:build` / `tokens:check` | Tek hedef (CSS) için ek paket gereksiz. İkinci hedef (ör. React Native) gerekirse Style Dictionary'e geçilir |
+| P1-8 | Tailwind boşluk ölçeği | 4…64 | `--spacing: 1px`. `p-16` = 16 px; token adı = değer (DESIGN §4.1) | Figma'daki token adlarıyla birebir |
+| P1-9 | Tailwind varsayılanları | Sıfırlanır | Renk, radius, gölge, breakpoint, font ve metin ölçekleri sıfırlandı. Yalnızca Pickaly token sınıfları var (`bg-surface-card`, `text-heading-h1`, `rounded-lg`, `shadow-floating`, `tablet:` / `laptop:` / `detail:` / `desktop:`) | DESIGN §10.5 |
+| P1-10 | z-index katmanları | Tanımlı değil | **[Varsayım]** `base 0 · sticky 10 · nav 20 · fab 30 · drawer 40 · modal 50 · toast 60` (`tokens/layout.json`, durum: proposed) | DESIGN/RESPONSIVE'de z-index yok; overlay hiyerarşisinden türetildi |
+| P1-11 | ESLint mimari kuralları | Lint ile zorlanır | Aktif: `process.env` yalnızca `src/lib/env.ts`'te; `lucide-react` yalnızca ikon kayıt defterinde; `.tsx` dosyalarında HEX renk yasak. Feature katman kuralları ilk modülle eklenecek | Kural ihlali deneme dosyasıyla doğrulandı |
+| P1-12 | Kurulum betikleri | – | `pnpm-workspace.yaml` → `allowBuilds`: sharp, unrs-resolver, @parcel/watcher, @swc/core **çalıştırılmaz** | Tedarik zinciri güvenliği; bu paketlerin betikleri gerekmiyor |
+| P1-13 | Favicon / PWA ikonları | 192 / 512 / maskable | Next.js varsayılan favicon'u kaldırıldı. Manifest'te ikon yok | **[Eksik]** Logo/uygulama ikonu Figma'da yok |
+| P1-14 | Ertelenen paketler | TanStack Query, RHF + Zod, Radix, Vaul, date-fns, Sonner, Serwist, Sentry, Vitest, Playwright, Prettier | Kurulmadı | Phase 1'de kullanılmıyor; ilgili aşamada eklenecek |
