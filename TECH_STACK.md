@@ -7,6 +7,7 @@
 > - Sürüm 2.3: Veri modeli (§5.2, §5.4, §5.6) ve RPC listesi (§4.1) PRD ürün kararlarına (Q-1…Q-24) göre güncellendi. `notifications` tablosu eklendi.
 > - Sürüm 2.4: Dile bağlı biçimlendirme (§3.4), hukuki metinlerin yayın engeli olduğu (§6.6, R5), CI'da kabul kriteri kontrolleri (§9.2), D-25'e tüm gün hatırlatma saati.
 > - Sürüm 2.5: Kategori arşivleme (D-32, §5.2, §5.6, §4.1). Kurulum planı (§13, D-33): onay noktaları, ortam ayrımı, ortam değişkenleri ve sırlar, güvenlik/RLS kontrol listesi, test verisi politikası, bölge ve KVKK notu.
+> - Sürüm 2.6: Kurulum ilerlemesi (S-1…S-3). Branch koruması tek geliştiriciye göre güncellendi (§9.1: PR zorunlu, onay 0).
 > **Durum:** Mimari analiz dokümanı. Kod, paket kurulumu veya proje iskeleti içermez.
 > **İlgili doküman:** [RESPONSIVE.md](RESPONSIVE.md)
 > **Tasarım kaynağı:** Figma `Fatih-Test` dosyasının yalnızca **Pages** ve **Components** sekmeleri. AI Pages kapsam dışıdır.
@@ -565,7 +566,9 @@ src/styles/tokens.css   (CSS değişkenleri) → Tailwind @theme
 
 ### 9.1 Branch ve commit
 - **Akış:** GitHub Flow. `main` her zaman yayınlanabilir. İş `feature/…`, `fix/…`, `chore/…`, `db/…` branch'lerinde yapılır.
-- **Koruma:** `main`'e yalnızca PR ile girilir. CI yeşil + en az 1 onay gerekir. Doğrudan push kapalı.
+- **Koruma:** `main`'e yalnızca PR ile girilir. Doğrudan push, force push ve dal silme kapalı (GitHub ruleset `main-protection`).
+  - **Onay sayısı:** Şu an **0**. Proje tek geliştiricili ve GitHub kişinin kendi PR'ını onaylamasına izin vermiyor. Ekibe ikinci geliştirici katılınca **1**'e çıkarılır.
+  - **CI zorunluluğu:** CI kurulunca (S-8) "status checks" kuralı ruleset'e eklenir. O andan itibaren CI yeşil olmadan merge yapılamaz.
 - **Commit mesajları:** Conventional Commits.
 
 ### 9.2 CI (her PR'da)
@@ -701,7 +704,14 @@ iOS ve Android uygulamaları **çok ileri bir aşamada Expo (React Native)** ile
 
 ## 13. Kurulum Planı (GitHub · Supabase · Vercel) [Karar: ürün sahibi onayı]
 
-> **Durum:** Plan aşamasında. Henüz hiçbir hesap, proje, repo veya kaynak oluşturulmadı.
+> **Durum (2026-11-03):** S-1, S-2 ve S-3 tamamlandı. Diğer adımlar bekliyor. Henüz hiçbir Supabase / Vercel projesi ve ücretli kaynak oluşturulmadı.
+>
+> | Adım | Durum | Not |
+> |---|---|---|
+> | S-1 | ✅ | Yerel git, `main` dalı, `.gitignore`, `.env.example`, ilk commit |
+> | S-2 | ✅ | Private repo `Fatih-Demirkan/pickaly`. Commit kimliği GitHub noreply adresiyle |
+> | S-3 | ✅ | Ruleset `main-protection` (silme ve force push engeli, PR zorunlu, onay 0). Environments: `staging` (korumasız), `production` (zorunlu onaylayıcı: Fatih-Demirkan, yalnızca `main`). Ücretli plan gerekmedi |
+> | S-4 – S-9 | ⏳ | Bekliyor |
 >
 > **Kurallar:**
 > 1. **Gerçek kullanıcı verisi kullanılmaz.** Tüm ortamlarda yalnızca sentetik test verisi bulunur. Yayın engelleri (PRD §1.8) kapanana kadar production ortamı gerçek kullanıcıya açılmaz.
