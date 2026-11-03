@@ -1,0 +1,8 @@
+# Bağımlılıkların kurulum (postinstall/build) betikleri varsayılan olarak çalıştırılmaz.
+# Burada yalnızca bilinçli olarak karar verilmiş paketler listelenir.
+allowBuilds:
+  sharp: false
+  unrs-resolver: false
+  # next-intl'in isteğe bağlı mesaj çıkarma aracının bağımlılıkları; Pickaly'de kullanılmıyor.
+  "@parcel/watcher": false
+  "@swc/core": false

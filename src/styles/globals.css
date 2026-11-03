@@ -1,0 +1,62 @@
+@import "tailwindcss";
+/* Pickaly token'ları: Tailwind'in varsayılan renk, boşluk, radius, gölge, breakpoint ve metin ölçeklerini
+   sıfırlar ve yalnızca DESIGN.md token'larını tanımlar. Üretilen dosyadır: pnpm tokens:build */
+@import "./tokens.css";
+
+/* Tema: v1'de yalnızca açık tema (PRD UX-009). Dark mode geldiğinde semantic renkler
+   [data-theme="dark"] altında yeniden tanımlanır; bileşen kodu değişmez (TECH_STACK §8.2). */
+:root {
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-surface-page font-sans text-body-md text-text-primary antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Görünür odak halkası: 2 px border.focus + 2 px boşluk (DESIGN §9.3). Kaldırılmaz. */
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: var(--border-width-thick) solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+
+  /* Hareket azaltma tercihine saygı. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility skip-link {
+  position: absolute;
+  inset-inline-start: var(--space-16);
+  top: var(--space-16);
+  z-index: var(--z-toast);
+  transform: translateY(-200%);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-card);
+  padding: var(--space-8) var(--space-16);
+  &:focus {
+    transform: none;
+  }
+}
+
+/* Güvenli alan payları (PWA, RESPONSIVE §5.3). */
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}

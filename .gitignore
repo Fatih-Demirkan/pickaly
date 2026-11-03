@@ -4,9 +4,15 @@
 .env.*
 !.env.example
 
+# --- Sertifika / anahtar dosyaları ---
+*.pem
+*.key
+
 # --- Bağımlılıklar ---
 node_modules/
 .pnpm-store/
+.pnp
+.pnp.*
 
 # --- Next.js / build çıktıları ---
 .next/

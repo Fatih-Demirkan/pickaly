@@ -1,0 +1,40 @@
+{
+  "app": {
+    "name": "Pickaly",
+    "tagline": "Life & Money Planner",
+    "description": "Plan your tasks, calendar, income, expenses and savings in one place."
+  },
+  "common": {
+    "loading": "Loading…",
+    "retry": "Try again",
+    "backHome": "Back to home",
+    "skipToContent": "Skip to content"
+  },
+  "locale": {
+    "label": "Language",
+    "tr": "Türkçe",
+    "en": "English"
+  },
+  "environment": {
+    "local": "Local environment",
+    "staging": "STAGING",
+    "production": "Production"
+  },
+  "start": {
+    "title": "Pickaly is getting ready",
+    "body": "This is the starting screen of the development process. App modules will be added in the next phases.",
+    "foundationTitle": "Foundation in place",
+    "items": {
+      "tokens": "Design tokens",
+      "i18n": "Turkish and English language support",
+      "icons": "Lucide icon system",
+      "responsive": "Mobile, tablet and desktop layout"
+    }
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "The page you are looking for may have moved or never existed.",
+    "genericTitle": "Something went wrong",
+    "genericBody": "An unexpected error occurred. Please try again."
+  }
+}
