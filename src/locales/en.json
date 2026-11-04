@@ -842,5 +842,77 @@
       "title": "Log Out",
       "hint": "End the session on this device"
     }
+  },
+  "auth": {
+    "notConfigured": "The Supabase connection is not configured yet. The app is running with local sample data and no sign-in. To sign in or sign up, add the staging connection values to .env.local.",
+    "showPassword": "Show",
+    "hidePassword": "Hide",
+    "fields": {
+      "name": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "passwordHint": "At least {min} characters.",
+      "newPassword": "New password",
+      "confirmPassword": "New password (again)"
+    },
+    "signIn": {
+      "title": "Sign in",
+      "subtitle": "Sign in to your account with your email and password.",
+      "submit": "Sign in",
+      "forgot": "Forgot password",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create account"
+    },
+    "signUp": {
+      "title": "Create account",
+      "subtitle": "We'll send a 6-digit verification code to your email.",
+      "terms": "I have read and accept the terms of use and the privacy policy.",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "verify": {
+      "title": "Verify your email",
+      "subtitle": "Enter the 6-digit code we sent to <strong>{email}</strong>.",
+      "codeLabel": "Verification code",
+      "digit": "Digit {index}",
+      "submit": "Verify",
+      "resend": "Resend code",
+      "resendIn": "Resend code ({seconds}s)",
+      "resent": "A new code has been sent."
+    },
+    "reset": {
+      "title": "Forgot password",
+      "subtitle": "Enter your account email and we'll send you a 6-digit code.",
+      "codeSubtitle": "Enter the 6-digit code we sent to <strong>{email}</strong>.",
+      "newTitle": "Set a new password",
+      "newSubtitle": "Choose a new password for your account.",
+      "step": "Step {step} of {total}",
+      "send": "Send code",
+      "save": "Save password",
+      "backToSignIn": "Back to sign in",
+      "restart": "Start over"
+    },
+    "errors": {
+      "email": "Enter a valid email address.",
+      "password": "Enter your password.",
+      "passwordLength": "Password must be at least {min} characters.",
+      "name": "Enter your name.",
+      "nameLength": "Name can be at most {max} characters.",
+      "terms": "Accept the terms to continue.",
+      "code": "Enter all 6 digits of the code.",
+      "mismatch": "Passwords do not match."
+    },
+    "formErrors": {
+      "invalidCredentials": "Incorrect email or password.",
+      "emailNotConfirmed": "Your email address is not verified yet.",
+      "codeInvalid": "The code is invalid or has expired. Request a new one.",
+      "rateLimited": "Too many attempts. Please try again later.",
+      "weakPassword": "This password is not strong enough. Choose a longer, harder-to-guess password.",
+      "samePassword": "The new password cannot be the same as the old one.",
+      "sessionMissing": "Your session has expired. Start the password reset again.",
+      "notConfigured": "This can't be done because the Supabase connection is not configured.",
+      "unknown": "Something went wrong. Please try again."
+    }
   }
 }

@@ -21,6 +21,14 @@ export type SupabasePublicEnv = {
 };
 
 /**
+ * Supabase bağlantı değerleri tanımlı mı? Tanımlı değilse uygulama yerel örnek veriyle, oturumsuz çalışır
+ * (giriş zorunlu değildir, giriş ekranları kurulum notu gösterir). Değerler girildiğinde oturum zorunlu olur.
+ */
+export function isSupabaseConfigured(): boolean {
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+}
+
+/**
  * Supabase'in herkese açık bağlantı değerleri.
  * Eksikse veya hatalıysa ne yapılacağını söyleyen açık bir hata fırlatır.
  * Değerler yalnızca Supabase istemcisi oluşturulurken okunur; Supabase kullanmayan ekranlar çalışmaya devam eder.
