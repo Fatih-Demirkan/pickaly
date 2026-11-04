@@ -873,13 +873,14 @@
     },
     "verify": {
       "title": "E-postanızı doğrulayın",
-      "subtitle": "<strong>{email}</strong> adresine gönderdiğimiz 6 haneli kodu girin.",
+      "subtitle": "<strong>{email}</strong> adresine bir doğrulama e-postası gönderdik. E-postadaki bağlantıya bu tarayıcıda tıklayın; e-postada 6 haneli kod varsa aşağıya da girebilirsiniz.",
       "codeLabel": "Doğrulama kodu",
       "digit": "{index}. hane",
       "submit": "Doğrula",
       "resend": "Kodu tekrar gönder",
       "resendIn": "Kodu tekrar gönder ({seconds} sn)",
-      "resent": "Yeni kod gönderildi."
+      "resent": "Yeni kod gönderildi.",
+      "linkDone": "Bağlantıya tıkladınız mı?"
     },
     "reset": {
       "title": "Şifremi unuttum",
@@ -912,7 +913,8 @@
       "samePassword": "Yeni şifre eskisiyle aynı olamaz.",
       "sessionMissing": "Oturum süresi doldu. Şifre sıfırlamaya baştan başlayın.",
       "notConfigured": "Supabase bağlantısı yapılandırılmadığı için bu işlem yapılamıyor.",
-      "unknown": "Bir sorun oluştu. Lütfen tekrar deneyin."
+      "unknown": "Bir sorun oluştu. Lütfen tekrar deneyin.",
+      "linkInvalid": "Doğrulama bağlantısı açılamadı: süresi dolmuş ya da kayıt olduğunuz tarayıcıdan farklı bir tarayıcıda açılmış olabilir. E-postanız doğrulandıysa e-posta ve şifrenizle giriş yapabilirsiniz."
     }
   }
 }

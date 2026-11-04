@@ -1,9 +1,13 @@
 import "server-only";
+import { cache } from "react";
 import { transactionRepository } from "@/features/transactions/server";
 import { addDays, localDateTimeToIso, toDateKey, toTimeValue, type DateKey } from "@/lib/dates";
+import { isSupabaseConfigured } from "@/lib/env";
 import { nthOccurrence, occurrencesBetween } from "@/lib/recurrence";
+import { DuplicateRecordError } from "@/lib/supabase/data";
 import type { PaymentRepository } from "./data/repository";
 import { mockPaymentRepository } from "./data/mock-repository";
+import { supabasePaymentRepository } from "./data/supabase-repository";
 import { compareByDue, GENERATION_HORIZON_MONTHS, UPCOMING_WINDOW_DAYS } from "./domain/schedule";
 import type { Payment, RecurringPayment, RecurringPaymentInput } from "./domain/types";
 
@@ -11,7 +15,7 @@ import type { Payment, RecurringPayment, RecurringPaymentInput } from "./domain/
 // [Supabase aşaması] Örnek üretimi zamanlanmış işe, işaretleme ve geri alma RPC'lere taşınır
 // (TECH_STACK §5.3 mark_payment_paid / undo_mark_payment_paid); imzalar korunur.
 
-const repository: PaymentRepository = mockPaymentRepository;
+const repository: PaymentRepository = isSupabaseConfigured() ? supabasePaymentRepository : mockPaymentRepository;
 
 /** Vadesi 3 ay içinde olan ödeme örneklerini üretir; süre ilerledikçe yenilenir (BR-REC-001). */
 async function generatePayments(today: DateKey) {
@@ -28,30 +32,28 @@ async function generatePayments(today: DateKey) {
     for (const dueDate of dates) {
       // Aynı vade için tek ödeme (BR-DUP-002).
       if (existing.has(dueDate)) continue;
-      await repository.createPayment({
-        recurringPaymentId: series.id,
-        dueDate,
-        amountMinor: series.amountMinor,
-        status: "pending",
-        paidAt: null,
-        paidAmountMinor: null,
-        paidAccountId: null,
-        transactionId: null,
-      });
+      try {
+        await repository.createPayment({
+          recurringPaymentId: series.id,
+          dueDate,
+          amountMinor: series.amountMinor,
+          status: "pending",
+          paidAt: null,
+          paidAmountMinor: null,
+          paidAccountId: null,
+          transactionId: null,
+        });
+      } catch (error) {
+        // Eşzamanlı bir istek aynı vadeyi oluşturdu (BR-DUP-002).
+        if (!(error instanceof DuplicateRecordError)) throw error;
+      }
     }
     await repository.updateSeries(series.id, { generatedThrough: dates.at(-1) ?? series.generatedThrough });
   }
 }
 
-// Paralel okumalar aynı örneği iki kez üretmesin diye tek çalıştırma paylaşılır.
-let generating: Promise<void> | null = null;
-
-async function ensureGenerated() {
-  generating ??= generatePayments(toDateKey(new Date())).finally(() => {
-    generating = null;
-  });
-  await generating;
-}
+// İstek başına tek üretim; kullanıcılar birbirinin üretimini beklemez. Mükerrer vadeyi veritabanı kuralı engeller.
+const ensureGenerated = cache(() => generatePayments(toDateKey(new Date())));
 
 export type PaymentWithSeries = { payment: Payment; series: RecurringPayment };
 

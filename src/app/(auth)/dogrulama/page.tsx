@@ -11,6 +11,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // E-posta Doğrulama (PRD FR-AUTH-002, D-1): 6 haneli kod + geri sayımlı "Kodu tekrar gönder". ?e= e-posta adresi.
+// [Ertelendi] Özel SMTP kurulana kadar Supabase şablonları düzenlenemiyor: e-postada kod yok, yalnızca bağlantı var.
+// Bu yüzden metin önce bağlantıyı söyler; kod kutuları SMTP gelince kullanılmak üzere durur.
 export default async function VerifyPage({ searchParams }: PageProps<"/dogrulama">) {
   const [t, params] = await Promise.all([getTranslations("auth.verify"), searchParams]);
   const email = typeof params.e === "string" ? params.e : "";

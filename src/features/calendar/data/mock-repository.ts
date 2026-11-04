@@ -1,4 +1,5 @@
 import "server-only";
+import { isDemoDataEnabled } from "@/lib/env";
 import { addDays, localDateTimeToIso, toDateKey } from "@/lib/dates";
 import { majorToMinor } from "@/lib/money";
 import type { CalendarItem } from "../domain/types";
@@ -61,6 +62,7 @@ const seeds: Seed[] = [
   { ...base, id: "cal-gym", kind: "appointment", title: "Spor Salonu", categoryId: "cat-cal-health", daysFromToday: 6, time: "19:00", durationMinutes: 90 },
 ];
 
+// Örnek içerik yalnızca PICKALY_DEMO_DATA=true iken yüklenir; varsayılan olarak depo boş başlar (lib/env.ts).
 function buildSeed(): CalendarItem[] {
   const today = toDateKey(new Date());
   return seeds.map(({ daysFromToday, ...seed }) => {
@@ -72,7 +74,7 @@ function buildSeed(): CalendarItem[] {
 const store = globalThis as typeof globalThis & { __pickalyMockCalendar?: CalendarItem[] };
 
 function rows(): CalendarItem[] {
-  store.__pickalyMockCalendar ??= buildSeed();
+  store.__pickalyMockCalendar ??= isDemoDataEnabled() ? buildSeed() : [];
   return store.__pickalyMockCalendar;
 }
 

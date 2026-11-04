@@ -873,13 +873,14 @@
     },
     "verify": {
       "title": "Verify your email",
-      "subtitle": "Enter the 6-digit code we sent to <strong>{email}</strong>.",
+      "subtitle": "We sent a verification email to <strong>{email}</strong>. Click the link in the email in this browser; if the email contains a 6-digit code, you can also enter it below.",
       "codeLabel": "Verification code",
       "digit": "Digit {index}",
       "submit": "Verify",
       "resend": "Resend code",
       "resendIn": "Resend code ({seconds}s)",
-      "resent": "A new code has been sent."
+      "resent": "A new code has been sent.",
+      "linkDone": "Already clicked the link?"
     },
     "reset": {
       "title": "Forgot password",
@@ -912,7 +913,8 @@
       "samePassword": "The new password cannot be the same as the old one.",
       "sessionMissing": "Your session has expired. Start the password reset again.",
       "notConfigured": "This can't be done because the Supabase connection is not configured.",
-      "unknown": "Something went wrong. Please try again."
+      "unknown": "Something went wrong. Please try again.",
+      "linkInvalid": "The verification link couldn't be opened: it may have expired or been opened in a different browser than the one you signed up in. If your email is verified, sign in with your email and password."
     }
   }
 }

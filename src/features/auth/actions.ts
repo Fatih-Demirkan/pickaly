@@ -99,13 +99,17 @@ export async function signUpAction(_previous: AuthFormState, formData: FormData)
   if (!parsed.success) return { errors: fieldErrors(parsed.error), values };
 
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
     // [Eksik] Kullanım koşulları / gizlilik metinleri hukuki onay bekliyor (LB-01); onay tarihi metadata'da tutulur.
     options: { data: { full_name: parsed.data.name, terms_accepted_at: new Date().toISOString() }, emailRedirectTo: `${await origin()}${AUTH_CALLBACK_PATH}` },
   });
   if (error) return { formError: formErrorOf(error), values };
+  // Supabase'de "Confirm email" kapalıysa kayıt oturumu hemen açar: doğrulama ekranı atlanır.
+  // [Ertelendi] Staging'de e-posta onayı geçici olarak kapalı (ürün sahibi kararı, 2026-11-04); SMTP ve yeni oturum
+  // tasarımıyla birlikte yeniden açılacak. Açıldığında akış kendiliğinden doğrulama ekranına döner.
+  if (data.session) redirect("/");
   redirect(verifyHref(parsed.data.email));
 }
 

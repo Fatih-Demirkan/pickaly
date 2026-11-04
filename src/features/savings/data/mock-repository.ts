@@ -1,4 +1,5 @@
 import "server-only";
+import { isDemoDataEnabled } from "@/lib/env";
 import { addDays, localDateTimeToIso, toDateKey } from "@/lib/dates";
 import { majorToMinor } from "@/lib/money";
 import { nthOccurrence } from "@/lib/recurrence";
@@ -14,6 +15,7 @@ import type { SavingsRepository } from "./repository";
 
 type Store = { accounts: SavingsAccount[]; movements: SavingsMovement[] };
 
+// Örnek içerik yalnızca PICKALY_DEMO_DATA=true iken yüklenir; varsayılan olarak depo boş başlar (lib/env.ts).
 function buildSeed(): Store {
   const today = toDateKey(new Date());
   // Acil Durum Fonu: 7 ay önce 10.000 ₺ ile açıldı, her ay 5.000 ₺ katkı (bugüne kadar ~45.000 ₺).
@@ -88,7 +90,7 @@ function buildSeed(): Store {
 const store = globalThis as typeof globalThis & { __pickalyMockSavings?: Store };
 
 function data(): Store {
-  store.__pickalyMockSavings ??= buildSeed();
+  store.__pickalyMockSavings ??= isDemoDataEnabled() ? buildSeed() : { accounts: [], movements: [] };
   return store.__pickalyMockSavings;
 }
 
