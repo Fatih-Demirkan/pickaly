@@ -6,6 +6,7 @@ import { ActionFooter } from "@/components/layout/ActionFooter";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { fieldBoxClass, inputClass, textareaClass } from "@/components/ui/field";
 import { categoryIcons, type CategoryIconName } from "@/config/icons";
 import { isLocale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
@@ -32,14 +33,12 @@ type CategoryFormProps = { categoryId?: string; initialValues: CategoryFormValue
 const PAGES_ICONS: CategoryIconName[] = ["birdhouse", "house", "car", "coffee", "briefcase-medical", "heart", "receipt-text", "wallet", "gift", "paw-print"];
 const FINANCE_OPTIONS = ["income", "expense", "subscription"] as const;
 
-const inputClass =
-  "h-46 w-full rounded-md border border-border-default bg-surface-card px-16 text-body-md text-text-primary placeholder:text-text-tertiary transition-colors hover:border-border-strong aria-invalid:border-border-error";
 
 function Label({ htmlFor, id, required, children }: { htmlFor?: string; id?: string; required?: boolean; children: ReactNode }) {
   const t = useTranslations("categories.form");
   const Tag = htmlFor ? "label" : "p";
   return (
-    <Tag htmlFor={htmlFor} id={id} className="text-label-md text-text-primary">
+    <Tag htmlFor={htmlFor} id={id} className="text-body-strong text-text-primary">
       {children}
       {required && (
         <>
@@ -56,7 +55,7 @@ function Label({ htmlFor, id, required, children }: { htmlFor?: string; id?: str
 function ErrorText({ id, message }: { id: string; message?: string }) {
   if (!message) return null;
   return (
-    <p id={id} className="text-body-sm text-text-danger">
+    <p id={id} className="text-caption text-text-danger">
       {message}
     </p>
   );
@@ -109,18 +108,18 @@ export function CategoryForm({ categoryId, initialValues, cancelHref }: Category
       <input type="hidden" name="color" value={values.color} />
 
       {state.formError && (
-        <p role="alert" className="rounded-md bg-status-danger-subtle p-12 text-body-md text-text-danger">
+        <p role="alert" className="rounded-lg bg-status-danger-subtle p-16 text-body text-text-on-danger">
           {t(`form.errors.${state.formError}`)}
         </p>
       )}
 
       {/* Canlı Önizleme — formla birlikte kayar; tablet+ drawer içinde üstte sabit */}
-      <section aria-labelledby="category-preview" className="sticky top-0 z-1 flex flex-col items-center gap-12 rounded-2xl border border-border-default bg-surface-card p-16 shadow-floating">
-        <h2 id="category-preview" className="text-label-sm text-text-secondary">
+      <section aria-labelledby="category-preview" className="sticky top-0 z-1 flex flex-col items-center gap-12 rounded-lg bg-surface-card p-16 shadow-elev-1">
+        <h2 id="category-preview" className="text-caption-strong text-text-secondary">
           {t("form.preview")}
         </h2>
-        <span className="inline-flex h-24 items-center rounded-full bg-surface-muted px-8 text-label-sm text-text-secondary">{t(`type.${values.type}`)}</span>
-        <span aria-live="polite" className={cn("inline-flex h-40 max-w-full items-center gap-8 rounded-full pe-16 ps-4 text-label-md", categoryChipClass(values.color))}>
+        <span className="inline-flex h-24 items-center rounded-full bg-surface-muted px-8 text-caption-strong text-text-secondary">{t(`type.${values.type}`)}</span>
+        <span aria-live="polite" className={cn("inline-flex h-40 max-w-full items-center gap-8 rounded-full pe-16 ps-4 text-body-strong", categoryChipClass(values.color))}>
           <CategoryIcon category={values} size="sm" className="rounded-full" />
           <span className="truncate">{values.name.trim() || t("form.previewPlaceholder")}</span>
         </span>
@@ -169,8 +168,10 @@ export function CategoryForm({ categoryId, initialValues, cancelHref }: Category
                 aria-label={t(`icon.${icon}`)}
                 onClick={() => set("icon", icon)}
                 className={cn(
-                  "touch-target inline-flex h-42 items-center justify-center rounded-md text-text-primary transition-colors",
-                  selected ? "border-2 border-border-focus bg-surface-selected" : "border border-border-default bg-surface-card hover:border-border-strong",
+                  "touch-target inline-flex h-44 items-center justify-center rounded-md border transition-colors",
+                  selected
+                    ? "border-surface-selected-strong bg-surface-selected-strong text-text-inverse"
+                    : "border-border-subtle bg-surface-card text-text-primary hover:border-border-strong hover:bg-action-tertiary-hover",
                 )}
               >
                 <Icon icon={categoryIcons[icon]} />
@@ -195,9 +196,10 @@ export function CategoryForm({ categoryId, initialValues, cancelHref }: Category
                 aria-label={t(`color.${color}`)}
                 onClick={() => set("color", color)}
                 className={cn(
-                  "touch-target inline-flex size-32 items-center justify-center rounded-full border border-border-default",
+                  "touch-target inline-flex size-32 items-center justify-center rounded-full border border-border-subtle",
                   categorySurfaceClass(color),
-                  selected && "outline-2 outline-offset-2 outline-border-focus",
+                  // Seçili renk: siyah halka (seçim = siyah); odak halkası global blue.600 olarak ayrıca görünür.
+                  selected && "outline-2 outline-offset-2 outline-surface-selected-strong",
                 )}
               >
                 {selected && <Icon icon="confirm" size="sm" className="text-text-primary" />}
@@ -213,10 +215,7 @@ export function CategoryForm({ categoryId, initialValues, cancelHref }: Category
           <Label htmlFor="budget">{t("form.budget")}</Label>
           <label
             htmlFor="budget"
-            className={cn(
-              "flex h-46 cursor-text items-center gap-8 rounded-md border bg-surface-card px-16 text-body-md text-text-primary transition-colors focus-within:outline-2 focus-within:outline-border-focus hover:border-border-strong",
-              invalid("budget") ? "border-border-error" : "border-border-default",
-            )}
+            className={fieldBoxClass(Boolean(invalid("budget")))}
           >
             <input
               id="budget"
@@ -229,13 +228,13 @@ export function CategoryForm({ categoryId, initialValues, cancelHref }: Category
               onBlur={completeBudget}
               aria-invalid={invalid("budget")}
               aria-describedby={describedBy("budget") ?? "budget-hint"}
-              className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-tertiary"
+              className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-secondary"
             />
             <span aria-hidden className="text-text-secondary">
               <Icon icon="currency" size="sm" />
             </span>
           </label>
-          <p id="budget-hint" className="text-body-sm text-text-secondary">
+          <p id="budget-hint" className="text-caption text-text-secondary">
             {t("form.budgetHint")}
           </p>
           <ErrorText id="budget-error" message={errorText("budget")} />
@@ -245,7 +244,7 @@ export function CategoryForm({ categoryId, initialValues, cancelHref }: Category
       <div className="flex flex-col gap-8">
         <div className="flex items-baseline justify-between gap-8">
           <Label htmlFor="note">{t("form.note")}</Label>
-          <span className="text-body-sm text-text-secondary" aria-live="polite">
+          <span className="text-caption text-text-secondary" aria-live="polite">
             {t("form.noteCount", { count: values.note.length, max: NOTE_MAX_LENGTH })}
           </span>
         </div>
@@ -259,7 +258,7 @@ export function CategoryForm({ categoryId, initialValues, cancelHref }: Category
           onChange={(event) => set("note", event.target.value)}
           aria-invalid={invalid("note")}
           aria-describedby={describedBy("note")}
-          className={cn(inputClass, "h-auto resize-y py-12")}
+          className={textareaClass}
         />
         <ErrorText id="note-error" message={errorText("note")} />
       </div>

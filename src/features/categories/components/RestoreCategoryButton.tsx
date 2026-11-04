@@ -24,7 +24,7 @@ export function RestoreCategoryButton({ categoryId, labels }: RestoreCategoryBut
           else toast({ message: result.reason === "conflict" ? labels.conflict : labels.failed, tone: "error" });
         })
       }
-      className="touch-target shrink-0 text-label-sm text-text-brand hover:underline disabled:cursor-wait"
+      className="touch-target shrink-0 text-caption-strong text-text-brand hover:underline disabled:cursor-wait"
     >
       {labels.restore}
     </button>

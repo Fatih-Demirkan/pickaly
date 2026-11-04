@@ -3,9 +3,9 @@ import { Icon } from "@/components/ui/Icon";
 import { formatMonthLabel, shiftMonth, type MonthKey } from "@/lib/dates";
 import type { Locale } from "@/i18n/config";
 
-// Pages → İşlemler ay seçici: 40 px, padding 8/16, radius-md, surface-card, border-default;
-// chevron-left / chevron-right 16 px text-secondary, ortada calendar 16 + ay adı (Body/Large).
-// İşlemler ve Aylık Finans Raporu (136:7660) aynı seçiciyi kullanır; adresleri çağıran üretir.
+// Ay seçici (İşlemler, Aylık Finans Raporu). DESIGN_SYSTEM_PICKALY §5.2 kart dili:
+// 44 px beyaz pill, elev-1, yatay 6; iki yanda 32 px yuvarlak ok butonu; ortada calendar 16 + ay adı (body-strong).
+// Adresleri çağıran üretir.
 
 type MonthSwitcherProps = {
   month: MonthKey;
@@ -15,15 +15,15 @@ type MonthSwitcherProps = {
 };
 
 const arrowClass =
-  "touch-target inline-flex size-24 items-center justify-center rounded-full text-text-secondary transition-colors hover:bg-action-tertiary-hover hover:text-text-primary";
+  "touch-target inline-flex size-32 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-action-tertiary-hover";
 
 export function MonthSwitcher({ month, hrefFor, locale, labels }: MonthSwitcherProps) {
   return (
-    <div className="flex h-40 items-center justify-between gap-8 rounded-md border border-border-default bg-surface-card px-16 py-8">
+    <div className="flex h-44 items-center justify-between gap-8 rounded-full bg-surface-card px-6 shadow-elev-1">
       <Link href={hrefFor(shiftMonth(month, -1))} scroll={false} aria-label={labels.previous} className={arrowClass}>
         <Icon icon="previous" size="sm" />
       </Link>
-      <p className="flex items-center gap-8 text-body-lg text-text-primary" aria-live="polite">
+      <p className="flex items-center gap-8 text-body-strong text-text-primary" aria-live="polite">
         <span className="text-text-secondary">
           <Icon icon="calendar" size="sm" />
         </span>

@@ -2,14 +2,14 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ButtonLink } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { getAccountMap } from "@/features/accounts/server";
 import { getCategoryMap } from "@/features/categories/server";
 import { isLocale } from "@/i18n/config";
 import { toDateKey, type MonthKey } from "@/lib/dates";
 import { applyFilter, groupByDay, summarize } from "../domain/summary";
 import { MonthSwitcher } from "@/components/ui/MonthSwitcher";
-import { listHref, type ListQuery } from "../routes";
+import { listHref, newTransactionHref, type ListQuery } from "../routes";
 import { transactionRepository } from "../server";
 import { SummaryCard } from "./SummaryCard";
 import { TransactionFilters } from "./TransactionFilters";
@@ -32,7 +32,7 @@ export async function TransactionsOverview({ query }: TransactionsOverviewProps)
     getAccountMap(),
   ]);
   const locale = isLocale(rawLocale) ? rawLocale : "tr";
-  const tPage = await getTranslations("pages.transactions");
+  const [tPage, tNav] = await Promise.all([getTranslations("pages.transactions"), getTranslations("nav")]);
 
   const summary = summarize(monthTransactions);
   const visible = applyFilter(monthTransactions, query);
@@ -58,14 +58,22 @@ export async function TransactionsOverview({ query }: TransactionsOverviewProps)
           query={query}
         />
       ) : (
-        // [Eksik] Boş durum Pages'ta tasarlanmadı (RESPONSIVE §5); geçici olarak metin kartı.
-        <Card className="flex flex-col gap-4">
-          <p className="text-heading-h4 text-text-primary">{t("list.emptyTitle")}</p>
-          <p className="text-body-md text-text-secondary">{filtered ? t("list.emptyFiltered") : t("list.emptyBody")}</p>
-        </Card>
+        // Boş durum: DESIGN_SYSTEM_PICKALY §5.9. Filtre varken aksiyon verilmez (kayıt eklemek filtreyi çözmez).
+        <EmptyState
+          icon="transactions"
+          title={t("list.emptyTitle")}
+          description={filtered ? t("list.emptyFiltered") : t("list.emptyBody")}
+          action={
+            filtered ? undefined : (
+              <ButtonLink href={newTransactionHref("income")} scroll={false} leadingIcon="add">
+                {tNav("newTransaction")}
+              </ButtonLink>
+            )
+          }
+        />
       )}
 
-      <p className="text-body-sm text-text-tertiary">{t("list.sampleData")}</p>
+      <p className="text-caption text-text-secondary">{t("list.sampleData")}</p>
     </>
   );
 

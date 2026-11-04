@@ -13,9 +13,9 @@ import { MarkPaidButton } from "./MarkPaidButton";
 import { dueMessage } from "./PaymentStatusChip";
 
 // Pages → Ana Sayfa ödeme kartı ("Bugünün Akışı" ve "Yaklaşan Ödemeler"):
-//   radius-lg, border-default, padding 12, aralık 12; kategori ikon kutusu 40 + başlık Label/Default,
-//   alt satır Label/Small (saat / vade) • Body/Small (kategori / kalan süre); sağda tutar Label/Default Semantic/Gider - Hata.
-//   Akış: başlığın yanında durum çipi ("Bekliyor" Turuncu).
+//   DESIGN_SYSTEM_PICKALY §5.3: beyaz, radius-md, padding 12, aralık 12, elev-1; 36 px ikon karosu + body-strong başlık,
+//   alt satır caption-strong (saat / vade) • caption (kategori / kalan süre); sağda tutar body-strong text-danger.
+//   Akış: başlığın yanında durum çipi ("Bekliyor" warning).
 // "Ödendi olarak işaretle" tek buton, Secondary [D-5, Ç-4]: kart dar iken altta tam genişlik, geniş iken (kart listesi
 //   ≥ 32rem) sağda tutarın altında SM (RESPONSIVE §4.6). "Hemen öde" kaldırıldı (PRD FR-FIN-017).
 // [Varsayım] Geniş/dar eşiği ekran yerine kart listesinin genişliğine göre (container query): laptop'ta dar sütunda
@@ -46,18 +46,18 @@ export async function PaymentCard({ payment, series, category, locale, today, va
 
   return (
     // Tamamlananlar listede soluk görünümle kalır (PRD Q-20).
-    <li className={cn("relative flex flex-col gap-12 rounded-lg border border-border-default bg-surface-card p-12 transition-colors hover:border-border-strong", paid && "opacity-60")}>
+    <li className={cn("relative flex flex-col gap-12 rounded-md bg-surface-card p-12 shadow-elev-1 transition-colors hover:bg-action-tertiary-hover", paid && "opacity-60")}>
       <div className="flex items-start gap-12">
         {category && <CategoryIcon category={category} />}
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           <span className="flex min-w-0 items-center gap-8">
-            <Link href={paymentHref(payment.id, "home")} className="truncate text-label-md text-text-primary after:absolute after:inset-0 after:rounded-lg">
+            <Link href={paymentHref(payment.id, "home")} className="truncate text-body-strong text-text-primary after:absolute after:inset-0 after:rounded-md">
               {series.title}
             </Link>
             {variant === "agenda" && <Chip variant={paid ? "success" : "warning"}>{paid ? t("status.paid") : t("status.pending")}</Chip>}
           </span>
-          <p className="flex min-w-0 items-center gap-8 text-body-sm">
-            <span className="shrink-0 text-label-sm text-text-primary">
+          <p className="flex min-w-0 items-center gap-8 text-caption">
+            <span className="shrink-0 text-caption-strong text-text-primary">
               {variant === "agenda" ? formatTime(localDateTimeToIso(payment.dueDate, series.dueTime), locale) : formatDayMonth(payment.dueDate, locale)}
             </span>
             <span aria-hidden className="text-text-secondary">
@@ -71,7 +71,7 @@ export async function PaymentCard({ payment, series, category, locale, today, va
           </p>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-8">
-          <p className="text-end text-label-md text-text-danger">{amount}</p>
+          <p className="text-end text-body-strong text-text-danger">{amount}</p>
           {actionable && <div className="hidden @[32rem]:block">{action()}</div>}
         </div>
       </div>

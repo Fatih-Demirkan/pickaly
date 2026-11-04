@@ -27,7 +27,7 @@ export function LanguageSwitcher() {
 
   return (
     <div className="flex flex-wrap items-center gap-8">
-      <span className="flex items-center gap-4 text-label-sm text-text-secondary">
+      <span className="flex items-center gap-4 text-caption-strong text-text-secondary">
         <Icon icon="language" size="sm" />
         {t("label")}
       </span>

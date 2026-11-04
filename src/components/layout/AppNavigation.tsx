@@ -7,13 +7,12 @@ import { NavLink } from "./NavLink";
 
 // Ana navigasyonun üç görünümü tek yapılandırmadan üretilir (RESPONSIVE §2, TECH_STACK §8.4).
 // Görünürlük yalnızca CSS ile değişir (sunucuda breakpoint tahmini yapılmaz).
-//   < 768  : BottomNav   — Figma Nav Bar: dış 16/16/24/16, beyaz pill, border-default, shadow-floating, iç 4
-//   768+   : NavRail     — 80 px dikey; aynı Nav Bar Buttons dikey dizilir [Karar #10]
-//   1024+  : Sidebar     — 240 / 264 px; marka bloğu + yatay öğeler, Profil altta ayrı [RESPONSIVE §2.3]
-// [Eksik] Rail/sidebar Figma'da tasarlanmadı (PRD TD-11); geçici olarak RESPONSIVE kurallarıyla kuruldu.
-// Odak ekranlarında mobil FAB ve alt nav gizlenir (ShellFrame data-focus).
-// "Yeni işlem": mobil FAB · tablet rail içi 56 px buton · laptop+ sidebar Primary buton (RESPONSIVE §4.6).
-// Varsayılan sekme Gelir'dir (RESPONSIVE §3.3.3).
+//   < 768  : Tab bar — DESIGN_SYSTEM.md §A8: siyah pill, 56 px, elev-2, güvenli alanın 16 px üstünde, kenarlardan 16
+//   768+   : Rail    — 80 px, beyaz, sağda border-subtle (DESIGN_SYSTEM_PICKALY §5.6)
+//   1024+  : Sidebar — 240 / 264 px; marka bloğu + Primary "Yeni işlem" + öğeler, Profil altta ayrı
+// Odak ekranlarında mobil FAB ve tab bar gizlenir (ShellFrame data-focus).
+// "Yeni işlem": mobil FAB (Primary LG + elev-2, tab bar'ın 16 px üstü) · tablet rail 48 px Primary daire ·
+// laptop+ sidebar Primary LG tam genişlik. Varsayılan sekme Gelir'dir (RESPONSIVE §3.3.3).
 
 const NEW_TRANSACTION_HREF = "/islemler/yeni";
 
@@ -25,27 +24,25 @@ export async function AppNavigation() {
 
   return (
     <>
-      {/* Mobil: Floating-Button (DESIGN §8.1) — 48 px, padding 16, tam yuvarlak, brand-primary, shadow-floating.
-          [Varsayım] Konum Pages'ta ölçülmedi: alt nav'ın 16 px üstünde, sağda. */}
+      {/* Mobil FAB: tab bar'ın (bottom-nav-offset) 16 px üstünde, sağda. */}
       <ButtonLink
         href={NEW_TRANSACTION_HREF}
         scroll={false}
-        shape="pill"
         leadingIcon="add"
-        className="fixed end-16 bottom-[calc(var(--layout-bottom-nav-offset)+16px+env(safe-area-inset-bottom))] z-(--z-fab) shadow-floating group-data-[focus]/shell:hidden tablet:hidden"
+        className="fixed end-16 bottom-[calc(var(--layout-bottom-nav-offset)+env(safe-area-inset-bottom))] z-(--z-fab) shadow-elev-2 group-data-[focus]/shell:hidden tablet:hidden"
       >
         {t("nav.newTransaction")}
       </ButtonLink>
 
-      {/* Mobil: alt pill nav */}
+      {/* Mobil: siyah yüzen tab bar */}
       <nav
         aria-label={t("nav.label")}
-        className="fixed inset-x-0 bottom-0 z-(--z-nav) px-16 pt-16 pb-[calc(24px+env(safe-area-inset-bottom))] group-data-[focus]/shell:hidden tablet:hidden"
+        className="fixed inset-x-16 bottom-[calc(16px+env(safe-area-inset-bottom))] z-(--z-nav) group-data-[focus]/shell:hidden tablet:hidden"
       >
-        <ul className="flex items-center rounded-full border border-border-default bg-surface-card p-4 shadow-floating">
+        <ul className="flex h-56 items-center rounded-full bg-surface-tabbar px-8 shadow-elev-2">
           {primaryNavigation.map((item) => (
             <li key={item.key} className="min-w-0 flex-1">
-              <NavLink item={item} label={label(item.key)} layout="stacked" />
+              <NavLink item={item} label={label(item.key)} layout="tab" />
             </li>
           ))}
         </ul>
@@ -54,17 +51,17 @@ export async function AppNavigation() {
       {/* Tablet: dikey rail */}
       <nav
         aria-label={t("nav.label")}
-        className="fixed inset-y-0 start-0 z-(--z-nav) hidden w-(--layout-nav-width) flex-col items-center gap-8 border-e border-border-default bg-surface-card px-4 pt-16 pb-16 tablet:flex laptop:hidden"
+        className="fixed inset-y-0 start-0 z-(--z-nav) hidden w-(--layout-nav-width) flex-col items-center gap-16 border-e border-border-subtle bg-surface-card pt-16 pb-16 tablet:flex laptop:hidden"
       >
         {/* [Eksik] Rail'in en üstündeki logo işareti: logo dosyası yok (PRD TD-14). */}
         <Link
           href={NEW_TRANSACTION_HREF}
           scroll={false}
           aria-label={t("nav.newTransaction")}
-          className="touch-target mb-8 flex size-56 flex-col items-center justify-center gap-2 rounded-md bg-brand-primary text-label-xs text-text-inverse transition-colors hover:bg-brand-primary-hover"
+          title={t("nav.newTransaction")}
+          className="touch-target flex size-48 items-center justify-center rounded-full bg-brand-primary text-text-inverse shadow-elev-2 transition-colors hover:bg-brand-primary-hover active:bg-action-primary-pressed"
         >
-          <Icon icon="add" />
-          <span aria-hidden>{t("nav.newShort")}</span>
+          <Icon icon="add" size="lg" />
         </Link>
         <ul className="flex w-full flex-col gap-8">
           {primaryNavigation.map((item) => (
@@ -78,12 +75,11 @@ export async function AppNavigation() {
       {/* Laptop+: sidebar */}
       <nav
         aria-label={t("nav.label")}
-        className="fixed inset-y-0 start-0 z-(--z-nav) hidden w-(--layout-nav-width) flex-col border-e border-border-default bg-surface-card px-16 pt-24 pb-24 laptop:flex"
+        className="fixed inset-y-0 start-0 z-(--z-nav) hidden w-(--layout-nav-width) flex-col border-e border-border-subtle bg-surface-card px-16 pt-24 pb-24 laptop:flex"
       >
-        <div className="flex flex-col px-12 pb-24">
-          {/* Figma Header'daki marka bloğu (H1 + Body/Small) sidebar'a taşınır (RESPONSIVE §2.3). */}
-          <span className="text-heading-h1 text-text-primary">{t("app.name")}</span>
-          <span className="text-body-sm text-text-secondary">{t("app.tagline")}</span>
+        <div className="flex flex-col px-16 pb-24">
+          <span className="text-title-md text-text-primary">{t("app.name")}</span>
+          <span className="text-caption text-text-secondary">{t("app.tagline")}</span>
         </div>
         <ButtonLink href={NEW_TRANSACTION_HREF} scroll={false} leadingIcon="add" fullWidth className="mb-24">
           {t("nav.newTransaction")}
@@ -96,7 +92,7 @@ export async function AppNavigation() {
           ))}
         </ul>
         {profileItem && (
-          <div className="border-t border-border-default pt-16">
+          <div className="border-t border-border-subtle pt-16">
             <NavLink item={profileItem} label={label(profileItem.key)} layout="inline" />
           </div>
         )}

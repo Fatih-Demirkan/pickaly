@@ -1,38 +1,184 @@
 {
   "$description": "Breakpoint'ler, responsive layout ölçüleri ve z-index katmanları. Kaynak: RESPONSIVE.md §1, §6.2. Responsive değerler mobile-first: base → tablet → laptop → desktop",
   "breakpoint": {
-    "tablet": { "$type": "dimension", "$value": "768px" },
-    "laptop": { "$type": "dimension", "$value": "1024px" },
-    "detail": { "$type": "dimension", "$value": "1280px", "$description": "Master-detail eşiği (RESPONSIVE §1.1)" },
-    "desktop": { "$type": "dimension", "$value": "1440px" }
+    "tablet": {
+      "$type": "dimension",
+      "$value": "768px"
+    },
+    "laptop": {
+      "$type": "dimension",
+      "$value": "1024px"
+    },
+    "detail": {
+      "$type": "dimension",
+      "$value": "1280px",
+      "$description": "Master-detail eşiği (RESPONSIVE §1.1)"
+    },
+    "desktop": {
+      "$type": "dimension",
+      "$value": "1440px"
+    }
   },
   "layout": {
-    "page-padding-x": { "$type": "dimension", "$value": "16px", "tablet": "24px", "laptop": "32px", "desktop": "40px" },
-    "page-padding-top": { "$type": "dimension", "$value": "16px", "tablet": "24px", "laptop": "32px", "desktop": "32px" },
-    "section-gap": { "$type": "dimension", "$value": "24px", "laptop": "32px" },
-    "stack-gap": { "$type": "dimension", "$value": "12px", "laptop": "16px" },
-    "card-padding": { "$type": "dimension", "$value": "16px", "tablet": "20px", "laptop": "24px" },
-    "grid-gutter": { "$type": "dimension", "$value": "16px", "laptop": "24px" },
-    "nav-width": { "$type": "dimension", "$value": "0px", "tablet": "80px", "laptop": "240px", "desktop": "264px", "$description": "Mobilde alt nav (genişlik 0), tablette rail, laptop+ sidebar" },
-    "topbar-height": { "$type": "dimension", "$value": "64px", "$description": "Figma Header 64 px (ekranlarda 65 px görünen değer alt çizgiden)" },
-    "bottom-nav-offset": { "$type": "dimension", "$value": "100px", "tablet": "0px", "$description": "Mobilde sabit alt nav'ın kapladığı yükseklik: 16 + 60 + 24 (Figma Nav Bar). İçerik bu kadar alttan boşluk bırakır" },
-    "content-max-width": { "$type": "dimension", "$value": "none", "desktop": "1200px" },
-    "drawer-width-detail": { "$type": "dimension", "$value": "480px" },
-    "drawer-width-form": { "$type": "dimension", "$value": "560px" },
-    "modal-max-width": { "$type": "dimension", "$value": "520px" },
-    "modal-confirm-width": { "$type": "dimension", "$value": "440px" },
-    "form-max-width": { "$type": "dimension", "$value": "560px" },
-    "settings-max-width": { "$type": "dimension", "$value": "720px" },
-    "touch-min": { "$type": "dimension", "$value": "44px", "laptop": "40px" }
+    "page-padding-x": {
+      "$type": "dimension",
+      "$value": "16px",
+      "tablet": "24px",
+      "laptop": "32px",
+      "desktop": "40px"
+    },
+    "page-padding-top": {
+      "$type": "dimension",
+      "$value": "16px",
+      "tablet": "24px",
+      "laptop": "32px",
+      "desktop": "32px"
+    },
+    "section-gap": {
+      "$type": "dimension",
+      "$value": "20px",
+      "laptop": "32px",
+      "$description": "DS space-5 (mobil bölüm arası)"
+    },
+    "stack-gap": {
+      "$type": "dimension",
+      "$value": "12px",
+      "laptop": "16px"
+    },
+    "card-padding": {
+      "$type": "dimension",
+      "$value": "16px",
+      "tablet": "20px",
+      "laptop": "24px"
+    },
+    "grid-gutter": {
+      "$type": "dimension",
+      "$value": "16px",
+      "laptop": "24px"
+    },
+    "nav-width": {
+      "$type": "dimension",
+      "$value": "0px",
+      "tablet": "80px",
+      "laptop": "240px",
+      "desktop": "264px",
+      "$description": "Mobilde alt nav (genişlik 0), tablette rail, laptop+ sidebar"
+    },
+    "topbar-height": {
+      "$type": "dimension",
+      "$value": "64px",
+      "$description": "Figma Header 64 px (ekranlarda 65 px görünen değer alt çizgiden)"
+    },
+    "bottom-nav-offset": {
+      "$type": "dimension",
+      "$value": "88px",
+      "tablet": "0px",
+      "$description": "Mobilde yüzen tab bar'ın kapladığı yükseklik: alt boşluk 16 + bar 56 + üst boşluk 16 (DESIGN_SYSTEM_PICKALY §5.6). İçerik bu kadar alttan boşluk bırakır"
+    },
+    "content-max-width": {
+      "$type": "dimension",
+      "$value": "none",
+      "desktop": "1200px"
+    },
+    "drawer-width-detail": {
+      "$type": "dimension",
+      "$value": "480px"
+    },
+    "drawer-width-form": {
+      "$type": "dimension",
+      "$value": "560px"
+    },
+    "modal-max-width": {
+      "$type": "dimension",
+      "$value": "520px"
+    },
+    "modal-confirm-width": {
+      "$type": "dimension",
+      "$value": "440px"
+    },
+    "form-max-width": {
+      "$type": "dimension",
+      "$value": "560px"
+    },
+    "settings-max-width": {
+      "$type": "dimension",
+      "$value": "720px"
+    },
+    "touch-min": {
+      "$type": "dimension",
+      "$value": "44px",
+      "laptop": "40px"
+    }
   },
   "z-index": {
     "$description": "[Varsayım] DESIGN.md ve RESPONSIVE.md'de z-index tanımı yok. Katman sırası RESPONSIVE §2.4 / §4.5'teki overlay hiyerarşisinden türetildi; tasarım onayı bekliyor",
-    "base": { "$type": "number", "$value": 0, "$extensions": { "pickaly": { "status": "proposed" } } },
-    "sticky": { "$type": "number", "$value": 10, "$description": "Üst bar, sticky paneller", "$extensions": { "pickaly": { "status": "proposed" } } },
-    "nav": { "$type": "number", "$value": 20, "$description": "Alt nav, rail, sidebar", "$extensions": { "pickaly": { "status": "proposed" } } },
-    "fab": { "$type": "number", "$value": 30, "$description": "Floating Button", "$extensions": { "pickaly": { "status": "proposed" } } },
-    "drawer": { "$type": "number", "$value": 40, "$description": "Drawer, bottom sheet ve arka plan örtüsü", "$extensions": { "pickaly": { "status": "proposed" } } },
-    "modal": { "$type": "number", "$value": 50, "$description": "Modal, popover", "$extensions": { "pickaly": { "status": "proposed" } } },
-    "toast": { "$type": "number", "$value": 60, "$extensions": { "pickaly": { "status": "proposed" } } }
+    "base": {
+      "$type": "number",
+      "$value": 0,
+      "$extensions": {
+        "pickaly": {
+          "status": "proposed"
+        }
+      }
+    },
+    "sticky": {
+      "$type": "number",
+      "$value": 10,
+      "$description": "Üst bar, sticky paneller",
+      "$extensions": {
+        "pickaly": {
+          "status": "proposed"
+        }
+      }
+    },
+    "nav": {
+      "$type": "number",
+      "$value": 20,
+      "$description": "Alt nav, rail, sidebar",
+      "$extensions": {
+        "pickaly": {
+          "status": "proposed"
+        }
+      }
+    },
+    "fab": {
+      "$type": "number",
+      "$value": 30,
+      "$description": "Floating Button",
+      "$extensions": {
+        "pickaly": {
+          "status": "proposed"
+        }
+      }
+    },
+    "drawer": {
+      "$type": "number",
+      "$value": 40,
+      "$description": "Drawer, bottom sheet ve arka plan örtüsü",
+      "$extensions": {
+        "pickaly": {
+          "status": "proposed"
+        }
+      }
+    },
+    "modal": {
+      "$type": "number",
+      "$value": 50,
+      "$description": "Modal, popover",
+      "$extensions": {
+        "pickaly": {
+          "status": "proposed"
+        }
+      }
+    },
+    "toast": {
+      "$type": "number",
+      "$value": 60,
+      "$extensions": {
+        "pickaly": {
+          "status": "proposed"
+        }
+      }
+    }
   }
 }

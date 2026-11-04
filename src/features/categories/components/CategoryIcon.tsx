@@ -4,8 +4,8 @@ import { cn } from "@/lib/cn";
 import type { Category } from "../domain/types";
 import { categoryIconClass, categorySurfaceClass } from "./categoryStyle";
 
-// Pages → işlem satırı "Background" kutusu: 40×40, radius 12 (md), kategori zemini, ikon 20.
-// Detaydaki küçük sürüm: 32×32, radius 8 (sm).
+// Liste satırı ikon karosu (DESIGN_SYSTEM.md §A8 Transaction list row): 36×36, radius-sm, kategori zemini, ikon 20.
+// Küçük sürüm: 32×32, radius-sm, ikon 16.
 
 type CategoryIconProps = {
   category: Pick<Category, "icon" | "color" | "type">;
@@ -28,7 +28,7 @@ export function CategoryIcon({ category, size = "md", className }: CategoryIconP
       aria-hidden
       className={cn(
         "inline-flex shrink-0 items-center justify-center",
-        size === "md" ? "size-40 rounded-md" : "size-32 rounded-sm",
+        size === "md" ? "size-36 rounded-sm" : "size-32 rounded-sm",
         categorySurfaceClass(category.color),
         categoryIconClass(category.color),
         className,

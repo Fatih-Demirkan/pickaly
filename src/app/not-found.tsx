@@ -8,8 +8,8 @@ export default async function NotFound() {
   return (
     <main id="main-content" className="min-h-dvh bg-surface-page">
       <PageContainer width="form" className="flex min-h-dvh flex-col justify-center gap-(--layout-stack-gap)">
-        <h1 className="text-heading-h2 text-text-primary">{t("errors.notFoundTitle")}</h1>
-        <p className="text-body-md text-text-secondary">{t("errors.notFoundBody")}</p>
+        <h1 className="text-title-md text-text-primary">{t("errors.notFoundTitle")}</h1>
+        <p className="text-body text-text-secondary">{t("errors.notFoundBody")}</p>
         <Link
           href="/"
           className="inline-flex min-h-48 w-fit items-center rounded-md bg-brand-primary px-16 text-button text-text-inverse hover:bg-brand-primary-hover"

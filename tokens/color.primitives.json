@@ -1,65 +1,69 @@
 {
-  "$description": "Ham renk paleti. Bileşenler doğrudan KULLANMAZ; yalnızca semantic token'lar bunlara bağlanır. Kaynak: DESIGN.md §2.2, §2.3, §2.4, §2.6, §2.7, §9.2.1",
+  "$description": "Ham renk paleti. Bileşenler doğrudan KULLANMAZ; yalnızca semantic token'lar bunlara bağlanır. Kaynak: DESIGN_SYSTEM.md Part A (FinPilot) + DESIGN_SYSTEM_PICKALY.md §2 (erişilebilirlik uyarlamaları ve türetmeler)",
   "primitive": {
-    "white": { "$type": "color", "$value": "#FFFFFF" },
-    "teal": {
-      "100": { "$type": "color", "$value": "#CCFBF1", "$description": "Figma: Brand/Primary Subtle, Category/Teal" },
-      "200": { "$type": "color", "$value": "#99F6E4", "$extensions": { "pickaly": { "status": "proposed", "source": "DESIGN §2.5 action.secondary-hover [Varsayım]" } } },
-      "500": { "$type": "color", "$value": "#14B8A6", "$description": "Figma: Brand/Accent" },
-      "600": { "$type": "color", "$value": "#0D9488", "$description": "Figma: Chart/Savings" },
-      "700": { "$type": "color", "$value": "#0F766E", "$description": "Figma: Brand/Primary" },
-      "800": { "$type": "color", "$value": "#115E59", "$description": "Figma: Brand/Primary Hover" },
-      "900": { "$type": "color", "$value": "#134E4A", "$extensions": { "pickaly": { "status": "proposed", "source": "DESIGN §2.5 action.primary-pressed [Varsayım]" } } }
+    "white": { "$type": "color", "$value": "#FFFFFF", "$description": "[DS] exact" },
+    "black": { "$type": "color", "$value": "#000000", "$description": "[DS] exact" },
+    "white-70": { "$type": "color", "$value": "#FFFFFFB3", "$description": "Siyah üzerinde ikincil metin / pasif tab ikonu (DS: beyaz %70)" },
+    "blue": {
+      "100": { "$type": "color", "$value": "#D6E9FF", "$description": "[DS≈] brand-100" },
+      "150": { "$type": "color", "$value": "#C2DEFF", "$description": "[Türetme] Secondary hover" },
+      "200": { "$type": "color", "$value": "#A8D3FE", "$description": "[DS≈] brand-200" },
+      "300": { "$type": "color", "$value": "#7BBEFE", "$description": "[DS≈] brand-300" },
+      "500": { "$type": "color", "$value": "#41A1FD", "$description": "[DS] exact brand-500. Metin / beyaz metinli zemin olarak kullanılmaz" },
+      "600": { "$type": "color", "$value": "#0267C5", "$description": "[Uyarlama] beyazla 5,60:1 (DS brand-600 ≈#2D7FE0 4,02:1)" },
+      "650": { "$type": "color", "$value": "#0258A9", "$description": "[Türetme] hover, beyazla 7,07:1" },
+      "700": { "$type": "color", "$value": "#0B4C9A", "$description": "[DS≈] brand-700, pressed" },
+      "900": { "$type": "color", "$value": "#0A2347", "$description": "[DS≈] brand-900, rezerv" }
+    },
+    "lavender": {
+      "200": { "$type": "color", "$value": "#D0D1FF", "$description": "[DS] exact" }
+    },
+    "lilac": {
+      "200": { "$type": "color", "$value": "#E7D0FF", "$description": "[DS] exact" }
     },
     "neutral": {
-      "50": { "$type": "color", "$value": "#F8FAFC" },
-      "100": { "$type": "color", "$value": "#F1F5F9" },
-      "200": { "$type": "color", "$value": "#E2E8F0" },
-      "300": { "$type": "color", "$value": "#CBD5E1" },
-      "400": { "$type": "color", "$value": "#94A3B8" },
-      "500": { "$type": "color", "$value": "#64748B" },
-      "600": { "$type": "color", "$value": "#475569" },
-      "700": { "$type": "color", "$value": "#334155" },
-      "800": { "$type": "color", "$value": "#1E293B" },
-      "900": { "$type": "color", "$value": "#0F172A" },
-      "950": { "$type": "color", "$value": "#020617" }
-    },
-    "green": {
-      "100": { "$type": "color", "$value": "#DCFCE7", "$description": "Figma: Category/Green" },
-      "600": { "$type": "color", "$value": "#16A34A", "$description": "Figma: Chart/Income" },
-      "700": { "$type": "color", "$value": "#15803D", "$description": "Figma: Semantic/Gelir - Tamamlandı" }
+      "50": { "$type": "color", "$value": "#F5F6F7", "$description": "[DS] exact canvas" },
+      "100": { "$type": "color", "$value": "#ECEDEF", "$description": "[DS≈] border-subtle" },
+      "150": { "$type": "color", "$value": "#E6E8EB", "$description": "[DS≈] disabled zemin" },
+      "200": { "$type": "color", "$value": "#DCDDE0", "$description": "[Türetme] hover çerçevesi" },
+      "400": { "$type": "color", "$value": "#A3A7AE", "$description": "[DS≈] text-tertiary; yalnızca disabled / dekor" },
+      "500": { "$type": "color", "$value": "#8B8F96", "$description": "[Uyarlama] beyazda 3,25:1 (büyük metin, form kontrolü çerçevesi)" },
+      "600": { "$type": "color", "$value": "#6B6F76", "$description": "[DS≈] text-secondary" },
+      "700": { "$type": "color", "$value": "#595D63", "$description": "[Türetme] muted yüzeyde ikincil metin (5,65:1)" },
+      "800": { "$type": "color", "$value": "#333333", "$description": "[Türetme] siyah üzerinde kontrol" },
+      "900": { "$type": "color", "$value": "#1F1F1F", "$description": "[Türetme] siyah üzerinde yükseltilmiş yüzey, Contrast hover" }
     },
     "red": {
-      "100": { "$type": "color", "$value": "#FEE2E2", "$description": "Figma: Category/Red" },
-      "600": { "$type": "color", "$value": "#DC2626", "$description": "Figma: Semantic/Gider - Hata" },
-      "700": { "$type": "color", "$value": "#B91C1C", "$extensions": { "pickaly": { "status": "proposed", "source": "DESIGN §2.5 action.danger-hover [Varsayım]" } } }
+      "500": { "$type": "color", "$value": "#EF4E54", "$description": "[DS≈] danger-500; yalnızca grafik öğe" },
+      "600": { "$type": "color", "$value": "#E0151C", "$description": "[Uyarlama] beyazla 4,89:1" },
+      "700": { "$type": "color", "$value": "#C11515", "$description": "[Türetme] hover; kırmızı zeminde metin" }
+    },
+    "green": {
+      "500": { "$type": "color", "$value": "#22C55E", "$description": "[DS≈] success-500; yalnızca dekoratif nokta" },
+      "700": { "$type": "color", "$value": "#0E8138", "$description": "[Uyarlama] beyazda 4,98:1" }
     },
     "amber": {
-      "100": { "$type": "color", "$value": "#FEF3C7", "$description": "Figma: Category/Amber" },
-      "600": { "$type": "color", "$value": "#D97706", "$description": "Figma: Semantic/Yaklaşan" },
-      "700": { "$type": "color", "$value": "#B45309", "$description": "DESIGN §9.2.1 [Karar]" },
-      "800": { "$type": "color", "$value": "#92400E", "$description": "DESIGN §9.2.1 [Karar]" }
+      "500": { "$type": "color", "$value": "#F5A524", "$description": "[DS≈] warning (suggested); siyah metinli zemin" },
+      "700": { "$type": "color", "$value": "#8C6710", "$description": "[Türetme] beyazda 5,17:1" }
     },
-    "orange": {
-      "100": { "$type": "color", "$value": "#FFEDD5", "$description": "Figma: Category/Orange" }
+    "category": {
+      "$description": "Kategori zemin (bg) ve ön plan (fg) çiftleri. Anahtarlar veritabanındaki renk adlarıdır, değişmez. DESIGN_SYSTEM_PICKALY §2.2",
+      "teal": { "bg": { "$type": "color", "$value": "#D1FFF9" }, "fg": { "$type": "color", "$value": "#0E7E6F" } },
+      "blue": { "bg": { "$type": "color", "$value": "#D6E9FF" }, "fg": { "$type": "color", "$value": "#1667C3" } },
+      "violet": { "bg": { "$type": "color", "$value": "#D0D1FF" }, "fg": { "$type": "color", "$value": "#3E41EA" } },
+      "pink": { "bg": { "$type": "color", "$value": "#FFD1E8" }, "fg": { "$type": "color", "$value": "#BC1569" } },
+      "orange": { "bg": { "$type": "color", "$value": "#FFDEC7" }, "fg": { "$type": "color", "$value": "#A34E12" } },
+      "amber": { "bg": { "$type": "color", "$value": "#FFEEC7" }, "fg": { "$type": "color", "$value": "#8C6710" } },
+      "green": { "bg": { "$type": "color", "$value": "#D1FFE2" }, "fg": { "$type": "color", "$value": "#0E8138" } },
+      "red": { "bg": { "$type": "color", "$value": "#FFD1D1" }, "fg": { "$type": "color", "$value": "#C11515" } },
+      "slate": { "bg": { "$type": "color", "$value": "#E6E8EB" }, "fg": { "$type": "color", "$value": "#616975" } }
     },
-    "blue": {
-      "100": { "$type": "color", "$value": "#DBEAFE", "$description": "Figma: Category/Blue, Semantic/Bilgilendirme" },
-      "600": { "$type": "color", "$value": "#2563EB", "$description": "DESIGN §2.4 status.info [Karar Ç-7]; Figma'da yok" }
-    },
-    "indigo": {
-      "500": { "$type": "color", "$value": "#6366F1", "$description": "Figma: Chart/Balance" },
-      "700": { "$type": "color", "$value": "#4338CA", "$description": "DESIGN §9.2.1 [Karar]" }
-    },
-    "violet": {
-      "100": { "$type": "color", "$value": "#EDE9FE", "$description": "Figma: Category/Violet" }
-    },
-    "pink": {
-      "100": { "$type": "color", "$value": "#FCE7F3", "$description": "Figma: Category/Pink" }
-    },
-    "rose": {
-      "600": { "$type": "color", "$value": "#E11D48", "$description": "Figma: Chart/Expense" },
-      "700": { "$type": "color", "$value": "#BE123C", "$description": "DESIGN §9.2.1 [Karar]" }
+    "chart": {
+      "$description": "Grafik renkleri; beyaz ve canvas üzerinde ≥3:1. DESIGN_SYSTEM_PICKALY §2.5",
+      "income": { "$type": "color", "$value": "#1C90FD" },
+      "expense": { "$type": "color", "$value": "#8082F5" },
+      "savings": { "$type": "color", "$value": "#0DA08D" },
+      "compare": { "$type": "color", "$value": "#B16FF3" }
     }
   }
 }

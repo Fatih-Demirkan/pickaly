@@ -13,7 +13,7 @@ type PaymentStatusChipProps = {
 
 export function PaymentStatusChip({ status, due, labels }: PaymentStatusChipProps) {
   if (status === "paid") return <Chip variant="success">{labels.paid}</Chip>;
-  if (due.kind === "overdue") return <Chip className="bg-status-danger-subtle text-text-danger">{labels.overdue}</Chip>;
+  if (due.kind === "overdue") return <Chip variant="danger">{labels.overdue}</Chip>;
   return <Chip variant="warning">{labels.pending}</Chip>;
 }
 

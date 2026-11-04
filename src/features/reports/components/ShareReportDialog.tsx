@@ -62,9 +62,9 @@ export async function ShareReportDialog({ month }: { month: MonthKey }) {
               footer: t("footer"),
             }}
           />
-          <p className="text-center text-body-sm text-text-secondary">{t("hint")}</p>
+          <p className="text-center text-caption text-text-secondary">{t("hint")}</p>
           {empty && (
-            <p id="share-empty" className="text-center text-body-sm text-text-secondary">
+            <p id="share-empty" className="text-center text-caption text-text-secondary">
               {t("emptyMonth")}
             </p>
           )}

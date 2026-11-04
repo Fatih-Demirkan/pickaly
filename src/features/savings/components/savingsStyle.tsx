@@ -5,26 +5,26 @@ import { cn } from "@/lib/cn";
 import type { SavingsAccount, SavingsIconName, SavingsKind } from "../domain/types";
 
 // Pages → Birikimler kart görselleri:
-//   ikon kutusu 40 px, radius-md (Acil Durum Fonu: Category/Red + octagon-alert · Ev Peşinatı: Category/Green + birdhouse)
+//   ikon karosu 36 px, radius-sm (Acil Durum Fonu: Category/Red + octagon-alert · Ev Peşinatı: Category/Green + birdhouse)
 //   tür çipi: "Vadeli" Görev (Category/Blue) · "Altın" Turuncu (Category/Orange)
-//   ilerleme çubuğu: 8 px, tam yuvarlak, Neutral/50 zemin + Border/Default çerçeve, Brand/Primary dolgu
+//   ilerleme çubuğu: 8 px, tam yuvarlak, iz blue.100 + dolgu blue.500 (DESIGN_SYSTEM_PICKALY §5.9)
 // [Varsayım] Yatırım Fonu / Döviz / Nakit türlerinin çipi çizilmedi: Genel. Yeni hesabın ikonu Birikimler nav ikonu.
 
 const iconOf: Record<SavingsIconName, AppIconName> = { emergency: "emergency", home: "savingsHome", savings: "savings" };
 
 const toneOf: Record<SavingsAccount["color"], string> = {
-  red: "bg-category-red text-status-danger",
-  green: "bg-category-green text-status-success",
-  blue: "bg-category-blue text-text-on-task",
-  orange: "bg-category-orange text-text-warning",
-  slate: "bg-category-slate text-text-secondary",
+  red: "bg-category-red text-category-fg-red",
+  green: "bg-category-green text-category-fg-green",
+  blue: "bg-category-blue text-category-fg-blue",
+  orange: "bg-category-orange text-category-fg-orange",
+  slate: "bg-category-slate text-category-fg-slate",
 };
 
 export const kindChip: Record<SavingsKind, ChipVariant> = { deposit: "task", gold: "warning", fund: "neutral", currency: "neutral", cash: "neutral" };
 
 export function SavingsIcon({ account }: { account: Pick<SavingsAccount, "icon" | "color"> }) {
   return (
-    <span aria-hidden className={cn("inline-flex size-40 shrink-0 items-center justify-center rounded-md", toneOf[account.color])}>
+    <span aria-hidden className={cn("inline-flex size-36 shrink-0 items-center justify-center rounded-sm", toneOf[account.color])}>
       <Icon icon={iconOf[account.icon]} />
     </span>
   );
@@ -39,9 +39,9 @@ export function ProgressBar({ percent, label }: { percent: number; label: string
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={value}
-      className="block h-8 w-full overflow-hidden rounded-full border border-border-default bg-surface-page"
+      className="block h-8 w-full overflow-hidden rounded-full bg-progress-track-bar"
     >
-      <span className="block h-full rounded-full bg-brand-primary" style={{ width: `${value}%` }} />
+      <span className="block h-full rounded-full bg-progress-fill" style={{ width: `${value}%` }} />
     </span>
   );
 }

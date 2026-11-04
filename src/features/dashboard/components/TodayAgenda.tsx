@@ -45,12 +45,12 @@ export async function TodayAgenda({ today, items, overdue, payments }: TodayAgen
         link={total > 0 ? { href: calendarHref({ day: today }), label: t("all", { count: total }) } : undefined}
       />
       {total === 0 ? (
-        <p className="rounded-lg border border-border-default bg-surface-card p-12 text-body-md text-text-secondary">{t("empty")}</p>
+        <p className="rounded-md bg-surface-card p-12 text-body text-text-secondary shadow-elev-1">{t("empty")}</p>
       ) : (
         <div className="flex flex-col gap-12">
           {overdue.length > 0 && (
             <section aria-labelledby="today-agenda-overdue" className="flex flex-col gap-8">
-              <h3 id="today-agenda-overdue" className="text-label-md text-text-danger">
+              <h3 id="today-agenda-overdue" className="text-body-strong text-text-danger">
                 {t("overdue")}
               </h3>
               <ul className="flex flex-col gap-8">

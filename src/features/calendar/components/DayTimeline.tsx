@@ -33,8 +33,8 @@ export function DayTimeline({ entries, categories, locale, today, query }: DayTi
           return (
             <li key={hour} className="flex flex-col gap-8 pb-8">
               <span className="flex items-center gap-12">
-                <span className="w-40 shrink-0 text-label-sm text-text-secondary">{label}</span>
-                <span aria-hidden className="h-px flex-1 bg-border-default" />
+                <span className="w-40 shrink-0 text-caption-strong text-text-secondary">{label}</span>
+                <span aria-hidden className="h-px flex-1 bg-border-subtle" />
               </span>
               {inHour.length > 0 && <ul className="flex flex-col gap-8 ps-48">{inHour.map(card)}</ul>}
             </li>

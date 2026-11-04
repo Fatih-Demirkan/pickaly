@@ -20,9 +20,9 @@ import { NAME_MAX_LENGTH, PASSWORD_MIN_LENGTH, type AuthFormError, type AuthForm
 import { FormAlert, PasswordField, TextField } from "./AuthFields";
 import { OtpInput } from "./OtpInput";
 
-// Oturum formları (RESPONSIVE §8.2.8 [Varsayım]). Ana buton Button LG Primary, tam genişlik; ikincil bağlantılar Label/Small brand.
+// Oturum formları (RESPONSIVE §8.2.8 [Varsayım]). Ana buton Button LG Primary, tam genişlik; ikincil bağlantılar Text buton (body-strong, text-brand).
 
-const linkClass = "text-label-md text-text-brand hover:underline";
+const linkClass = "text-body-strong text-text-brand hover:underline";
 const RESEND_SECONDS = 60; // [Varsayım] Kodu tekrar gönder geri sayımı (FR-AUTH-002).
 
 export function SignInForm({ next, initialError }: { next: string; initialError?: AuthFormError }) {
@@ -41,7 +41,7 @@ export function SignInForm({ next, initialError }: { next: string; initialError?
       <Button type="submit" fullWidth loading={pending}>
         {t("signIn.submit")}
       </Button>
-      <p className="text-center text-body-md text-text-secondary">
+      <p className="text-center text-body text-text-secondary">
         {t("signIn.noAccount")}{" "}
         <Link href={SIGN_UP_PATH} className={linkClass}>
           {t("signIn.createAccount")}
@@ -70,7 +70,7 @@ export function SignUpForm() {
         required
       />
       <div className="flex flex-col gap-4">
-        <label className="flex items-start gap-8 text-body-md text-text-primary">
+        <label className="flex items-start gap-8 text-body text-text-primary">
           <input
             type="checkbox"
             name="terms"
@@ -82,7 +82,7 @@ export function SignUpForm() {
           {t("signUp.terms")}
         </label>
         {state.errors?.terms && (
-          <p id="terms-error" className="text-body-sm text-text-danger">
+          <p id="terms-error" className="text-caption text-text-danger">
             {t("errors.terms")}
           </p>
         )}
@@ -90,7 +90,7 @@ export function SignUpForm() {
       <Button type="submit" fullWidth loading={pending}>
         {t("signUp.submit")}
       </Button>
-      <p className="text-center text-body-md text-text-secondary">
+      <p className="text-center text-body text-text-secondary">
         {t("signUp.haveAccount")}{" "}
         <Link href={SIGN_IN_PATH} className={linkClass}>
           {t("signUp.signIn")}
@@ -125,7 +125,7 @@ function ResendButton({ email, kind }: { email: string; kind: "signup" | "recove
           } else toast({ message: t(`formErrors.${result.error ?? "unknown"}`), tone: "error" });
         })
       }
-      className="touch-target self-center text-label-md text-text-brand hover:underline disabled:cursor-not-allowed disabled:text-text-tertiary disabled:no-underline"
+      className="touch-target self-center text-body-strong text-text-brand hover:underline disabled:cursor-not-allowed disabled:text-text-disabled disabled:no-underline"
     >
       {seconds > 0 ? t("verify.resendIn", { seconds }) : t("verify.resend")}
     </button>
@@ -144,7 +144,7 @@ function CodeForm({ email, next, kind }: { email: string; next?: string; kind: "
       <FormAlert error={state.formError} />
       <OtpInput name="code" label={t("verify.codeLabel")} digitLabel={(index) => t("verify.digit", { index })} invalid={Boolean(state.errors?.code || state.formError === "codeInvalid")} describedBy={errorId} />
       {state.errors?.code && (
-        <p id="code-error" className="text-body-sm text-text-danger">
+        <p id="code-error" className="text-caption text-text-danger">
           {t("errors.code")}
         </p>
       )}
@@ -161,7 +161,7 @@ export function VerifySignUpForm({ email, next }: { email: string; next?: string
   return (
     <div className="flex flex-col gap-16">
       <CodeForm email={email} next={next} kind="signup" />
-      <p className="text-center text-body-md text-text-secondary">
+      <p className="text-center text-body text-text-secondary">
         {t("verify.linkDone")}{" "}
         <Link href={SIGN_IN_PATH} className={linkClass}>
           {t("signUp.signIn")}

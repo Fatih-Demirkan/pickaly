@@ -1,6 +1,6 @@
 @import "tailwindcss";
 /* Pickaly token'ları: Tailwind'in varsayılan renk, boşluk, radius, gölge, breakpoint ve metin ölçeklerini
-   sıfırlar ve yalnızca DESIGN.md token'larını tanımlar. Üretilen dosyadır: pnpm tokens:build */
+   sıfırlar ve yalnızca DESIGN_SYSTEM.md / DESIGN_SYSTEM_PICKALY.md token'larını tanımlar. Üretilen dosyadır: pnpm tokens:build */
 @import "./tokens.css";
 
 /* Tema: v1'de yalnızca açık tema (PRD UX-009). Dark mode geldiğinde semantic renkler
@@ -67,7 +67,7 @@
   }
 
   body {
-    @apply bg-surface-page font-sans text-body-md text-text-primary antialiased;
+    @apply bg-surface-page font-sans text-body text-text-primary antialiased;
     font-variant-numeric: tabular-nums;
   }
 

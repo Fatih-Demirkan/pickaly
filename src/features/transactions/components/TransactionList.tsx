@@ -11,11 +11,11 @@ import type { Transaction } from "../domain/types";
 import { detailHref, type ListQuery } from "../routes";
 import { TransactionRowLink } from "./TransactionRowLink";
 
-// Pages → İşlemler gün grupları.
-//   Gün başlığı: Heading/H4 ("Bugün, 14 Mayıs") + Label/Small text-secondary ("Net: +6.570,00 ₺")
-//   Liste kartı: radius-lg, surface-card, border-default, iç boşluk yok
-//   Satır: padding 12, aralık 12, alt çizgi; ikon kutusu 40; başlık Label/Default; altında kategori chip'i
-//          + "•" + hesap (Body/Small); sağda tutar Label/Default (gelir success / gider danger) ve saat (Body/Small)
+// İşlemler gün grupları (DESIGN_SYSTEM.md §A8 Transaction list row, DESIGN_SYSTEM_PICKALY §5.3).
+//   Gün başlığı: caption-strong text-secondary ("Bugün, 14 Mayıs") · sağda günlük net (caption-strong)
+//   Liste grubu: beyaz, radius-md, elev-1, iç boşluk yok; satırlar arası border-subtle
+//   Satır: 64 px, yatay 16, aralık 12; 36 px ikon karosu; başlık body-strong; altında kategori çipi + "•" + hesap (caption);
+//          sağda tutar body-strong (gelir success / gider danger, PRD UX-014) ve saat (caption). Seçili satır blue.100.
 // Laptop+: sütunlu liste-tablo hibriti, semantik <table> (RESPONSIVE §3.3.1, §4.2).
 // ≥1280'de detay paneli sağa sabitlenince (<html data-docked-drawer>) liste daralır; tablo yerine satır kartları döner.
 // Seçili satır adresten işaretlenir (TransactionRowLink), liste seçim için yeniden çizilmez.
@@ -47,33 +47,33 @@ export async function TransactionList({ groups, categories, accounts, locale, to
       {groups.map((group) => {
         const headingId = `day-${group.date}`;
         return (
-          <section key={group.date} aria-labelledby={headingId} className="flex flex-col gap-12">
+          <section key={group.date} aria-labelledby={headingId} className="flex flex-col gap-8">
             <div className="flex items-baseline justify-between gap-12">
-              <h2 id={headingId} className="text-heading-h4 text-text-primary">
+              <h2 id={headingId} className="text-caption-strong text-text-secondary">
                 {heading(group.date)}
               </h2>
-              <p className="text-label-sm text-text-secondary">{t("dayNet", { amount: formatMoney(group.netMinor, locale, "always") })}</p>
+              <p className="text-caption-strong text-text-secondary">{t("dayNet", { amount: formatMoney(group.netMinor, locale, "always") })}</p>
             </div>
 
             {/* Mobil / tablet (ve ≥1280 detay paneli açıkken): satır kartları */}
-            <ul className="overflow-hidden rounded-lg border border-border-default bg-surface-card laptop:hidden detail:[html[data-docked-drawer]_&]:block">
+            <ul className="overflow-hidden rounded-md bg-surface-card shadow-elev-1 laptop:hidden detail:[html[data-docked-drawer]_&]:block">
               {group.transactions.map((transaction) => {
                 const category = categories.get(transaction.categoryId) ?? UNKNOWN_CATEGORY;
                 return (
-                  <li key={transaction.id} className="border-b border-border-default last:border-b-0">
+                  <li key={transaction.id} className="border-b border-border-subtle last:border-b-0">
                     <TransactionRowLink
                       id={transaction.id}
                       href={detailHref(transaction.id, query)}
-                      className="flex items-center gap-12 p-12 transition-colors hover:bg-surface-page aria-[current]:bg-surface-selected"
+                      className="flex min-h-64 items-center gap-12 px-16 py-12 transition-colors hover:bg-surface-page aria-[current]:bg-surface-selected"
                     >
                       <CategoryIcon category={category} />
                       <div className="flex min-w-0 flex-1 flex-col gap-2">
                         <span className="flex min-w-0 items-center gap-8">
-                          <span className="truncate text-label-md text-text-primary">{transaction.title}</span>
+                          <span className="truncate text-body-strong text-text-primary">{transaction.title}</span>
                           {transaction.source === "payment" && <Chip variant="success">{t("paid")}</Chip>}
                         </span>
-                        <span className="flex min-w-0 items-center gap-8 text-body-sm text-text-secondary">
-                          <span className={cn("inline-flex h-24 shrink-0 items-center rounded-full px-8 text-label-sm", categoryChipClass(category.color))}>
+                        <span className="flex min-w-0 items-center gap-8 text-caption text-text-secondary">
+                          <span className={cn("inline-flex h-24 shrink-0 items-center rounded-full px-8 text-caption-strong", categoryChipClass(category.color))}>
                             {category.name}
                           </span>
                           <span aria-hidden>•</span>
@@ -81,8 +81,8 @@ export async function TransactionList({ groups, categories, accounts, locale, to
                         </span>
                       </div>
                       <div className="flex shrink-0 flex-col items-end">
-                        <span className={cn("text-label-md", amountClass(transaction))}>{formatMoney(signedAmount(transaction), locale, "always")}</span>
-                        <span className="text-body-sm text-text-secondary">{formatTime(transaction.occurredAt, locale)}</span>
+                        <span className={cn("text-body-strong", amountClass(transaction))}>{formatMoney(signedAmount(transaction), locale, "always")}</span>
+                        <span className="text-caption text-text-secondary">{formatTime(transaction.occurredAt, locale)}</span>
                       </div>
                     </TransactionRowLink>
                   </li>
@@ -91,7 +91,7 @@ export async function TransactionList({ groups, categories, accounts, locale, to
             </ul>
 
             {/* Laptop+: liste-tablo hibriti */}
-            <div className="hidden overflow-hidden rounded-lg border border-border-default bg-surface-card laptop:block detail:[html[data-docked-drawer]_&]:hidden">
+            <div className="hidden overflow-hidden rounded-md bg-surface-card shadow-elev-1 laptop:block detail:[html[data-docked-drawer]_&]:hidden">
                 <table className="w-full table-fixed border-collapse text-start">
                   <caption className="sr-only">{heading(group.date)}</caption>
                   {/* Başlık satırı yalnızca ekran okuyucu için olduğundan sütun genişlikleri colgroup ile verilir. */}
@@ -118,23 +118,23 @@ export async function TransactionList({ groups, categories, accounts, locale, to
                       const category = categories.get(transaction.categoryId) ?? UNKNOWN_CATEGORY;
                       const href = detailHref(transaction.id, query);
                       return (
-                        <tr key={transaction.id} className="relative border-b border-border-default transition-colors last:border-b-0 hover:bg-surface-page has-[a[aria-current]]:bg-surface-selected">
-                          <th scope="row" className="p-12 text-start font-normal">
+                        <tr key={transaction.id} className="relative border-b border-border-subtle transition-colors last:border-b-0 hover:bg-surface-page has-[a[aria-current]]:bg-surface-selected">
+                          <th scope="row" className="px-16 py-12 text-start font-normal">
                             {/* Satırın tamamı tıklanabilir: bağlantı ilk hücrede, ::after ile satırı kaplar. */}
                             <TransactionRowLink id={transaction.id} href={href} className="flex min-w-0 items-center gap-12 after:absolute after:inset-0 after:content-['']">
                               <CategoryIcon category={category} />
-                              <span className="truncate text-label-md text-text-primary">{transaction.title}</span>
+                              <span className="truncate text-body-strong text-text-primary">{transaction.title}</span>
                             </TransactionRowLink>
                           </th>
                           <td className="p-12">
-                            <span className={cn("inline-flex h-24 max-w-full items-center truncate rounded-full px-8 text-label-sm", categoryChipClass(category.color))}>
+                            <span className={cn("inline-flex h-24 max-w-full items-center truncate rounded-full px-8 text-caption-strong", categoryChipClass(category.color))}>
                               {category.name}
                             </span>
                           </td>
-                          <td className="truncate p-12 text-body-sm text-text-secondary">{accounts.get(transaction.accountId)?.name}</td>
+                          <td className="truncate p-12 text-caption text-text-secondary">{accounts.get(transaction.accountId)?.name}</td>
                           <td className="p-12">{transaction.source === "payment" && <Chip variant="success">{t("paid")}</Chip>}</td>
-                          <td className="p-12 text-body-sm text-text-secondary">{formatTime(transaction.occurredAt, locale)}</td>
-                          <td className={cn("p-12 text-end text-label-md", amountClass(transaction))}>{formatMoney(signedAmount(transaction), locale, "always")}</td>
+                          <td className="p-12 text-caption text-text-secondary">{formatTime(transaction.occurredAt, locale)}</td>
+                          <td className={cn("p-12 text-end text-body-strong", amountClass(transaction))}>{formatMoney(signedAmount(transaction), locale, "always")}</td>
                         </tr>
                       );
                     })}

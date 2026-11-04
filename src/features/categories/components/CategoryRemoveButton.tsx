@@ -48,17 +48,17 @@ export function CategoryRemoveButton({ categoryId, mode, labels }: CategoryRemov
         ref={dialogRef}
         aria-labelledby={titleId}
         aria-describedby={bodyId}
-        className="m-auto w-[calc(100%-32px)] max-w-(--layout-modal-confirm-width) rounded-2xl border border-border-default bg-surface-card p-24 text-text-primary shadow-overlay backdrop:bg-text-primary/40 open:animate-pop-enter open:backdrop:animate-fade-in"
+        className="m-auto w-[calc(100%-32px)] max-w-(--layout-modal-confirm-width) rounded-xl bg-surface-card p-24 text-text-primary shadow-elev-3 backdrop:bg-text-primary/40 open:animate-pop-enter open:backdrop:animate-fade-in"
       >
         <div className="flex flex-col gap-24">
           <div className="flex flex-col gap-8">
-            <h2 id={titleId} className="text-heading-h4">
+            <h2 id={titleId} className="text-title-md">
               {labels.title}
             </h2>
-            <p id={bodyId} className="text-body-md text-text-secondary">
+            <p id={bodyId} className="text-body text-text-secondary">
               {labels.body}
             </p>
-            {labels.note && <p className="text-body-md text-text-secondary">{labels.note}</p>}
+            {labels.note && <p className="text-body text-text-secondary">{labels.note}</p>}
           </div>
           <div className="flex flex-col-reverse gap-12 tablet:flex-row tablet:justify-end">
             <Button variant="tertiary" onClick={() => dialogRef.current?.close()}>

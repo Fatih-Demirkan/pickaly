@@ -66,7 +66,11 @@ function resolve(value, seen = new Set()) {
 const aliasPath = (value) => (typeof value === "string" ? value.match(/^\{([^}]+)\}$/)?.[1] : undefined);
 const cssName = (path) => path.join("-");
 const pxToRem = (px) => `${parseFloat(px) / 16}rem`;
-const shadowCss = (s) => `${s.offsetX} ${s.offsetY} ${s.blur} ${s.spread} ${s.color}`;
+// Gölge: tek katman ({…}), çok katman ([{…}, {…}]) veya başka bir gölgeye referans ("{shadow.elev-1}").
+const shadowCss = (value) => {
+  const s = resolve(value);
+  return (Array.isArray(s) ? s : [s]).map((l) => `${l.offsetX} ${l.offsetY} ${l.blur} ${l.spread} ${l.color}`).join(", ");
+};
 
 // ---- 2. CSS üret -------------------------------------------------------------------------
 const breakpoints = collect(tree.breakpoint).map(([p, t]) => [p[0], t.$value]);
@@ -78,7 +82,7 @@ push(
   "/* ------------------------------------------------------------------------------------------",
   " * ÜRETİLEN DOSYA – ELLE DÜZENLEMEYİN.",
   " * Kaynak: tokens/*.json · Üretici: scripts/build-tokens.mjs (pnpm tokens:build)",
-  " * Kurallar: DESIGN.md §10, TECH_STACK.md §8",
+  " * Kurallar: DESIGN_SYSTEM.md Part A, DESIGN_SYSTEM_PICKALY.md, TECH_STACK.md §8",
   " * ---------------------------------------------------------------------------------------- */",
   "",
 );
@@ -113,7 +117,8 @@ for (const [name, value] of breakpoints) push(`  --breakpoint-${name}: ${pxToRem
 push(
   "",
   "  --font-*: initial;",
-  `  --font-sans: var(--font-manrope), ${tree.font.family.sans.$value}, ui-sans-serif, system-ui, sans-serif;`,
+  // --font-geist: src/app/layout.tsx'te next/font ile yüklenen fontun değişkeni.
+  `  --font-sans: var(--font-geist), ${tree.font.family.sans.$value}, ui-sans-serif, system-ui, sans-serif;`,
   "  --font-weight-*: initial;",
 );
 for (const [path, token] of collect(tree.font.weight)) push(`  --font-weight-${cssName(path)}: ${token.$value};`);
@@ -125,6 +130,7 @@ for (const [path, token] of collect(tree.type)) {
     `  --text-${name}: var(--pk-type-${name}-size);`,
     `  --text-${name}--line-height: var(--pk-type-${name}-line-height);`,
     `  --text-${name}--font-weight: ${token.$value.fontWeight};`,
+    ...(token.$value.letterSpacing ? [`  --text-${name}--letter-spacing: ${token.$value.letterSpacing};`] : []),
   );
 }
 push("}", "");

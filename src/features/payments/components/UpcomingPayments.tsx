@@ -26,7 +26,7 @@ export async function UpcomingPayments({ today }: { today: DateKey }) {
         link={upcoming.length > 0 ? { href: "/islemler", label: t("upcoming.all", { count: upcoming.length }) } : undefined}
       />
       {upcoming.length === 0 ? (
-        <p className="rounded-lg border border-border-default bg-surface-card p-12 text-body-md text-text-secondary">{t("upcoming.empty")}</p>
+        <p className="rounded-lg bg-surface-card shadow-elev-1 p-12 text-body text-text-secondary">{t("upcoming.empty")}</p>
       ) : (
         <ul className="@container flex flex-col gap-8">
           {upcoming.slice(0, VISIBLE_LIMIT).map(({ payment, series }) => (

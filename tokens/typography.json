@@ -1,29 +1,137 @@
 {
-  "$description": "Manrope tipografi ölçeği. Boyutlar Figma text style'larından, satır yükseklikleri RESPONSIVE.md §6.3 kararından (başlık %125, gövde %150, tutar %110). 'laptop' değeri ≥1024 px'de geçerlidir. Kaynak: DESIGN.md §3",
+  "$description": "Geist tipografi ölçeği. Kaynak: DESIGN_SYSTEM.md Part A §A3 + DESIGN_SYSTEM_PICKALY.md §3. Boyutlar breakpoint'e göre değişmez; tek istisna display-balance (laptop+ 48/52, Karar K-3). 'laptop' değeri ≥1024 px'de geçerlidir",
   "font": {
     "family": {
-      "sans": { "$type": "fontFamily", "$value": "Manrope" }
+      "sans": {
+        "$type": "fontFamily",
+        "$value": "Geist"
+      }
     },
     "weight": {
-      "regular": { "$type": "fontWeight", "$value": 400 },
-      "semibold": { "$type": "fontWeight", "$value": 600 },
-      "bold": { "$type": "fontWeight", "$value": 700 }
+      "regular": {
+        "$type": "fontWeight",
+        "$value": 400
+      },
+      "medium": {
+        "$type": "fontWeight",
+        "$value": 500
+      },
+      "semibold": {
+        "$type": "fontWeight",
+        "$value": 600
+      },
+      "bold": {
+        "$type": "fontWeight",
+        "$value": 700
+      }
     }
   },
   "type": {
-    "display-lg": { "$type": "typography", "$value": { "fontWeight": 700, "fontSize": "32px", "lineHeight": "40px" }, "laptop": { "fontSize": "36px", "lineHeight": "45px" } },
-    "heading-h1": { "$type": "typography", "$value": { "fontWeight": 700, "fontSize": "28px", "lineHeight": "35px" }, "laptop": { "fontSize": "32px", "lineHeight": "40px" } },
-    "heading-h2": { "$type": "typography", "$value": { "fontWeight": 700, "fontSize": "24px", "lineHeight": "30px" }, "laptop": { "fontSize": "28px", "lineHeight": "35px" } },
-    "heading-h3": { "$type": "typography", "$value": { "fontWeight": 600, "fontSize": "20px", "lineHeight": "25px" } },
-    "heading-h4": { "$type": "typography", "$value": { "fontWeight": 600, "fontSize": "18px", "lineHeight": "23px" } },
-    "body-lg": { "$type": "typography", "$value": { "fontWeight": 400, "fontSize": "16px", "lineHeight": "24px" } },
-    "body-md": { "$type": "typography", "$value": { "fontWeight": 400, "fontSize": "14px", "lineHeight": "21px" } },
-    "body-sm": { "$type": "typography", "$value": { "fontWeight": 400, "fontSize": "12px", "lineHeight": "18px" } },
-    "label-md": { "$type": "typography", "$value": { "fontWeight": 600, "fontSize": "14px", "lineHeight": "21px" } },
-    "label-sm": { "$type": "typography", "$value": { "fontWeight": 600, "fontSize": "12px", "lineHeight": "18px" } },
-    "label-xs": { "$type": "typography", "$value": { "fontWeight": 700, "fontSize": "10px", "lineHeight": "15px" }, "$description": "Yalnızca nav etiketleri [Karar Ç-11]" },
-    "button": { "$type": "typography", "$value": { "fontWeight": 600, "fontSize": "14px", "lineHeight": "21px" } },
-    "data-lg": { "$type": "typography", "$value": { "fontWeight": 700, "fontSize": "32px", "lineHeight": "35px" }, "laptop": { "fontSize": "40px", "lineHeight": "44px" } },
-    "data-md": { "$type": "typography", "$value": { "fontWeight": 700, "fontSize": "24px", "lineHeight": "26px" }, "laptop": { "fontSize": "28px", "lineHeight": "31px" } }
+    "display-balance": {
+      "$type": "typography",
+      "$value": {
+        "fontWeight": 500,
+        "fontSize": "44px",
+        "lineHeight": "48px",
+        "letterSpacing": "-0.02em"
+      },
+      "laptop": {
+        "fontSize": "48px",
+        "lineHeight": "52px"
+      }
+    },
+    "display-hero": {
+      "$type": "typography",
+      "$value": {
+        "fontWeight": 400,
+        "fontSize": "34px",
+        "lineHeight": "40px",
+        "letterSpacing": "-0.02em"
+      }
+    },
+    "title-lg": {
+      "$type": "typography",
+      "$value": {
+        "fontWeight": 500,
+        "fontSize": "28px",
+        "lineHeight": "34px",
+        "letterSpacing": "-0.01em"
+      }
+    },
+    "title-md": {
+      "$type": "typography",
+      "$value": {
+        "fontWeight": 600,
+        "fontSize": "20px",
+        "lineHeight": "26px",
+        "letterSpacing": "-0.01em"
+      }
+    },
+    "title-sm": {
+      "$type": "typography",
+      "$value": {
+        "fontWeight": 600,
+        "fontSize": "16px",
+        "lineHeight": "22px"
+      }
+    },
+    "body": {
+      "$type": "typography",
+      "$value": {
+        "fontWeight": 400,
+        "fontSize": "14px",
+        "lineHeight": "20px"
+      }
+    },
+    "body-strong": {
+      "$type": "typography",
+      "$value": {
+        "fontWeight": 600,
+        "fontSize": "14px",
+        "lineHeight": "20px"
+      }
+    },
+    "caption": {
+      "$type": "typography",
+      "$value": {
+        "fontWeight": 400,
+        "fontSize": "12px",
+        "lineHeight": "16px"
+      }
+    },
+    "caption-strong": {
+      "$type": "typography",
+      "$value": {
+        "fontWeight": 600,
+        "fontSize": "12px",
+        "lineHeight": "16px"
+      }
+    },
+    "micro": {
+      "$type": "typography",
+      "$value": {
+        "fontWeight": 500,
+        "fontSize": "10px",
+        "lineHeight": "14px",
+        "letterSpacing": "0.04em"
+      },
+      "$description": "Metin kaynakta BÜYÜK HARF yazılır"
+    },
+    "nav": {
+      "$type": "typography",
+      "$value": {
+        "fontWeight": 600,
+        "fontSize": "10px",
+        "lineHeight": "14px"
+      }
+    },
+    "button": {
+      "$type": "typography",
+      "$value": {
+        "fontWeight": 600,
+        "fontSize": "14px",
+        "lineHeight": "20px"
+      }
+    }
   }
 }

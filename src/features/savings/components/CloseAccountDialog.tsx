@@ -41,20 +41,20 @@ export function CloseAccountDialog({ labels, accounts, action }: CloseAccountDia
         ref={dialogRef}
         aria-labelledby={titleId}
         aria-describedby={bodyId}
-        className="m-auto w-[calc(100%-32px)] max-w-(--layout-modal-confirm-width) rounded-2xl border border-border-default bg-surface-card p-24 text-text-primary shadow-overlay backdrop:bg-text-primary/40 open:animate-pop-enter open:backdrop:animate-fade-in"
+        className="m-auto w-[calc(100%-32px)] max-w-(--layout-modal-confirm-width) rounded-xl bg-surface-card p-24 text-text-primary shadow-elev-3 backdrop:bg-text-primary/40 open:animate-pop-enter open:backdrop:animate-fade-in"
       >
         <form action={action} className="flex flex-col gap-24">
           <div className="flex flex-col gap-8">
-            <h2 id={titleId} className="text-heading-h4">
+            <h2 id={titleId} className="text-title-md">
               {labels.title}
             </h2>
-            <p id={bodyId} className="text-body-md text-text-secondary">
+            <p id={bodyId} className="text-body text-text-secondary">
               {labels.body}
             </p>
           </div>
           {labels.transferBody && (
             <fieldset className="flex flex-col gap-8">
-              <legend className="mb-8 text-label-md text-text-primary">{labels.transferBody}</legend>
+              <legend className="mb-8 text-body-strong text-text-primary">{labels.transferBody}</legend>
               <input type="hidden" name="targetAccountId" value={target} />
               <div role="radiogroup" className="flex flex-col gap-2">
                 {options.map((option) => {
@@ -67,11 +67,11 @@ export function CloseAccountDialog({ labels, accounts, action }: CloseAccountDia
                       aria-checked={selected}
                       onClick={() => setTarget(option.value)}
                       className={cn(
-                        "flex h-48 items-center gap-12 rounded-md px-12 text-start text-body-md transition-colors",
+                        "flex h-48 items-center gap-12 rounded-md px-12 text-start text-body transition-colors",
                         selected ? "bg-surface-selected text-text-brand" : "text-text-primary hover:bg-surface-page",
                       )}
                     >
-                      <span className={cn("min-w-0 flex-1 truncate", selected && "text-label-md")}>{option.label}</span>
+                      <span className={cn("min-w-0 flex-1 truncate", selected && "text-body-strong")}>{option.label}</span>
                       {selected && (
                         <span className="text-brand-primary">
                           <Icon icon="confirm" size="sm" />

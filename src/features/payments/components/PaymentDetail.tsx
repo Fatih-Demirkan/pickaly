@@ -58,22 +58,22 @@ export async function PaymentDetail({ data, category, accounts, locale, today, o
 
   return (
     <article className="flex flex-1 flex-col gap-(--layout-section-gap)">
-      <section className="flex flex-col items-start gap-12 rounded-2xl border border-border-default bg-linear-to-b from-surface-card to-surface-muted p-16 shadow-floating">
+      <section className="flex flex-col items-start gap-12 rounded-lg bg-surface-card p-16 shadow-elev-1">
         <div className="flex flex-wrap items-center gap-4">
           {category && (
-            <span className={cn("inline-flex h-24 items-center gap-4 rounded-full px-8 text-label-sm", categoryChipClass(category.color))}>
+            <span className={cn("inline-flex h-24 items-center gap-4 rounded-full px-8 text-caption-strong", categoryChipClass(category.color))}>
               <Icon icon={resolveCategoryIcon(category)} size="xs" />
               {category.name}
             </span>
           )}
-          <span aria-hidden className="w-8 text-center text-body-sm text-text-secondary">
+          <span aria-hidden className="w-8 text-center text-caption text-text-secondary">
             •
           </span>
           <PaymentStatusChip status={payment.status} due={due} labels={statusLabels} />
         </div>
         <div className="flex min-w-0 flex-col">
-          <h2 className="text-label-sm text-text-secondary">{series.title}</h2>
-          <p className="text-data-lg text-text-danger">{formatMoney(-(payment.paidAmountMinor ?? payment.amountMinor), locale, "always")}</p>
+          <h2 className="text-caption-strong text-text-secondary">{series.title}</h2>
+          <p className="text-display-balance text-text-danger">{formatMoney(-(payment.paidAmountMinor ?? payment.amountMinor), locale, "always")}</p>
         </div>
         <Chip variant="neutral">
           {formatDateWithWeekday(dueAt, locale)} • {formatTime(dueAt, locale)}
@@ -81,33 +81,33 @@ export async function PaymentDetail({ data, category, accounts, locale, today, o
       </section>
 
       <section aria-labelledby={`payment-details-${payment.id}`} className="flex flex-col gap-12">
-        <h3 id={`payment-details-${payment.id}`} className="text-heading-h4 text-text-primary">
+        <h3 id={`payment-details-${payment.id}`} className="text-title-sm text-text-primary">
           {t("detail.details")}
         </h3>
-        <dl className="overflow-hidden rounded-lg border border-border-default bg-surface-card">
+        <dl className="overflow-hidden rounded-lg bg-surface-card shadow-elev-1">
           <DetailRow icon="calendar" label={t("detail.due")}>
-            <p className="text-label-md text-text-primary">{formatDateLong(payment.dueDate, locale)}</p>
-            <p className={cn("text-body-sm", !paid && due.kind === "overdue" ? "text-text-danger" : "text-text-secondary")}>
+            <p className="text-body-strong text-text-primary">{formatDateLong(payment.dueDate, locale)}</p>
+            <p className={cn("text-caption", !paid && due.kind === "overdue" ? "text-text-danger" : "text-text-secondary")}>
               {paid && payment.paidAt
                 ? t("detail.paidOn", { date: formatDateLong(toDateKey(new Date(payment.paidAt)), locale) })
                 : t(`due.${dueText.key}`, dueText.values)}
             </p>
           </DetailRow>
           <DetailRow icon="repeat" label={t("detail.frequency")}>
-            <p className="text-label-md text-text-primary">{tRecurrence(`frequency.${series.frequency ?? "once"}`)}</p>
-            <p className="text-body-sm text-text-secondary">{tRecurrence(`rule.${rule.key}`, rule.values)}</p>
+            <p className="text-body-strong text-text-primary">{tRecurrence(`frequency.${series.frequency ?? "once"}`)}</p>
+            <p className="text-caption text-text-secondary">{tRecurrence(`rule.${rule.key}`, rule.values)}</p>
           </DetailRow>
           <DetailRow icon="paymentMethod" label={t("detail.account")}>
-            <p className="text-label-md text-text-primary">{account?.name ?? "—"}</p>
-            {account?.detail && <p className="text-body-sm text-text-secondary">{account.detail}</p>}
+            <p className="text-body-strong text-text-primary">{account?.name ?? "—"}</p>
+            {account?.detail && <p className="text-caption text-text-secondary">{account.detail}</p>}
           </DetailRow>
           <DetailRow icon="notifications" label={t("detail.reminder")}>
             {series.reminder === "none" ? (
-              <p className="text-label-md text-text-primary">{t("detail.reminderOff")}</p>
+              <p className="text-body-strong text-text-primary">{t("detail.reminderOff")}</p>
             ) : (
               <>
-                <p className="text-label-md text-text-primary">{t("detail.reminderChannel")}</p>
-                <p className="text-body-sm text-text-secondary">{t("detail.reminderOffset", { offset: tRecurrence(`reminder.${series.reminder}`) })}</p>
+                <p className="text-body-strong text-text-primary">{t("detail.reminderChannel")}</p>
+                <p className="text-caption text-text-secondary">{t("detail.reminderOffset", { offset: tRecurrence(`reminder.${series.reminder}`) })}</p>
               </>
             )}
           </DetailRow>
@@ -120,25 +120,25 @@ export async function PaymentDetail({ data, category, accounts, locale, today, o
       </section>
 
       <section aria-labelledby={`payment-history-${payment.id}`} className="flex flex-col gap-12">
-        <h3 id={`payment-history-${payment.id}`} className="text-heading-h4 text-text-primary">
+        <h3 id={`payment-history-${payment.id}`} className="text-title-sm text-text-primary">
           {t("detail.history")}
         </h3>
         {history.length === 0 ? (
-          <p className="text-body-md text-text-secondary">{t("detail.historyEmpty")}</p>
+          <p className="text-body text-text-secondary">{t("detail.historyEmpty")}</p>
         ) : (
-          <ul className="overflow-hidden rounded-lg border border-border-default bg-surface-card">
+          <ul className="overflow-hidden rounded-lg bg-surface-card shadow-elev-1">
             {history.slice(0, HISTORY_LIMIT).map((item) => (
               <li key={item.id} className="flex items-center justify-between gap-12 p-16">
                 <span className="flex min-w-0 items-center gap-8">
-                  <span aria-hidden className="inline-flex size-32 shrink-0 items-center justify-center rounded-sm bg-category-green text-status-success">
+                  <span aria-hidden className="inline-flex size-32 shrink-0 items-center justify-center rounded-sm bg-category-green text-category-fg-green">
                     <Icon icon="paid" size="sm" />
                   </span>
                   <span className="flex min-w-0 flex-col gap-2">
-                    <span className="truncate text-label-md text-text-primary">{formatDateLong(item.dueDate, locale)}</span>
-                    <span className="truncate text-body-sm text-text-secondary">{accounts.get(item.paidAccountId ?? series.accountId)?.name}</span>
+                    <span className="truncate text-body-strong text-text-primary">{formatDateLong(item.dueDate, locale)}</span>
+                    <span className="truncate text-caption text-text-secondary">{accounts.get(item.paidAccountId ?? series.accountId)?.name}</span>
                   </span>
                 </span>
-                <span className="shrink-0 text-label-md text-text-primary">{formatMoney(item.paidAmountMinor ?? item.amountMinor, locale)}</span>
+                <span className="shrink-0 text-body-strong text-text-primary">{formatMoney(item.paidAmountMinor ?? item.amountMinor, locale)}</span>
               </li>
             ))}
           </ul>

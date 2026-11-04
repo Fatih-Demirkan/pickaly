@@ -37,7 +37,12 @@
     "search": "Ara",
     "notifications": "Bildirimler",
     "account": "Hesap",
-    "unavailable": "Bu özellik henüz kullanılamıyor."
+    "unavailable": "Bu özellik henüz kullanılamıyor.",
+    "greeting": {
+      "morning": "Günaydın",
+      "afternoon": "İyi günler",
+      "evening": "İyi akşamlar"
+    }
   },
   "pages": {
     "calendar": {
@@ -278,7 +283,11 @@
       "todayPayments": "{count} Ödeme",
       "waiting": "bekleniyor.",
       "todayNone": "Bugün bekleyen görev veya ödeme yok.",
-      "todayTasks": "{count} Görev"
+      "todayTasks": "{count} Görev",
+      "accounts": "{count, plural, one {# hesapta} other {# hesapta}}",
+      "vsLastMonth": "Geçen aya göre",
+      "openIncome": "Bu ayın gelirlerini aç",
+      "openExpense": "Bu ayın giderlerini aç"
     },
     "quick": {
       "label": "Hızlı aksiyonlar",
@@ -297,7 +306,8 @@
       "label": "Birikim Hedefi",
       "completed": "%{percent} Tamamlandı",
       "target": "Hedef: {amount}",
-      "progress": "İlerleme"
+      "progress": "İlerleme",
+      "percent": "%{percent}"
     }
   },
   "calendar": {

@@ -13,7 +13,7 @@ import { SignOutRow } from "./SignOutRow";
 
 // Pages → Profil ve Ayarlar (145:9490, PRD FR-SET-001…013), RESPONSIVE §3.6.1.
 //   Sayfa başlığı "Profil ve Ayarlar" Heading/H2 + alt başlık Body/Small
-//   Profil kartı (İşlemler özet kartıyla aynı gradyan, radius-2xl, padding 16, shadow-floating): 58 px avatar (2 px beyaz
+//   Profil kartı (İşlemler özet kartıyla aynı gradyan, radius-2xl, padding 16, shadow-elev-2): 58 px avatar (2 px beyaz
 //     çerçeve, Shadow/MD) + ad Label/Default, e-posta Body/Small, "Senkronize" çipi
 //   Gruplar: başlık Label/Small büyük harf text-secondary, aralık 8 · satırlar SettingsRow.
 // Tablet: tek sütun, max 720, ortalı · laptop+: profil kartı [4/12] sticky | ayar grupları [8/12, max 720].
@@ -65,17 +65,17 @@ export async function ProfileSettings() {
         <div className="grid grid-cols-1 gap-(--layout-section-gap) laptop:grid-cols-12 laptop:items-start">
           <section
             aria-label={t("profile.label")}
-            className="flex items-center gap-12 rounded-2xl border border-border-default bg-linear-to-b from-surface-card to-surface-muted p-16 shadow-floating laptop:sticky laptop:top-24 laptop:col-span-4"
+            className="flex items-center gap-12 rounded-lg bg-surface-card p-16 shadow-elev-1 laptop:sticky laptop:top-24 laptop:col-span-4"
           >
             <span
               aria-hidden
-              className="inline-flex size-58 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-surface-card bg-category-blue text-heading-h4 text-text-on-task shadow-md"
+              className="inline-flex size-56 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand-primary-subtle text-title-sm text-text-brand"
             >
               {initials(profile.name)}
             </span>
             <div className="flex min-w-0 flex-col items-start gap-4">
-              <p className="max-w-full truncate text-label-md text-text-primary">{profile.name}</p>
-              <p className="max-w-full truncate text-body-sm text-text-secondary">{profile.email}</p>
+              <p className="max-w-full truncate text-title-sm text-text-primary">{profile.name}</p>
+              <p className="max-w-full truncate text-caption text-text-secondary">{profile.email}</p>
               <Chip>{t("profile.synced")}</Chip>
             </div>
           </section>

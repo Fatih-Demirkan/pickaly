@@ -61,8 +61,9 @@ export function CompleteToggle({ id, title, done, variant = "compact", className
       disabled={pending}
       onClick={toggle}
       className={cn(
-        "touch-target relative inline-flex size-32 shrink-0 items-center justify-center rounded-md border transition-colors disabled:cursor-wait",
-        done ? "border-border-success bg-category-green text-text-success" : "border-border-default bg-surface-card text-text-secondary hover:border-border-strong hover:text-text-primary",
+        "touch-target relative inline-flex size-32 shrink-0 items-center justify-center rounded-full border transition-colors disabled:cursor-wait",
+        // Durum göstergesi: kapalıyken border-control (3:1, WCAG 1.4.11), tamamlanınca yeşil dolgu (DESIGN_SYSTEM_PICKALY §5.7).
+        done ? "border-border-success bg-category-green text-category-fg-green" : "border-border-control bg-surface-card text-text-secondary hover:border-border-control-hover hover:text-text-primary",
         className,
       )}
     >

@@ -2,9 +2,8 @@
 
 import { cn } from "@/lib/cn";
 
-// Pages → "Label - Custom Active State Toggle Switch" (Yeni İşlem "Tekrar Eden İşlem"):
-//   zemin 44×24 tam yuvarlak · düğme 20, kenardan 2 px
-//   kapalı: Neutral/200 zemin + Neutral/400 düğme · açık: Chart/Income zemin + beyaz düğme
+// DESIGN_SYSTEM_PICKALY.md §5.7 Switch: iz 44×24 tam yuvarlak · düğme 20 beyaz + elev-1, kenardan 2 px
+//   kapalı iz neutral.500 (3:1) · açık iz blue.600
 // Etiket ve açıklama dışarıdadır; `aria-labelledby` / `aria-describedby` ile bağlanır (WAI-ARIA switch).
 
 type SwitchProps = {
@@ -33,7 +32,7 @@ export function Switch({ id, checked, onChange, labelledBy, describedBy }: Switc
       <span
         aria-hidden
         className={cn(
-          "absolute top-2 size-20 rounded-full transition-[inset-inline-start,background-color] motion-reduce:transition-none",
+          "absolute top-2 size-20 rounded-full shadow-elev-1 transition-[inset-inline-start,background-color] motion-reduce:transition-none",
           checked ? "start-22 bg-control-thumb-on" : "start-2 bg-control-thumb-off",
         )}
       />

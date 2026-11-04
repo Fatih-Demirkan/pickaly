@@ -2,17 +2,18 @@ import { getTranslations } from "next-intl/server";
 import { Chip } from "@/components/ui/Chip";
 import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/cn";
-import { formatMoney } from "@/lib/money";
+import { formatMoney, splitMoneyDecimals } from "@/lib/money";
 import type { Locale } from "@/i18n/config";
 import type { PeriodSummary } from "../domain/summary";
 
-// Pages → İşlemler "Durum & Başlık" özet kartı:
-//   kart: radius-2xl (24), padding 16, aralık 12, LINEAR(-90°) beyaz → Neutral/100, border Neutral/200, shadow-floating
-//   chip "Pozitif Bakiye" (Category/Green, Label/Small) · "Dönem Net Değişimi" Body/Small · tutar Heading/H2
-//   mini kartlar: padding 4, aralık 8, radius-md, beyaz + border-default; ikon kutusu 30 px genişlik, radius-sm
-// [Varsayım] Mini kart metin stilleri ölçülmedi: başlık Label/Small, tutar Label/Default, adet Body/Small.
-// [Varsayım] Negatif dönem Pages'ta yok: "Negatif Bakiye" Turuncu chip ile gösterilir.
-// [Varsayım] Gradyan yönü: beyaz başlangıçta (sol), ton sonda (sağ).
+// İşlemler dönem özeti (DESIGN_SYSTEM_PICKALY §5.2, DS Spending chart card başlık düzeni). Gradyanlı kart kaldırıldı.
+//   Standart beyaz kart (radius-lg, padding 16, elev-1).
+//   Üst: caption "Dönem Net Değişimi" + sağda durum çipi (Pozitif: success · Negatif: warning) →
+//        title-lg net tutar (ondalık text-tertiary yalnızca büyük metinde, 28 px).
+//   Alt: Toplam Gelir / Toplam Gider blokları (canvas zemin, radius-md, padding 12): üstte 28 px renkli ikon karosu +
+//        caption etiket; altında tam genişlik body-strong tutar (gelir success / gider danger, PRD UX-014) ve caption adet.
+//        Dikey düzen: TR tutarları mobilde ikonun yanına sığmaz.
+//        Renkli tutar AA için beyaz/canvas zeminde durur; tint zeminde kullanılmaz.
 // Tablet+: tek satır — Net [4/8] | Gelir [2/8] | Gider [2/8] (RESPONSIVE §3.3.1).
 
 type SummaryCardProps = {
@@ -23,35 +24,36 @@ type SummaryCardProps = {
 export async function SummaryCard({ summary, locale }: SummaryCardProps) {
   const t = await getTranslations("transactions.summary");
   const positive = summary.netMinor >= BigInt(0);
+  const [whole, fraction] = splitMoneyDecimals(formatMoney(summary.netMinor, locale, "always"), locale);
 
   const totals = [
-    { key: "income", label: t("income"), amount: summary.incomeMinor, count: summary.incomeCount, icon: "trendUp", tone: "bg-category-green text-status-success", amountClass: "text-text-success", sign: BigInt(1) },
-    { key: "expense", label: t("expense"), amount: summary.expenseMinor, count: summary.expenseCount, icon: "trendDown", tone: "bg-category-red text-status-danger", amountClass: "text-text-danger", sign: BigInt(-1) },
+    { key: "income", label: t("income"), amount: summary.incomeMinor, count: summary.incomeCount, icon: "trendUp", tone: "bg-category-green text-category-fg-green", amountClass: "text-text-success", sign: BigInt(1) },
+    { key: "expense", label: t("expense"), amount: summary.expenseMinor, count: summary.expenseCount, icon: "trendDown", tone: "bg-category-red text-category-fg-red", amountClass: "text-text-danger", sign: BigInt(-1) },
   ] as const;
 
   return (
-    <section
-      aria-label={t("label")}
-      className="grid grid-cols-2 gap-12 rounded-2xl border border-border-default bg-linear-to-r from-surface-card to-surface-muted p-16 shadow-floating tablet:grid-cols-8 tablet:items-center"
-    >
-      <div className="col-span-2 flex flex-col items-start gap-12 tablet:col-span-4">
-        <Chip variant={positive ? "success" : "warning"}>{positive ? t("positive") : t("negative")}</Chip>
-        <div className="flex flex-col">
-          <p className="text-body-sm text-text-secondary">{t("net")}</p>
-          <p className="text-heading-h2 text-text-primary">{formatMoney(summary.netMinor, locale, "always")}</p>
+    <section aria-label={t("label")} className="grid grid-cols-2 gap-12 rounded-lg bg-surface-card p-16 shadow-elev-1 tablet:grid-cols-8 tablet:items-center">
+      <div className="col-span-2 flex flex-col gap-4 tablet:col-span-4">
+        <div className="flex items-center justify-between gap-8">
+          <p className="text-caption text-text-secondary">{t("net")}</p>
+          <Chip variant={positive ? "success" : "warning"}>{positive ? t("positive") : t("negative")}</Chip>
         </div>
+        <p className="text-title-lg text-text-primary">
+          {whole}
+          <span className="text-text-tertiary">{fraction}</span>
+        </p>
       </div>
 
       {totals.map((item) => (
-        <div key={item.key} className="flex min-w-0 gap-8 rounded-md border border-border-default bg-surface-card p-4 tablet:col-span-2">
-          <span aria-hidden className={cn("flex w-30 shrink-0 items-center justify-center rounded-sm", item.tone)}>
-            <Icon icon={item.icon} size="sm" />
+        <div key={item.key} className="flex min-w-0 flex-col gap-4 rounded-md bg-surface-page p-12 tablet:col-span-2">
+          <span className="flex min-w-0 items-center gap-8">
+            <span aria-hidden className={cn("inline-flex size-28 shrink-0 items-center justify-center rounded-sm", item.tone)}>
+              <Icon icon={item.icon} size="sm" />
+            </span>
+            <span className="truncate text-caption text-text-secondary">{item.label}</span>
           </span>
-          <div className="flex min-w-0 flex-col py-2">
-            <span className="truncate text-label-sm text-text-secondary">{item.label}</span>
-            <span className={cn("truncate text-label-md", item.amountClass)}>{formatMoney(item.amount * item.sign, locale, "always")}</span>
-            <span className="text-body-sm text-text-secondary">{t("count", { count: item.count })}</span>
-          </div>
+          <span className={cn("truncate text-body-strong", item.amountClass)}>{formatMoney(item.amount * item.sign, locale, "always")}</span>
+          <span className="text-caption text-text-secondary">{t("count", { count: item.count })}</span>
         </div>
       ))}
     </section>

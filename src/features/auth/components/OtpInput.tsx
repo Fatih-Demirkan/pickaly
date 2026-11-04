@@ -4,7 +4,7 @@ import { useRef, useState, type ClipboardEvent, type KeyboardEvent } from "react
 import { cn } from "@/lib/cn";
 import { OTP_LENGTH } from "../schemas";
 
-// 6 haneli e-posta kodu (RESPONSIVE §8.2.8): 6 ayrı 48 px kutu, radius-md, odakta border-focus.
+// 6 haneli e-posta kodu (RESPONSIVE §8.2.8): 6 ayrı 48×56 kutu, radius-md, border-control; rakam title-md (DESIGN_SYSTEM_PICKALY §5.7).
 // Yapıştırma, geri silme ve ok tuşlarıyla gezinme desteklenir; değer tek bir gizli alanla (name) gönderilir.
 // Ekran okuyucu için kutular tek bir grup olarak adlandırılır; her kutu "n. hane" etiketlidir.
 
@@ -73,8 +73,8 @@ export function OtpInput({ name, label, digitLabel, invalid, describedBy }: OtpI
           onPaste={(event) => onPaste(index, event)}
           onFocus={(event) => event.target.select()}
           className={cn(
-            "size-48 min-w-0 rounded-md border bg-surface-card text-center text-heading-h4 text-text-primary transition-colors focus:border-border-focus",
-            invalid ? "border-border-error" : "border-border-default hover:border-border-strong",
+            "h-56 w-48 min-w-0 rounded-md border bg-surface-card text-center text-title-md text-text-primary transition-colors focus:border-border-focus",
+            invalid ? "border-border-error" : "border-border-control hover:border-border-control-hover",
           )}
         />
       ))}

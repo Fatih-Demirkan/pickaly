@@ -14,12 +14,13 @@ import type { CalendarItem } from "../domain/types";
 import { CompleteToggle } from "./CompleteToggle";
 import { kindChip } from "./kindStyle";
 
-// Pages → Takvim ajanda kartı ("Article"): radius-lg, border-default, padding 12, aralık 12, surface-card.
-//   Solda 62 px saat kutusu (Category/Slate, radius-sm): saat Label/Default + alt satır Label/Small
+// Takvim ajanda kartı (Pages "Article" yapısı) — görünüm DESIGN_SYSTEM_PICKALY §5.2: beyaz, radius-md, padding 12,
+//   aralık 12, elev-1. Solda 62 px saat kutusu (canvas zemin, radius-sm): saat body-strong + alt satır caption-strong
 //     ("45 dk" text-secondary · "Son Gün" Semantic/Gider - Hata · "Bitti" Semantic/Gelir - Tamamlandı)
 //   Dikey ayırıcı · içerik: tür çipi + sağda ✓ (Button-test 32 px) / "Öncelikli" Label/Small Semantic/Gider - Hata /
 //     ödeme tutarı; başlık Label/Default; alt satır 16 px ikon + Body/Small text-secondary
-//   Tamamlandı: zemin Neutral/100, saat ve başlık text-secondary, başlık üstü çizili (PRD Q-19).
+//   Tamamlandı: zemin beyaz kalır (muted zeminde ikincil gri AA'yı karşılamaz); saat ve başlık text-secondary,
+//   başlık üstü çizili (PRD Q-19).
 //   Ödeme kartı: "Ödendi olarak işaretle" sağa hizalı, Secondary SM (RESPONSIVE §4.6, "Hemen öde" kaldırıldı).
 // [Varsayım] Yüksek öncelikli görevde Pages ✓ yerine "Öncelikli" gösteriyor; ikisi birlikte gösterilir ki görev
 //   listeden de tamamlanabilsin (PRD FR-CAL-015). Alt satır: konum varsa konum, yoksa açıklama; ikon konum /
@@ -30,19 +31,19 @@ type Shell = { done: boolean; time: string; sub: string; subTone: string; childr
 
 function CardShell({ done, time, sub, subTone, children }: Shell) {
   return (
-    <li className={cn("relative flex gap-12 rounded-lg border border-border-default p-12 transition-colors hover:border-border-strong", done ? "bg-surface-muted" : "bg-surface-card")}>
-      <span className="flex w-62 shrink-0 flex-col items-center justify-center rounded-sm bg-category-slate px-4 text-center">
-        <span className={cn("text-label-md", done ? "text-text-secondary" : "text-text-primary")}>{time}</span>
-        <span className={cn("text-label-sm", subTone)}>{sub}</span>
+    <li className="relative flex gap-12 rounded-md bg-surface-card p-12 shadow-elev-1 transition-colors hover:bg-action-tertiary-hover">
+      <span className="flex w-62 shrink-0 flex-col items-center justify-center rounded-sm bg-surface-page px-4 text-center">
+        <span className={cn("text-body-strong", done ? "text-text-secondary" : "text-text-primary")}>{time}</span>
+        <span className={cn("text-caption-strong", subTone)}>{sub}</span>
       </span>
-      <span aria-hidden className="w-px shrink-0 self-stretch bg-border-default" />
+      <span aria-hidden className="w-px shrink-0 self-stretch bg-border-subtle" />
       <div className="flex min-w-0 flex-1 flex-col gap-4">{children}</div>
     </li>
   );
 }
 
 function titleLinkClass(done: boolean) {
-  return cn("text-label-md after:absolute after:inset-0 after:rounded-lg", done ? "text-text-secondary line-through" : "text-text-primary");
+  return cn("text-body-strong after:absolute after:inset-0 after:rounded-md", done ? "text-text-secondary line-through" : "text-text-primary");
 }
 
 type ItemCardProps = { item: CalendarItem; category: Category | undefined; href: string };
@@ -60,7 +61,7 @@ export async function AgendaItemCard({ item, category, href }: ItemCardProps) {
         <Chip variant={kindChip[item.kind]}>{t(`kind.${item.kind}`)}</Chip>
         {/* Kartı kaplayan başlık bağlantısı DOM'da sonra geldiği için buton z-1 ile üstte tutulur. */}
         <span className="relative z-1 flex items-center gap-8">
-          {item.priority === "high" && !done && <span className="text-label-sm text-text-danger">{t("card.highPriority")}</span>}
+          {item.priority === "high" && !done && <span className="text-caption-strong text-text-danger">{t("card.highPriority")}</span>}
           <CompleteToggle id={item.id} title={item.title} done={done} />
         </span>
       </span>
@@ -68,7 +69,7 @@ export async function AgendaItemCard({ item, category, href }: ItemCardProps) {
         {item.title}
       </Link>
       {metaText && (
-        <span className="flex min-w-0 items-start gap-4 text-body-sm text-text-secondary">
+        <span className="flex min-w-0 items-start gap-4 text-caption text-text-secondary">
           <span aria-hidden className="shrink-0">
             <Icon icon={metaIcon} size="sm" />
           </span>
@@ -91,7 +92,7 @@ export async function AgendaPaymentCard({ payment, series, locale, today }: Paym
     <CardShell done={paid} time={series.dueTime} sub={sub} subTone={paid ? "text-text-success" : "text-text-danger"}>
       <span className="flex items-center justify-between gap-8">
         <Chip variant={kindChip.payment}>{t("kind.payment")}</Chip>
-        <span className="text-label-md text-text-danger">{formatMoney(-(payment.paidAmountMinor ?? payment.amountMinor), locale, "always")}</span>
+        <span className="text-body-strong text-text-danger">{formatMoney(-(payment.paidAmountMinor ?? payment.amountMinor), locale, "always")}</span>
       </span>
       <Link href={paymentHref(payment.id, "calendar")} scroll={false} className={titleLinkClass(paid)}>
         {series.title}

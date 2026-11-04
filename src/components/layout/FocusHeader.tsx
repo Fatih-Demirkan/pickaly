@@ -2,10 +2,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Icon } from "@/components/ui/Icon";
 
-// Pages → odak ekranı başlığı (Detay-Nav Bar): "← İşlem Detayı", "Yeni İşlem  × İptal".
-// Drawer'ın en üstünde sabit durur: surface-card + alt çizgi. Mobilde solda geri oku; tablet+ drawer'da
-// aynı adrese giden kapat (×) butonu sağdadır.
-// [Varsayım] Yükseklik ve başlık stili ölçülmedi: Header ile aynı 64 px, Heading/H4.
+// Odak ekranı başlığı (DESIGN_SYSTEM_PICKALY §5.6): 56 px, canvas zemin, alt çizgi yok; title-sm başlık.
+// Mobilde solda geri (36 px outline daire); tablet+ drawer'da aynı adrese giden kapat (×) butonu sağdadır.
 
 type FocusHeaderProps = {
   title: string;
@@ -21,22 +19,23 @@ type FocusHeaderProps = {
 
 // Görünürlük (inline-flex / hidden) her bağlantıda ayrı verilir: sınıflar birleştirilmediği için aynı listede iki display
 // değeri çakışır.
-const iconLinkClass = "touch-target size-40 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-action-tertiary-hover";
+const iconLinkClass =
+  "touch-target size-36 shrink-0 items-center justify-center rounded-full border border-border-subtle bg-surface-card text-text-primary transition-colors hover:border-border-strong hover:bg-action-tertiary-hover";
 
 export function FocusHeader({ title, titleId, back, backIcon = "back", trailing }: FocusHeaderProps) {
   return (
-    <div className="sticky top-0 z-(--z-sticky) flex h-(--layout-topbar-height) shrink-0 items-center gap-8 border-b border-border-default bg-surface-card px-16 tablet:px-24">
+    <div className="sticky top-0 z-(--z-sticky) flex h-56 shrink-0 items-center gap-12 bg-surface-page px-16 tablet:px-24">
       {back && (
-        <Link href={back.href} scroll={false} aria-label={back.label} className={`${iconLinkClass} -ms-8 inline-flex text-text-primary tablet:hidden`}>
+        <Link href={back.href} scroll={false} aria-label={back.label} className={`${iconLinkClass} inline-flex tablet:hidden`}>
           <Icon icon={backIcon} />
         </Link>
       )}
-      <h2 id={titleId} className="min-w-0 flex-1 truncate text-heading-h4 text-text-primary">
+      <h2 id={titleId} className="min-w-0 flex-1 truncate text-title-sm text-text-primary">
         {title}
       </h2>
       {trailing}
       {back && (
-        <Link href={back.href} scroll={false} aria-label={back.label} className={`${iconLinkClass} -me-8 hidden text-text-secondary hover:text-text-primary tablet:inline-flex`}>
+        <Link href={back.href} scroll={false} aria-label={back.label} className={`${iconLinkClass} hidden tablet:inline-flex`}>
           <Icon icon="close" />
         </Link>
       )}

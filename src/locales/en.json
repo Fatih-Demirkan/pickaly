@@ -37,7 +37,12 @@
     "search": "Search",
     "notifications": "Notifications",
     "account": "Account",
-    "unavailable": "This feature is not available yet."
+    "unavailable": "This feature is not available yet.",
+    "greeting": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    }
   },
   "pages": {
     "calendar": {
@@ -278,7 +283,11 @@
       "todayPayments": "{count, plural, one {# Payment} other {# Payments}}",
       "waiting": "pending.",
       "todayNone": "Nothing pending today.",
-      "todayTasks": "{count, plural, one {# Task} other {# Tasks}}"
+      "todayTasks": "{count, plural, one {# Task} other {# Tasks}}",
+      "accounts": "{count, plural, one {Across # account} other {Across # accounts}}",
+      "vsLastMonth": "Vs last month",
+      "openIncome": "Open this month’s income",
+      "openExpense": "Open this month’s expenses"
     },
     "quick": {
       "label": "Quick actions",
@@ -297,7 +306,8 @@
       "label": "Savings Goal",
       "completed": "{percent}% Complete",
       "target": "Target: {amount}",
-      "progress": "Progress"
+      "progress": "Progress",
+      "percent": "{percent}%"
     }
   },
   "calendar": {

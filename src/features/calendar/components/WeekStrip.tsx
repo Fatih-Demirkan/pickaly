@@ -8,11 +8,10 @@ import { calendarHref } from "../routes";
 import type { AgendaEntry } from "./entries";
 import { AGENDA_KINDS, kindDot } from "./kindStyle";
 
-// Pages → Takvim Haftalık "7 Günlük Kompakt Şerit" (6:9992): 7 eşit buton, aralık 6;
-//   buton surface-card, border-default, radius-md, dikey padding 8; gün adı Body/Small text-secondary,
-//   gün Button/Default text-primary, altında 6 px tür noktaları (aralık 2)
-//   seçili: Brand/Primary zemin, 2 px beyaz + 2 px Brand/Primary halka; gün adı Brand/Primary Subtle, gün beyaz kalın
-// [Varsayım] Bugün (seçili değilken) aylık matristeki gibi Brand/Primary çerçeve ile işaretlenir; Pages'ta ayrı çizilmedi.
+// Takvim haftalık şerit (Pages 6:9992 yapısı) — görünüm DESIGN_SYSTEM_PICKALY §5.10: 7 eşit pill hücre, aralık 6;
+//   hücre beyaz + elev-1, tam yuvarlak, dikey padding 8; gün adı caption text-secondary, gün button text-primary,
+//   altında 6 px tür noktaları (aralık 2) · seçili: siyah zemin, gün adı beyaz %70, gün beyaz
+//   bugün (seçili değilken): blue.100 zemin + blue.600 metin.
 
 type WeekStripProps = { day: DateKey; today: DateKey; byDate: Map<DateKey, AgendaEntry[]>; locale: Locale; weekStart: WeekStart };
 
@@ -34,18 +33,18 @@ export async function WeekStrip({ day, today, byDate, locale, weekStart }: WeekS
                 aria-current={selected ? "date" : undefined}
                 aria-label={`${formatDateLong(date, locale)} ${formatWeekday(date, locale)}${entries.length ? `, ${t("matrix.dayItems", { count: entries.length })}` : ""}`}
                 className={cn(
-                  "flex flex-col items-center rounded-md border py-8 transition-colors",
+                  "flex flex-col items-center rounded-full py-8 transition-colors",
                   selected
-                    ? "border-brand-primary bg-brand-primary shadow-[0_0_0_2px_var(--color-surface-card),0_0_0_4px_var(--color-brand-primary)]"
+                    ? "bg-surface-selected-strong"
                     : date === today
-                      ? "border-brand-primary bg-surface-card hover:bg-surface-page"
-                      : "border-border-default bg-surface-card hover:border-border-strong",
+                      ? "bg-brand-primary-subtle hover:bg-action-secondary-hover"
+                      : "bg-surface-card shadow-elev-1 hover:bg-action-tertiary-hover",
                 )}
               >
-                <span className={cn("text-body-sm", selected ? "text-brand-primary-subtle" : "text-text-secondary")}>
+                <span className={cn("text-caption", selected ? "text-text-inverse-secondary" : date === today ? "text-text-brand" : "text-text-secondary")}>
                   {new Intl.DateTimeFormat(intlLocale[locale], { weekday: "short", timeZone: "UTC" }).format(new Date(`${date}T00:00:00Z`))}
                 </span>
-                <span className={cn("pt-2 text-button", selected ? "font-bold text-text-inverse" : "text-text-primary")}>{Number(date.slice(8))}</span>
+                <span className={cn("pt-2 text-button", selected ? "text-text-inverse" : date === today ? "text-text-brand" : "text-text-primary")}>{Number(date.slice(8))}</span>
                 <span aria-hidden className="flex h-12 items-end gap-2">
                   {kinds.map((kind) => (
                     <span key={kind} className={cn("size-6 rounded-full", selected ? "bg-text-inverse" : kindDot[kind])} />

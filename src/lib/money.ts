@@ -33,6 +33,15 @@ export function formatMoney(minor: bigint, locale: Locale, sign: SignMode = "aut
   return new Intl.NumberFormat(intlLocale[locale], { style: "currency", currency: "TRY", currencyDisplay: "narrowSymbol", signDisplay }).format(value);
 }
 
+/**
+ * Biçimlenmiş tutarı tam kısım ve ondalık kısım olarak ikiye böler (DESIGN_SYSTEM.md §A1: büyük bakiyede ondalık soluk).
+ * TR "57.806,62 ₺" → ["57.806", ",62 ₺"] · EN "₺57,806.62" → ["₺57,806", ".62"].
+ */
+export function splitMoneyDecimals(formatted: string, locale: Locale): [whole: string, fraction: string] {
+  const index = formatted.lastIndexOf(locale === "tr" ? "," : ".");
+  return index < 0 ? [formatted, ""] : [formatted.slice(0, index), formatted.slice(index)];
+}
+
 /** Hızlı tutar çipleri gibi kuruşsuz kısa gösterim: TR "1.000 ₺", EN "₺1,000". */
 export function formatMoneyShort(minor: bigint, locale: Locale): string {
   const major = (minor / MINOR_PER_MAJOR).toString() as `${number}`;

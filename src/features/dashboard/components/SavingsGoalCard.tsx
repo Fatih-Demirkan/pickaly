@@ -1,50 +1,73 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { formatSavingsAmount, formatSavingsShort, progressPercent, savingsHref, type SavingsAccountView } from "@/features/savings";
+import { formatSavingsAmount, progressPercent, savingsHref, type SavingsAccountView } from "@/features/savings";
 import type { Locale } from "@/i18n/config";
+import { cn } from "@/lib/cn";
 
-// Pages → Ana Sayfa "Birikim Hedefi" (6:2423, PRD FR-DSH-008).
-//   Kart: radius-lg, padding 16, aralık 8, gradyan Brand/Accent → Brand/Primary Hover (yukarıdan aşağı)
-//   "BİRİKİM HEDEFİ" Body/Small Brand/Primary Subtle · sağda "%75 Tamamlandı" Yeşil çip
-//   hedef adı Heading/H4 beyaz + "Hedef: 60.000 ₺" Body/Small · sağda mevcut tutar Heading/H3 beyaz
-//   ilerleme çubuğu 8 px, tam yuvarlak, koyu yarı saydam zemin + Brand/Accent dolgu
-// Kart, hedefin Birikim Hesabı Detayı'nı açar. Mobilde en altta, laptop+ bakiye kartının yanında (RESPONSIVE §5.1).
-// [Varsayım] Çubuk zemini Pages'ta rgba(0,0,0,.2); en yakın token Neutral/900 %20.
+// Ana Sayfa Birikim Hedefi (PRD FR-DSH-008). DESIGN_SYSTEM.md §A8 Progress meter + DESIGN_SYSTEM_PICKALY.md §5.2.
+// Teal gradyanlı kart kaldırıldı; standart beyaz kart (radius-lg, padding 16, elev-1).
+//   Üst satır: caption "Birikim Hedefi" + title-sm hedef adı · sağda caption-strong "%75 tamamlandı"
+//   Noktalı iz: dolu noktalar blue.500 (brand-accent), boş noktalar blue.300 %40; ilerleme ucunda knob (blue.500 + blue.200 hale)
+//   Alt satır: "mevcut / hedef" | "%n". Yüzde her zaman metin olarak da yazılır (renk tek başına anlam taşımaz).
+// Kart, hedefin Birikim Hesabı Detayı'nı açar. Mobilde en altta, laptop+ bakiye bloğunun yanında (RESPONSIVE §5.1).
+
+const DOTS = 28;
 
 export async function SavingsGoalCard({ goal, locale }: { goal: SavingsAccountView; locale: Locale }) {
   const t = await getTranslations("dashboard.savings");
   const percent = Math.min(progressPercent(goal) ?? 0, 100);
+  const filled = Math.round((percent / 100) * DOTS);
+  const amount = formatSavingsAmount(goal.balance, goal.unit, locale);
+  const target = goal.target !== null ? formatSavingsAmount(goal.target, goal.unit, locale) : null;
 
   return (
     <Link
       href={savingsHref(goal.id)}
       aria-labelledby="savings-goal-label savings-goal-title"
-      className="flex h-full flex-col justify-between gap-8 rounded-lg bg-linear-to-b from-brand-accent to-brand-primary-hover p-16 text-text-inverse transition-opacity hover:opacity-95"
+      className="flex h-full flex-col justify-between gap-16 rounded-lg bg-surface-card p-16 text-text-primary shadow-elev-1 transition-colors hover:bg-action-tertiary-hover"
     >
-      <span className="flex items-center justify-between gap-8">
-        <span id="savings-goal-label" className="text-body-sm text-brand-primary-subtle uppercase">
-          {t("label")}
-        </span>
-        <span className="inline-flex h-24 items-center rounded-full bg-category-green px-8 text-label-sm text-text-success">{t("completed", { percent })}</span>
-      </span>
-      <span className="flex items-end justify-between gap-12">
+      <span className="flex items-start justify-between gap-12">
         <span className="flex min-w-0 flex-col">
-          <span id="savings-goal-title" className="truncate text-heading-h4">
+          <span id="savings-goal-label" className="text-caption text-text-secondary">
+            {t("label")}
+          </span>
+          <span id="savings-goal-title" className="truncate text-title-sm">
             {goal.name}
           </span>
-          <span className="text-body-sm text-brand-primary-subtle">{goal.target !== null && t("target", { amount: formatSavingsShort(goal.target, goal.unit, locale) })}</span>
         </span>
-        <span className="shrink-0 text-end text-heading-h3">{formatSavingsAmount(goal.balance, goal.unit, locale)}</span>
+        <span className="shrink-0 text-caption-strong text-text-secondary">{t("completed", { percent })}</span>
       </span>
+
       <span
         role="progressbar"
         aria-label={t("progress")}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={percent}
-        className="block h-8 w-full overflow-hidden rounded-full bg-surface-inverse/20"
+        className="flex h-16 items-center justify-between"
       >
-        <span className="block h-full rounded-full bg-brand-accent" style={{ width: `${percent}%` }} />
+        {Array.from({ length: DOTS }, (_, index) => {
+          const knob = filled > 0 && index === filled - 1;
+          return (
+            <span
+              key={index}
+              aria-hidden
+              className={cn(
+                "shrink-0 rounded-full",
+                knob ? "size-12 bg-progress-fill shadow-[0_0_0_4px_var(--color-progress-halo)]" : "size-6",
+                !knob && (index < filled ? "bg-progress-fill" : "bg-progress-track/40"),
+              )}
+            />
+          );
+        })}
+      </span>
+
+      <span className="flex items-baseline justify-between gap-12 text-caption text-text-secondary">
+        <span className="min-w-0 truncate">
+          <span className="text-body-strong text-text-primary">{amount}</span>
+          {target && <> / {target}</>}
+        </span>
+        <span className="shrink-0">{t("percent", { percent })}</span>
       </span>
     </Link>
   );
