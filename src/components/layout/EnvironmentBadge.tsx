@@ -15,7 +15,9 @@ export async function EnvironmentBadge() {
     <div
       role="status"
       className={[
-        "fixed end-8 top-8 z-(--z-toast) rounded-full px-8 py-4 text-label-xs",
+        // Header aksiyonlarının ve sağ alttaki "Yeni işlem" FAB'ının üstüne binmemesi için sol altta;
+        // mobilde alt nav'ın hemen üstünde.
+        "pointer-events-none fixed start-8 bottom-[calc(var(--layout-bottom-nav-offset)+8px+env(safe-area-inset-bottom))] z-(--z-toast) rounded-full px-8 py-4 text-label-xs tablet:start-[calc(var(--layout-nav-width)+8px)]",
         environment === "staging" ? "bg-status-warning-subtle text-text-on-warning" : "bg-surface-muted text-text-secondary",
       ].join(" ")}
     >

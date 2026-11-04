@@ -66,10 +66,19 @@
   --color-text-on-task: var(--pk-indigo-700);
   --color-text-on-payment: var(--pk-rose-700);
   --color-text-on-warning: var(--pk-amber-800);
+  --color-text-on-neutral: var(--pk-neutral-600);
   --color-surface-page: var(--pk-neutral-50);
   --color-surface-card: var(--pk-white);
   --color-surface-muted: var(--pk-neutral-100);
-  --color-surface-selected: var(--pk-teal-100);
+  --color-surface-selected: var(--pk-neutral-100);
+  --color-surface-nav-active: var(--pk-neutral-200);
+  --color-surface-inverse: var(--pk-neutral-900);
+  --color-surface-inverse-raised: var(--pk-neutral-700);
+  --color-surface-inverse-control: var(--pk-neutral-600);
+  --color-control-track-off: var(--pk-neutral-200);
+  --color-control-thumb-off: var(--pk-neutral-400);
+  --color-control-track-on: var(--pk-green-600);
+  --color-control-thumb-on: var(--pk-white);
   --color-border-default: var(--pk-neutral-200);
   --color-border-subtle: var(--pk-neutral-100);
   --color-border-strong: var(--pk-neutral-300);
@@ -248,7 +257,8 @@
   --layout-card-padding: 16px;
   --layout-grid-gutter: 16px;
   --layout-nav-width: 0px;
-  --layout-topbar-height: 65px;
+  --layout-topbar-height: 64px;
+  --layout-bottom-nav-offset: 100px;
   --layout-content-max-width: none;
   --layout-drawer-width-detail: 480px;
   --layout-drawer-width-form: 560px;
@@ -265,7 +275,7 @@
     --layout-page-padding-top: 24px;
     --layout-card-padding: 20px;
     --layout-nav-width: 80px;
-    --layout-topbar-height: 64px;
+    --layout-bottom-nav-offset: 0px;
   }
 }
 

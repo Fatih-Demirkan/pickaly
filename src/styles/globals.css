@@ -9,10 +9,61 @@
   color-scheme: light;
 }
 
+/* Hareket (giriş animasyonları). [Varsayım] DESIGN.md'de hareket token'ı yok; ürün sahibi isteği (2026-11-04):
+   ekranlar birden açılmasın, geçişler hafif animasyonla akıcı olsun. Yalnızca giriş animasyonu vardır;
+   kapanış anında gerçekleşir. "Hareketi azalt" tercihinde süreler sıfırlanır (aşağıdaki base kuralı).
+   Sayfa geçişi yalnızca opaklık kullanır: transform, içindeki fixed drawer'ların konumunu bozar. */
+@theme {
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-page-enter: page-enter 200ms ease-out;
+  --animate-fade-in: fade-in 200ms ease-out;
+  --animate-drawer-enter: drawer-enter 280ms var(--ease-enter);
+  --animate-sheet-enter: sheet-enter 280ms var(--ease-enter);
+  --animate-pop-enter: pop-enter 160ms var(--ease-enter);
+  --animate-toast-enter: toast-enter 220ms var(--ease-enter);
+
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  /* Sağ drawer ve mobil tam ekran: yandan (satır sonu tarafından) kayarak gelir. */
+  @keyframes drawer-enter {
+    from {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes sheet-enter {
+    from {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes pop-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.98);
+    }
+  }
+  @keyframes toast-enter {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+}
+
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    /* Kaydırma çubuğu için yer her zaman ayrılır: içerik uzayıp kısaldığında ya da drawer arka planı
+       kilitlediğinde (overflow: hidden) sayfa yana kaymaz. Kaplamalı çubuklu sistemlerde etkisi yoktur. */
+    scrollbar-gutter: stable;
   }
 
   body {
@@ -53,10 +104,31 @@
   }
 }
 
+/* Dokunma alanı: görünüm Figma ölçüsünde kalır, tıklanabilir alan görünmez şekilde en az
+   --layout-touch-min'e (mobil/tablet 44 px, laptop+ 40 px) genişler (RESPONSIVE §8.4, DESIGN §9.5). */
+@utility touch-target {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    top: min(0px, calc((100% - var(--layout-touch-min)) / 2));
+    bottom: min(0px, calc((100% - var(--layout-touch-min)) / 2));
+    left: min(0px, calc((100% - var(--layout-touch-min)) / 2));
+    right: min(0px, calc((100% - var(--layout-touch-min)) / 2));
+  }
+}
+
 /* Güvenli alan payları (PWA, RESPONSIVE §5.3). */
 @utility pb-safe {
   padding-bottom: env(safe-area-inset-bottom);
 }
 @utility pt-safe {
   padding-top: env(safe-area-inset-top);
+}
+
+/* Doğrudan adresle açılmış bir odak sayfası (ör. /islemler/<id>) kendi drawer'ını çizer. Üstüne @drawer
+   slot'undan başka bir drawer açılırsa (ör. Düzenle; Drawer <html data-slot-drawer> koyar) alttaki gizlenir.
+   Bkz. src/app/(app)/islemler/layout.tsx, src/components/ui/Drawer.tsx */
+html[data-slot-drawer] [data-drawer-host="page"] [data-drawer] {
+  display: none;
 }

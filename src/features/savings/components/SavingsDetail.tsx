@@ -1,0 +1,251 @@
+import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
+import type { ReactNode } from "react";
+import { ActionFooter } from "@/components/layout/ActionFooter";
+import { FocusHeader } from "@/components/layout/FocusHeader";
+import { PageContainer } from "@/components/layout/PageContainer";
+import { ButtonLink } from "@/components/ui/Button";
+import { Chip } from "@/components/ui/Chip";
+import { Icon } from "@/components/ui/Icon";
+import { listAccounts } from "@/features/accounts/server";
+import { isLocale } from "@/i18n/config";
+import { cn } from "@/lib/cn";
+import { daysBetween, formatDateLong, toDateKey } from "@/lib/dates";
+import { closeSavingsAccountAction } from "../actions";
+import { progressPercent, signedMovement, type SavingsMovement } from "../domain/types";
+import { formatSavingsAmount } from "../format";
+import { movementHref } from "../routes";
+import { getSavingsDetail } from "../server";
+import { CloseAccountDialog } from "./CloseAccountDialog";
+import { kindChip, ProgressBar } from "./savingsStyle";
+
+// Pages → Birikim Hesabı Detayı (129:6652, PRD FR-SAV-004/008/009/011), RESPONSIVE §3.4.3.
+//   Durum kartı: tür çipi • "Aktif Birikim" (Yeşil); ad Label/Small + bakiye Data/Large; ayırıcı;
+//     "Hedef: …" Label/Small + "(Kalan: …)"; ilerleme çubuğu; "Tamamlanma Oranı" + "%75 Tamamlandı" Brand/Primary
+//   Bilgi notu: Category/Blue zemin, radius-md, padding 12, info ikonu, Body/Default
+//   Hesap Parametreleri: liste kartı (satır padding 16, çizgi); Saklama Kurumu · Açılış Tarihi ("(4 ay önce)") ·
+//     Son İşlem Tarihi (+ tutar) · Aylık Hedef Katkı ("5.000,00 ₺ / Ay") · Kullanıcı Notu (Neutral/50 kutu)
+//   Geçmiş Hareketler: liste kartı; 32 px Category/Green kutuda arrow-down, başlık + tarih, sağda "+5.000,00 ₺"
+//   "Birikim hesabını kapat / Sil" Destructive LG · alt bar "Para ekle / Çek" (Tertiary) + "Hesabı düzenle" (Primary)
+// Mobil: tam sayfa odak ekranı. Laptop+: sol [8/12] durum kartı + Geçmiş Hareketler, sağ [4/12] Hesap Parametreleri +
+//   bilgi notu + tehlike bölgesi; aksiyonlar üst barda (Para ekle / Çek Primary, Hesabı düzenle Secondary).
+// [Varsayım] Çekme satırı Category/Red + arrow-up, eksi işaretli. Hareket başlıkları kaynağa göre üretilir.
+// [Eksik] "Geçmiş Hareketler → Tümü" ekranı tasarlanmadı; son 5 hareket listelenir, bağlantı gösterilmez.
+
+const HISTORY_LIMIT = 5;
+
+function ParamRow({ label, children, stacked }: { label: string; children: ReactNode; stacked?: boolean }) {
+  return (
+    <div className={cn("flex gap-16 border-b border-border-default p-16 last:border-b-0", stacked ? "flex-col gap-6" : "items-center justify-between")}>
+      <dt className="text-body-md text-text-secondary">{label}</dt>
+      <dd className={cn("min-w-0", !stacked && "text-end")}>{children}</dd>
+    </div>
+  );
+}
+
+export async function SavingsDetail({ id }: { id: string }) {
+  const detail = await getSavingsDetail(id);
+  if (!detail) notFound();
+  const [t, tRecurrence, rawLocale, bankAccounts] = await Promise.all([getTranslations("savings"), getTranslations("recurrence"), getLocale(), listAccounts()]);
+  const locale = isLocale(rawLocale) ? rawLocale : "tr";
+  const { account, movements } = detail;
+  const percent = progressPercent(account);
+  const completed = percent !== null && percent >= 100;
+  const today = toDateKey(new Date());
+  const amount = (value: bigint, sign?: "always") => formatSavingsAmount(value, account.unit, locale, sign);
+
+  const openedDays = daysBetween(account.openedAt, today);
+  const openedAgo =
+    openedDays <= 0 ? t("detail.today") : openedDays < 30 ? t("detail.daysAgo", { count: openedDays }) : t("detail.monthsAgo", { count: Math.floor(openedDays / 30) });
+  const movementTitle = (movement: SavingsMovement) =>
+    movement.source === "manual" ? t(movement.direction === "in" ? "detail.movement.manualIn" : "detail.movement.manualOut") : t(`detail.movement.${movement.source}`);
+  const closeTransfer = account.unit === "TRY" && account.balance > BigInt(0);
+
+  const hero = (
+    <section className="order-1 flex flex-col gap-12 rounded-2xl border border-border-default bg-linear-to-b from-surface-card to-surface-muted p-16 shadow-floating laptop:order-none">
+      <div className="flex flex-wrap items-center gap-4">
+        <Chip variant={kindChip[account.kind]}>{t(`kindShort.${account.kind}`)}</Chip>
+        <span aria-hidden className="w-8 text-center text-body-sm text-text-secondary">
+          •
+        </span>
+        <Chip variant="success">{completed ? t("detail.completed") : t("detail.active")}</Chip>
+      </div>
+      <div className="flex flex-col">
+        <h2 className="text-label-sm text-text-secondary">{account.name}</h2>
+        <p className="text-data-lg text-text-primary">{amount(account.balance)}</p>
+      </div>
+      {account.target !== null && percent !== null && (
+        <>
+          <hr className="border-border-default" />
+          <div className="flex flex-col gap-8">
+            <p className="flex items-center justify-between gap-8 text-label-sm">
+              <span className="text-text-primary">{t("detail.target", { amount: amount(account.target) })}</span>
+              {!completed && <span className="text-text-secondary">{t("detail.remaining", { amount: amount(account.target - account.balance) })}</span>}
+            </p>
+            <ProgressBar percent={percent} label={t("detail.progressLabel")} />
+            <p className="flex items-center justify-between gap-8 text-label-sm">
+              <span className="text-text-secondary">{t("detail.progress")}</span>
+              <span className="text-text-brand">{t("detail.progressValue", { percent })}</span>
+            </p>
+          </div>
+        </>
+      )}
+    </section>
+  );
+
+  const info = (
+    <p className="order-2 flex gap-8 rounded-md bg-category-blue p-12 text-body-md text-text-primary laptop:order-none">
+      <span className="mt-2 shrink-0 text-text-on-task">
+        <Icon icon="info" />
+      </span>
+      {t("detail.info")}
+    </p>
+  );
+
+  const parameters = (
+    <section aria-labelledby="savings-parameters" className="order-3 flex flex-col gap-12 laptop:order-none">
+      <h3 id="savings-parameters" className="text-heading-h4 text-text-primary">
+        {t("detail.parameters")}
+      </h3>
+      <dl className="overflow-hidden rounded-lg border border-border-default bg-surface-card">
+        {account.institution && (
+          <ParamRow label={t("detail.institution")}>
+            <p className="text-label-md text-text-primary">{account.institution}</p>
+          </ParamRow>
+        )}
+        <ParamRow label={t("detail.openedAt")}>
+          <p className="text-label-md text-text-primary">{formatDateLong(account.openedAt, locale)}</p>
+          <p className="text-body-sm text-text-secondary">{openedAgo}</p>
+        </ParamRow>
+        {account.lastMovement && (
+          <ParamRow label={t("detail.lastMovement")}>
+            <p className="text-label-md text-text-primary">{formatDateLong(toDateKey(new Date(account.lastMovement.occurredAt)), locale)}</p>
+            <p className="text-body-sm text-text-secondary">{amount(signedMovement(account.lastMovement), "always")}</p>
+          </ParamRow>
+        )}
+        {account.contribution && (
+          <ParamRow label={t("detail.contribution")}>
+            <p className="text-label-md text-text-primary">
+              {t("detail.contributionValue", { amount: amount(account.contribution.amount), frequency: t(`frequencyUnit.${account.contribution.frequency}`) })}
+            </p>
+            <p className="text-body-sm text-text-secondary">{tRecurrence(`frequency.${account.contribution.frequency}`)}</p>
+          </ParamRow>
+        )}
+        {account.note && (
+          <ParamRow label={t("detail.note")} stacked>
+            <p className="rounded-sm bg-surface-page p-8 text-body-md text-text-primary">{account.note}</p>
+          </ParamRow>
+        )}
+      </dl>
+    </section>
+  );
+
+  const history = (
+    <section aria-labelledby="savings-history" className="order-4 flex flex-col gap-12 laptop:order-none">
+      <h3 id="savings-history" className="text-heading-h4 text-text-primary">
+        {t("detail.history")}
+      </h3>
+      {movements.length === 0 ? (
+        <p className="text-body-md text-text-secondary">{t("detail.historyEmpty")}</p>
+      ) : (
+        <ul className="overflow-hidden rounded-lg border border-border-default bg-surface-card">
+          {movements.slice(0, HISTORY_LIMIT).map((movement) => (
+            <li key={movement.id} className="flex items-center justify-between gap-12 p-16">
+              <span className="flex min-w-0 items-center gap-8">
+                <span
+                  aria-hidden
+                  className={cn(
+                    "inline-flex size-32 shrink-0 items-center justify-center rounded-sm",
+                    movement.direction === "in" ? "bg-category-green text-status-success" : "bg-category-red text-status-danger",
+                  )}
+                >
+                  <Icon icon={movement.direction === "in" ? "trendDown" : "trendUp"} size="sm" />
+                </span>
+                <span className="flex min-w-0 flex-col gap-2">
+                  <span className="truncate text-label-md text-text-primary">{movementTitle(movement)}</span>
+                  <span className="text-body-sm text-text-secondary">{formatDateLong(toDateKey(new Date(movement.occurredAt)), locale)}</span>
+                </span>
+              </span>
+              <span className="shrink-0 text-label-md text-text-primary">{amount(signedMovement(movement), "always")}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+
+  const danger = (
+    <div className="order-5 laptop:order-none">
+      <CloseAccountDialog
+        labels={{
+          trigger: t("detail.close"),
+          title: t("closeDialog.title"),
+          body: t("closeDialog.body", { name: account.name }),
+          transferBody: closeTransfer ? t("closeDialog.transferBody", { amount: amount(account.balance) }) : undefined,
+          noTransfer: t("closeDialog.noTransfer"),
+          cancel: t("closeDialog.cancel"),
+          confirm: t("closeDialog.confirm"),
+        }}
+        accounts={bankAccounts.map((bank) => ({ id: bank.id, name: bank.name }))}
+        action={closeSavingsAccountAction.bind(null, account.id)}
+      />
+    </div>
+  );
+
+  const editHref = `/birikimler/${encodeURIComponent(account.id)}/duzenle`;
+
+  return (
+    <>
+      <div className="tablet:hidden">
+        <FocusHeader title={t("detail.title")} titleId="savings-detail-title" back={{ href: "/birikimler", label: t("detail.back") }} />
+      </div>
+      <PageContainer className="flex flex-col gap-(--layout-section-gap)">
+        <div className="hidden items-center justify-between gap-12 tablet:flex">
+          <div className="flex min-w-0 items-center gap-8">
+            <Link
+              href="/birikimler"
+              aria-label={t("detail.back")}
+              className="touch-target -ms-8 inline-flex size-40 shrink-0 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-action-tertiary-hover"
+            >
+              <Icon icon="back" />
+            </Link>
+            <h1 className="truncate text-heading-h2 text-text-primary">{t("detail.title")}</h1>
+          </div>
+          <div className="hidden gap-8 laptop:flex">
+            <ButtonLink href={editHref} scroll={false} variant="secondary" leadingIcon="edit">
+              {t("detail.edit")}
+            </ButtonLink>
+            <ButtonLink href={movementHref(account.id)} scroll={false} leadingIcon="transfer">
+              {t("detail.move")}
+            </ButtonLink>
+          </div>
+        </div>
+
+        {/* Mobil sıra Pages'taki gibidir; laptop+ iki sütuna ayrılır (display: contents ile aynı öğeler). */}
+        <div className="flex flex-col gap-(--layout-section-gap) laptop:grid laptop:grid-cols-12 laptop:items-start laptop:gap-24">
+          <div className="contents laptop:col-span-8 laptop:flex laptop:flex-col laptop:gap-(--layout-section-gap)">
+            {hero}
+            {history}
+          </div>
+          <div className="contents laptop:col-span-4 laptop:flex laptop:flex-col laptop:gap-(--layout-section-gap)">
+            {parameters}
+            {info}
+            {danger}
+          </div>
+        </div>
+
+        <div className="laptop:hidden">
+          <ActionFooter>
+            <ButtonLink href={movementHref(account.id)} scroll={false} variant="tertiary" leadingIcon="transfer">
+              {t("detail.move")}
+            </ButtonLink>
+            <ButtonLink href={editHref} scroll={false} leadingIcon="edit">
+              {t("detail.edit")}
+            </ButtonLink>
+          </ActionFooter>
+        </div>
+      </PageContainer>
+    </>
+  );
+}

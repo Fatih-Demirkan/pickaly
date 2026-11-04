@@ -10,6 +10,7 @@
 > - Sürüm 2.6: Kurulum ilerlemesi (S-1…S-3). Branch koruması tek geliştiriciye göre güncellendi (§9.1: PR zorunlu, onay 0).
 > - Sürüm 2.7: S-4 ve S-5 tamamlandı. Production bölgesi eu-west-1 (D-21a).
 > - Sürüm 2.8: Phase 1 (proje altyapısı) uygulama notları ve plandan sapmalar (§14).
+> - Sürüm 2.9: Phase 2 (UI bileşenleri, navigasyon, rota iskeletleri) notları (§14.1).
 > **Durum:** Mimari analiz dokümanı. Kod, paket kurulumu veya proje iskeleti içermez.
 > **İlgili doküman:** [RESPONSIVE.md](RESPONSIVE.md)
 > **Tasarım kaynağı:** Figma `Fatih-Test` dosyasının yalnızca **Pages** ve **Components** sekmeleri. AI Pages kapsam dışıdır.
@@ -841,3 +842,18 @@ Kurulumun her ortamda tamamlanmış sayılması için:
 | P1-12 | Kurulum betikleri | – | `pnpm-workspace.yaml` → `allowBuilds`: sharp, unrs-resolver, @parcel/watcher, @swc/core **çalıştırılmaz** | Tedarik zinciri güvenliği; bu paketlerin betikleri gerekmiyor |
 | P1-13 | Favicon / PWA ikonları | 192 / 512 / maskable | Next.js varsayılan favicon'u kaldırıldı. Manifest'te ikon yok | **[Eksik]** Logo/uygulama ikonu Figma'da yok |
 | P1-14 | Ertelenen paketler | TanStack Query, RHF + Zod, Radix, Vaul, date-fns, Sonner, Serwist, Sentry, Vitest, Playwright, Prettier | Kurulmadı | Phase 1'de kullanılmıyor; ilgili aşamada eklenecek |
+
+### 14.1 Phase 2 – UI temeli ve navigasyon
+
+| # | Konu | Uygulama | Durum |
+|---|---|---|---|
+| P2-1 | UI bileşenleri | `Button` / `ButtonLink` (LG/SM × Primary/Secondary/Tertiary/Destructive, ikon, loading, disabled, pill), `IconButton`, `Chip` (task/payment/neutral/success/warning), `ChipSelect` (32 px), `SegmentedControl`, `Card` (liste kartı), `Spinner` | Figma Components + DESIGN §8 ölçüleriyle |
+| P2-2 | Navigasyon | `AppNavigation` tek yapılandırmadan üç görünüm: mobil alt pill nav, tablet 80 px rail, laptop+ 240/264 px sidebar; `NavLink` aktif durumu `aria-current` | Rail ve sidebar TD-11 tasarımı beklemeden RESPONSIVE kurallarıyla (PRD §19.2) |
+| P2-3 | Üst bar | `AppTopBar`: mobilde Figma Header (marka + 3 ikon), tablet+ yalnızca aksiyonlar. Arama, bildirim ve hesap butonları **devre dışı** (özellikler yok) | – |
+| P2-4 | Rotalar | `(app)` grubu: `/`, `/takvim`, `/islemler`, `/birikimler`, `/profil`. Sekme sayfaları geçici yer tutucu; başlıklar Pages'tan | Modüller sonraki aşamalarda |
+| P2-5 | Yeni token'lar | `color.surface.nav-active` (Neutral/200), `color.text.on-neutral` (Neutral/600), `layout.bottom-nav-offset` (100 px mobil, 0 tablet+), `layout.topbar-height` 64 px | Figma ölçülerinden |
+| P2-6 | z-index | `base 0 · sticky 10 · nav 20 · fab 30 · drawer 40 · modal 50 · toast 60` kullanılıyor | **[Varsayım]** Onay bekliyor |
+| P2-7 | Dokunma alanı | Görünüm Figma ölçüsünde (ör. segmented 32 px, ikon buton 40 px); `touch-target` yardımcı sınıfı tıklanabilir alanı görünmez şekilde mobil/tablette 44 px, laptop+ 40 px'e genişletiyor | **[Varsayım]** Onay bekliyor |
+| P2-8 | İngilizce nav etiketi | "İşlemler" → **"Activity"**. 360 px'de beş etiket de kesilmeden sığıyor (RESPONSIVE §9.3 riski) | – |
+| P2-9 | Figma metin düzeltmesi | Profil alt başlığı Figma'da "ayalarlar yapın"; uygulamada **"ayarlar yapın"** | Tasarım ekibine iletilmeli |
+| P2-10 | Ertelenenler | "Yeni işlem" (FAB / rail / sidebar butonu; formu yok), rail logo işareti (logo yok), hero kartlar, Top Navigation Header (odak ekranları) | İlgili modüllerle |

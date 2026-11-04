@@ -132,7 +132,7 @@ Figma'da şu anda tek bir `Colors` koleksiyonu var. Primitive ve semantic token'
 | `color.surface.page` | → `neutral.50` | Sayfa zemini |
 | `color.surface.card` | → `brand.white` | Kartlar, input'lar, header, nav pill |
 | `color.surface.muted` | → `neutral.100` | Segmented control zemini |
-| `color.surface.selected` | → `brand.primary-subtle` | Seçili satır/öğe zemini |
+| `color.surface.selected` | → `neutral.100` | Seçili satır/öğe zemini. [Karar: ürün sahibi, 2026-11-04] teal (`brand.primary-subtle`) yerine gri ton |
 | `color.surface.inverse` | → gradyan `neutral.700 → neutral.900` | Toplam Bakiye kartı |
 | `color.surface.brand` | → gradyan `brand.accent → brand.primary-hover` | Birikim Hedefi kartı |
 | `color.surface.overlay` | → `neutral.900` @ %40 [Varsayım] | Modal/drawer arka planı |

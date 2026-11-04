@@ -909,7 +909,11 @@ Geliştirme sırasında doldurulur. Başlangıçta boştur.
 
 | # | Ekran / bileşen | Detay | Uygulanan geçici çözüm | Tarih |
 |---|---|---|---|---|
-| – | – | – | – | – |
+| 1 | Sidebar (TD-11) | Yatay nav öğesinin metin stili ve ikon–metin aralığı | `label-md`, aralık 12 px, 40 px yükseklik, `radius-md` (RESPONSIVE §2.3'teki ölçüler) | 2026-11-03 |
+| 2 | Sidebar (TD-11) | Marka bloğu | Figma Header'daki "Pickaly" (H1) + "Life & Money Planner" (Body/Small) aynen | 2026-11-03 |
+| 3 | Rail (TD-11) | Üstteki logo işareti ve "Yeni işlem" butonu | Yok: logo varlığı Figma'da yok, Yeni İşlem formu henüz yok. Rail yalnızca 5 sekmeyi gösteriyor | 2026-11-03 |
+| 4 | Tablet+ üst bar | Header'daki marka tablet+'ta kalkınca üst barın görünümü | Yalnızca sağda ikon aksiyonları, zemin `surface-page`, alt çizgi yok | 2026-11-03 |
+| 5 | Chip | "Dot" property'sindeki noktanın çapı | 6 px [Varsayım] | 2026-11-03 |
 
 ### 19.3 RESPONSIVE.md §8.1 eksik öğeleri
 
