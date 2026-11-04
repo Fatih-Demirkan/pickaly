@@ -1,0 +1,28 @@
+import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import { connection } from "next/server";
+import { TransactionFormDrawer } from "@/features/transactions/components/TransactionFormDrawer";
+import { TransactionsOverview } from "@/features/transactions/components/TransactionsOverview";
+import { parseFormTypeParam } from "@/features/transactions/routes";
+import { toMonthKey } from "@/lib/dates";
+
+// Yeni İşlem — doğrudan adresle ve diğer sekmelerden ("Yeni işlem" butonu) açılış. Arkada bu ayın listesi çizilir.
+// ?tur=gelir|gider|abonelik seçili sekmeyi belirler; varsayılan Gelir (RESPONSIVE §3.3.3). İşlemler'den açılış: @drawer/(.)yeni.
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("transactions.form");
+  return { title: t("newTitle") };
+}
+
+export default async function NewTransactionPage({ searchParams }: PageProps<"/islemler/yeni">) {
+  // Tarihler ve örnek veri istek anındaki zamana göre hesaplanır: sayfa istek anında render edilir (cacheComponents).
+  await connection();
+  const { tur } = await searchParams;
+
+  return (
+    <>
+      <TransactionsOverview query={{ month: toMonthKey(new Date()) }} />
+      <TransactionFormDrawer mode="create" type={parseFormTypeParam(tur)} />
+    </>
+  );
+}

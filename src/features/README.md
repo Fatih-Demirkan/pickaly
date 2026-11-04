@@ -1,6 +1,15 @@
 # Feature modülleri
 
-Pickaly feature (dikey modül) bazlı düzenlenir (TECH_STACK.md §2). Henüz modül yok; her modül ilk gerçek ihtiyaç doğduğunda oluşturulur.
+Pickaly feature (dikey modül) bazlı düzenlenir (TECH_STACK.md §2). Her modül ilk gerçek ihtiyaç doğduğunda oluşturulur.
+
+Mevcut modüller: `transactions` (İşlemler liste / detay / Gelir-Gider-Abonelik formu, Tekrar Eden İşlem), `payments` (Abonelik: tekrarlayan ödemeler, Ödeme Detayı, Yaklaşan Ödemeler), `categories`, `accounts`, `savings` (Birikimler: hesaplar, Para ekle / Çek, düzenli katkı), `dashboard` (Ana Sayfa), `calendar` (Takvim: görev ve randevular, Kayıt Detayı, Görev Ekle / Düzenle).
+Şimdilik **yerel örnek veri** kullanırlar (`data/mock-*.ts`, sunucu belleği; yeniden başlatınca sıfırlanır).
+Supabase geldiğinde yalnızca `server.ts` içindeki repository değişir.
+
+## Genel arayüz
+- `index.ts`: istemcide de kullanılabilen tipler ve bileşenler.
+- `server.ts`: sunucu tarafı veri erişimi (`server-only`).
+- Başka modül yalnızca bu iki dosyayı import eder. İstisna: `dashboard` gibi birden çok modülü bir araya getiren ekranlar, sayfalar gibi diğer modüllerin `components/` altındaki ekran parçalarını (ör. `UpcomingPayments`) doğrudan yerleştirebilir.
 
 Planlanan modüller: `dashboard`, `calendar`, `transactions`, `savings`, `reports`, `accounts`, `categories`, `reminders`, `settings`, `auth`.
 

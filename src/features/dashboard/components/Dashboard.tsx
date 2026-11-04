@@ -1,0 +1,73 @@
+import { getLocale, getTranslations } from "next-intl/server";
+import { connection } from "next/server";
+import { calendarRepository } from "@/features/calendar/server";
+import { UpcomingPayments } from "@/features/payments/components/UpcomingPayments";
+import { listPaymentsDueOn } from "@/features/payments/server";
+import { getFeaturedGoal } from "@/features/savings/server";
+import { summarize } from "@/features/transactions";
+import { getAccountBalances, transactionRepository } from "@/features/transactions/server";
+import { isLocale } from "@/i18n/config";
+import { toDateKey, toMonthKey } from "@/lib/dates";
+import { BalanceCard } from "./BalanceCard";
+import { QuickActions } from "./QuickActions";
+import { SavingsGoalCard } from "./SavingsGoalCard";
+import { TodayAgenda } from "./TodayAgenda";
+
+// Pages → Ana Sayfa (6:1008), RESPONSIVE §3.1, PRD §4 FR-DSH.
+//   Mobil sıra [Figma]: Toplam Bakiye · Hızlı Aksiyonlar · Bugünün Akışı · (ayırıcı) · Yaklaşan Ödemeler · Birikim Hedefi
+//   Tablet [Karar]: Bakiye 8/8 · Hızlı Aksiyonlar 8/8 · Bugünün Akışı 4/8 | Yaklaşan Ödemeler 4/8 · Birikim Hedefi 8/8
+//   Laptop+ [Karar]: Bakiye 8/12 | Birikim Hedefi 4/12 · Bugünün Akışı 7/12 | Hızlı Aksiyonlar 2×2 + Yaklaşan Ödemeler 5/12
+// Görevler Takvim modülünden gelir (Bugünün Akışı, "Bugün: n Görev").
+// [Eksik] Haftalık özet kartı (PRD FR-DSH-011, Q-3) ve "Sıradaki" etkinlik satırı (FR-DSH-010) tasarlanmadı.
+
+export async function Dashboard() {
+  await connection(); // Bakiye, bugünün akışı ve vadeler istek anına göre hesaplanır (cacheComponents).
+  const now = new Date();
+  const today = toDateKey(now);
+  const [t, rawLocale, balances, monthTransactions, dueToday, goal, todayItems, overdue] = await Promise.all([
+    getTranslations("nav"),
+    getLocale(),
+    getAccountBalances(),
+    transactionRepository.listByMonth(toMonthKey(now)),
+    listPaymentsDueOn(today),
+    getFeaturedGoal(),
+    calendarRepository.listBetween(today, today),
+    calendarRepository.listOverdue(today),
+  ]);
+  const locale = isLocale(rawLocale) ? rawLocale : "tr";
+  const month = summarize(monthTransactions);
+  const totalMinor = [...balances.values()].reduce((sum, balance) => sum + balance, BigInt(0));
+
+  return (
+    <div className="grid grid-cols-1 gap-(--layout-section-gap) tablet:grid-cols-2 laptop:grid-cols-12">
+      <h1 className="sr-only">{t("home")}</h1>
+      <div className="tablet:col-span-2 laptop:col-span-8 laptop:col-start-1 laptop:row-start-1">
+        <BalanceCard
+          totalMinor={totalMinor}
+          incomeMinor={month.incomeMinor}
+          expenseMinor={month.expenseMinor}
+          pendingPayments={dueToday.filter(({ payment }) => payment.status === "pending").length}
+          // Yalnızca bugün tarihli, tamamlanmamış görev ve randevular (BR-TSK-002).
+          pendingTasks={todayItems.filter((item) => item.status === "open").length}
+          locale={locale}
+        />
+      </div>
+      <div className="tablet:col-span-2 laptop:col-span-5 laptop:col-start-8 laptop:row-start-2 laptop:self-start">
+        <QuickActions />
+      </div>
+      <div className="laptop:col-span-7 laptop:col-start-1 laptop:row-span-2 laptop:row-start-2 laptop:self-start">
+        <TodayAgenda today={today} items={todayItems} overdue={overdue} payments={dueToday} />
+      </div>
+      {/* Pages: mobilde Bugünün Akışı ile Yaklaşan Ödemeler arasında ayırıcı çizgi. */}
+      <hr className="border-border-default tablet:hidden" />
+      <div className="laptop:col-span-5 laptop:col-start-8 laptop:row-start-3 laptop:self-start">
+        <UpcomingPayments today={today} />
+      </div>
+      {goal && (
+        <div className="tablet:col-span-2 laptop:col-span-4 laptop:col-start-9 laptop:row-start-1">
+          <SavingsGoalCard goal={goal} locale={locale} />
+        </div>
+      )}
+    </div>
+  );
+}

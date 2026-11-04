@@ -8,7 +8,8 @@
     "loading": "Loading…",
     "retry": "Try again",
     "backHome": "Back to home",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "dismissNotification": "Dismiss notification"
   },
   "locale": {
     "label": "Language",
@@ -20,21 +21,826 @@
     "staging": "STAGING",
     "production": "Production"
   },
-  "start": {
-    "title": "Pickaly is getting ready",
-    "body": "This is the starting screen of the development process. App modules will be added in the next phases.",
-    "foundationTitle": "Foundation in place",
-    "items": {
-      "tokens": "Design tokens",
-      "i18n": "Turkish and English language support",
-      "icons": "Lucide icon system",
-      "responsive": "Mobile, tablet and desktop layout"
+  "nav": {
+    "label": "Main menu",
+    "home": "Home",
+    "calendar": "Calendar",
+    "transactions": "Activity",
+    "savings": "Savings",
+    "profile": "Profile",
+    "newTransaction": "New transaction",
+    "newShort": "New"
+  },
+  "header": {
+    "brand": "Pickaly",
+    "tagline": "Life & Money Planner",
+    "search": "Search",
+    "notifications": "Notifications",
+    "account": "Account",
+    "unavailable": "This feature is not available yet."
+  },
+  "pages": {
+    "calendar": {
+      "title": "Calendar",
+      "subtitle": "Planned payments, tasks and appointments"
+    },
+    "transactions": {
+      "title": "Activity",
+      "subtitle": "General transactions and to-dos"
+    },
+    "savings": {
+      "title": "Savings",
+      "subtitle": "Savings accounts and financial goals"
+    },
+    "profile": {
+      "title": "Profile & Settings",
+      "subtitle": "Manage your account and settings"
     }
+  },
+  "placeholder": {
+    "body": "This module will be added in the next development phase."
   },
   "errors": {
     "notFoundTitle": "Page not found",
     "notFoundBody": "The page you are looking for may have moved or never existed.",
     "genericTitle": "Something went wrong",
     "genericBody": "An unexpected error occurred. Please try again."
+  },
+  "transactions": {
+    "today": "Today",
+    "period": "Period",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "summary": {
+      "label": "Period summary",
+      "positive": "Positive balance",
+      "negative": "Negative balance",
+      "net": "Net change for the period",
+      "income": "Total income",
+      "expense": "Total expenses",
+      "count": "{count, plural, one {# transaction} other {# transactions}}"
+    },
+    "filter": {
+      "type": "Transaction type",
+      "all": "All",
+      "income": "Income",
+      "expense": "Expense",
+      "categories": "Category filter",
+      "allCategories": "All categories"
+    },
+    "list": {
+      "dayNet": "Net: {amount}",
+      "todayHeading": "Today, {date}",
+      "columns": {
+        "transaction": "Transaction",
+        "category": "Category",
+        "account": "Account",
+        "time": "Time",
+        "amount": "Amount",
+        "status": "Status"
+      },
+      "emptyTitle": "No transactions in this period",
+      "emptyFiltered": "No transactions match the selected filters.",
+      "emptyBody": "Add a new transaction to get started.",
+      "sampleData": "Sample data: the records on this screen were generated for development and reset when the server restarts.",
+      "paid": "Paid"
+    },
+    "type": {
+      "income": "Income",
+      "expense": "Expense"
+    },
+    "detail": {
+      "title": "Transaction details",
+      "back": "Back to activity",
+      "close": "Close details",
+      "parameters": "Record details",
+      "account": "Account / Payment method",
+      "merchant": "Location / Store",
+      "note": "Note",
+      "code": "Transaction code",
+      "copyCode": "Copy code",
+      "copied": "Copied",
+      "deleteInfoExpense": "If you delete this transaction, the expense amount ({amount}) will be returned to your {account} balance in full.",
+      "deleteInfoIncome": "If you delete this transaction, the income amount ({amount}) will be deducted from your {account} balance.",
+      "delete": "Delete transaction",
+      "edit": "Edit",
+      "repeat": "Repeat"
+    },
+    "deleteDialog": {
+      "title": "Delete this transaction?",
+      "body": "“{title}” will be deleted permanently. This cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "bodyPayment": "“{title}” will be permanently deleted and the linked payment will return to Pending."
+    },
+    "form": {
+      "newTitle": "New transaction",
+      "editTitle": "Edit transaction",
+      "cancel": "Cancel",
+      "save": "Save",
+      "required": "required",
+      "type": "Transaction type",
+      "subscription": "Subscription",
+      "amount": "Amount",
+      "incomeEntry": "Income",
+      "expenseEntry": "Expense",
+      "quickAmounts": "Add a quick amount",
+      "addAmount": "Add {amount}",
+      "title": "Title",
+      "titlePlaceholder": "e.g. Grocery shopping",
+      "category": "Category",
+      "account": "Account",
+      "balance": "Balance",
+      "change": "Change",
+      "when": "Date and time",
+      "date": "Date",
+      "time": "Time",
+      "note": "Note (optional)",
+      "notePlaceholder": "A short note about this transaction",
+      "noteCount": "{count}/{max}",
+      "errors": {
+        "amount": "Enter a valid amount.",
+        "title": "Enter a title.",
+        "titleLength": "The title can be at most {max} characters.",
+        "category": "Choose a category.",
+        "account": "Choose an account.",
+        "date": "Choose a valid date.",
+        "time": "Choose a valid time.",
+        "note": "The note can be at most {max} characters.",
+        "summary": "Could not save. Check the highlighted fields.",
+        "notFound": "This transaction no longer exists.",
+        "frequency": "Choose a repeat frequency.",
+        "reminder": "Choose a reminder."
+      },
+      "chooseAccount": "Choose an account",
+      "chooseDate": "Choose a date",
+      "chooseTime": "Choose a time",
+      "whenRepeat": "Date, Time and Repeat",
+      "repeatTitle": "Recurring Transaction",
+      "repeatHintIncome": "Add the same income periodically",
+      "repeatHintExpense": "Add the same expense periodically",
+      "oneTimeHint": "When off, it is saved as a one-time payment.",
+      "frequency": "Repeat Frequency",
+      "reminder": "Reminder",
+      "chooseFrequency": "Choose repeat frequency",
+      "chooseReminder": "Choose reminder",
+      "subscriptionEntry": "Subscription / Recurring",
+      "subscriptionHint": "Add a bill, payment or subscription"
+    }
+  },
+  "picker": {
+    "close": "Close",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "hour": "Hour",
+    "minute": "Minute"
+  },
+  "recurrence": {
+    "frequency": {
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "once": "One-time"
+    },
+    "rule": {
+      "daily": "Every day",
+      "weekly": "Every {weekday}",
+      "monthly": "Every month on the {day, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}",
+      "yearly": "Every year on {date}",
+      "once": "This due date only"
+    },
+    "reminder": {
+      "none": "No reminder",
+      "1h": "1 hour before",
+      "1d": "1 day before",
+      "2d": "2 days before",
+      "1w": "1 week before"
+    }
+  },
+  "payments": {
+    "detail": {
+      "title": "Payment Details",
+      "back": "Back",
+      "close": "Close details",
+      "details": "Payment Details",
+      "due": "Due Date",
+      "frequency": "Repeat Frequency",
+      "account": "Source Account",
+      "reminder": "Reminder",
+      "reminderChannel": "In-app notification",
+      "reminderOffset": "{offset} the due date",
+      "reminderOff": "Off",
+      "contract": "Subscriber / Contract No",
+      "copyContract": "Copy number",
+      "copied": "Copied",
+      "history": "Past Payments",
+      "historyEmpty": "No paid due dates yet.",
+      "delete": "Delete",
+      "markPaid": "Mark as paid",
+      "paidOn": "Paid on {date}"
+    },
+    "status": {
+      "pending": "Pending",
+      "paid": "Paid",
+      "overdue": "Overdue"
+    },
+    "due": {
+      "inDays": "{count, plural, one {# day left} other {# days left}}",
+      "today": "Due today",
+      "overdue": "{count, plural, one {# day overdue} other {# days overdue}}"
+    },
+    "deleteDialog": {
+      "title": "Delete payment?",
+      "body": "“{title}” and all its pending due dates will be deleted. Past payments and their transactions are kept.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "upcoming": {
+      "title": "Upcoming Payments",
+      "all": "All ({count})",
+      "empty": "No upcoming payments."
+    },
+    "toast": {
+      "paid": "Payment recorded.",
+      "undo": "Undo",
+      "undone": "Payment undone.",
+      "failed": "Could not complete. Please try again."
+    }
+  },
+  "dashboard": {
+    "balance": {
+      "label": "Total Balance",
+      "monthlyReport": "Monthly Report",
+      "monthIncome": "Income This Month",
+      "monthExpense": "Expense This Month",
+      "today": "Today:",
+      "todayPayments": "{count, plural, one {# Payment} other {# Payments}}",
+      "waiting": "pending.",
+      "todayNone": "Nothing pending today.",
+      "todayTasks": "{count, plural, one {# Task} other {# Tasks}}"
+    },
+    "quick": {
+      "label": "Quick actions",
+      "income": "Income",
+      "expense": "Expense",
+      "task": "Task",
+      "payment": "Payment"
+    },
+    "agenda": {
+      "title": "Today's Flow",
+      "all": "All ({count})",
+      "empty": "Nothing planned for today.",
+      "overdue": "Overdue"
+    },
+    "savings": {
+      "label": "Savings Goal",
+      "completed": "{percent}% Complete",
+      "target": "Target: {amount}",
+      "progress": "Progress"
+    }
+  },
+  "calendar": {
+    "today": "Today",
+    "period": "Period",
+    "views": {
+      "label": "Calendar view",
+      "month": "Monthly",
+      "week": "Weekly",
+      "day": "Daily"
+    },
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "previousWeek": "Previous week",
+    "nextWeek": "Next week",
+    "kind": {
+      "task": "Task",
+      "appointment": "Appointment",
+      "payment": "Payment"
+    },
+    "legend": "Legend",
+    "matrix": {
+      "more": "+{count}",
+      "dayItems": "{count, plural, one {# item} other {# items}}",
+      "week": "Week strip"
+    },
+    "summary": {
+      "today": "Today:",
+      "day": "Day:",
+      "tasks": "{count, plural, one {# Task} other {# Tasks}}",
+      "appointments": "{count, plural, one {# Appointment} other {# Appointments}}",
+      "payments": "{count, plural, one {# Payment} other {# Payments}}",
+      "none": "Nothing on this day."
+    },
+    "agenda": {
+      "todo": "To Do",
+      "done": "Completed",
+      "empty": "Nothing planned for this day.",
+      "addTask": "Add task"
+    },
+    "card": {
+      "minutes": "{count} min",
+      "allDay": "All day",
+      "lastDay": "Due",
+      "finished": "Done",
+      "highPriority": "Priority",
+      "complete": "Mark “{title}” as done",
+      "reopen": "Reopen “{title}”"
+    },
+    "toast": {
+      "completed": "Marked as done.",
+      "reopened": "Reopened.",
+      "undo": "Undo",
+      "failed": "Could not complete. Please try again."
+    },
+    "detail": {
+      "title": "Item Details",
+      "back": "Back",
+      "close": "Close details",
+      "highPriority": "High Priority",
+      "timeAndReminder": "Time & Reminder",
+      "date": "Date",
+      "time": "Time",
+      "allDay": "All day",
+      "reminders": "Reminders",
+      "locationNotes": "Location & Notes",
+      "address": "Address",
+      "openMap": "Open in maps",
+      "openMapLabel": "Open “{place}” in maps (new tab)",
+      "notes": "Additional Info & Notes",
+      "plannedExpense": "Planned Expense",
+      "plannedExpenseLabel": "Estimated related expense",
+      "delete": "Delete permanently",
+      "edit": "Edit",
+      "complete": "Complete task",
+      "reopen": "Reopen",
+      "hours": "{count, plural, one {# hour} other {# hours}}",
+      "hoursMinutes": "{hours} h {minutes} min",
+      "minutes": "{count} min"
+    },
+    "deleteDialog": {
+      "title": "Delete item?",
+      "body": "“{title}” will be permanently deleted. This cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "form": {
+      "newTitle": "New Task",
+      "editTitle": "Edit Item",
+      "cancel": "Cancel",
+      "save": "Save",
+      "required": "required",
+      "kind": "Type",
+      "title": "Title",
+      "titlePlaceholder": "e.g. Dentist check-up",
+      "description": "Description (Optional)",
+      "descriptionPlaceholder": "A short description",
+      "priority": "Priority",
+      "priorities": {
+        "low": "Low",
+        "normal": "Normal",
+        "high": "High"
+      },
+      "category": "Category",
+      "when": "Date and Time",
+      "date": "Date",
+      "time": "Time",
+      "allDay": "All day",
+      "allDayHint": "Added to the whole day without a time",
+      "duration": "Duration",
+      "durationNone": "Not set",
+      "durationMinutes": "{count} min",
+      "reminder": "Reminder",
+      "chooseDate": "Choose date",
+      "chooseTime": "Choose time",
+      "chooseDuration": "Choose duration",
+      "chooseReminder": "Choose reminder",
+      "location": "Location (Optional)",
+      "locationName": "Place name",
+      "locationNamePlaceholder": "e.g. Dr. Selin Yıldız Clinic",
+      "locationAddress": "Address",
+      "locationAddressPlaceholder": "Street, neighbourhood, district",
+      "note": "Note (Optional)",
+      "notePlaceholder": "A short note about this item",
+      "noteCount": "{count}/{max}",
+      "plannedExpense": "Related Expense (Optional)",
+      "plannedExpenseHint": "For information only; does not affect balances or reports.",
+      "errors": {
+        "title": "Enter a title.",
+        "titleLength": "Title can be at most {max} characters.",
+        "description": "Description can be at most {max} characters.",
+        "category": "Choose a valid category.",
+        "date": "Choose a valid date.",
+        "time": "Choose a time or turn on “All day”.",
+        "duration": "Choose a valid duration.",
+        "reminder": "Choose a reminder.",
+        "location": "Location can be at most {max} characters.",
+        "note": "Note can be at most {max} characters.",
+        "plannedExpense": "Enter a valid amount.",
+        "summary": "Could not save. Check the marked fields.",
+        "notFound": "This item no longer exists."
+      }
+    }
+  },
+  "savings": {
+    "summary": {
+      "chip": "Total Savings",
+      "monthAdded": "{amount} added this month",
+      "monthAddedPercent": "{amount} added this month ({percent}% increase)"
+    },
+    "actions": {
+      "monthlyReport": "Monthly Report",
+      "add": "Add savings account"
+    },
+    "list": {
+      "title": "Saved Accounts",
+      "active": "{count, plural, one {# Active Goal} other {# Active Goals}}",
+      "target": "Target: {amount}",
+      "noTarget": "No target",
+      "completed": "Completed"
+    },
+    "kind": {
+      "gold": "Gold / Precious",
+      "deposit": "Time Deposit",
+      "fund": "Investment Fund",
+      "currency": "Currency Basket",
+      "cash": "Cash Savings"
+    },
+    "kindShort": {
+      "gold": "Gold",
+      "deposit": "Deposit",
+      "fund": "Fund",
+      "currency": "Currency",
+      "cash": "Cash"
+    },
+    "unit": {
+      "label": "Unit",
+      "piece": "Pieces",
+      "gram": "Grams"
+    },
+    "empty": {
+      "title": "No savings account yet!",
+      "body": "Create a savings account now to keep your savings under control and support your financial progress!",
+      "action": "Add savings account"
+    },
+    "detail": {
+      "title": "Account Details",
+      "back": "Back to savings",
+      "active": "Active Savings",
+      "completed": "Completed",
+      "target": "Target: {amount}",
+      "remaining": "(Remaining: {amount})",
+      "progress": "Completion",
+      "progressValue": "{percent}% Complete",
+      "progressLabel": "Progress",
+      "info": "The balance in this account is kept separate from your everyday spendable balance and only counts toward your savings total.",
+      "parameters": "Account Parameters",
+      "institution": "Institution",
+      "openedAt": "Opened",
+      "monthsAgo": "({count, plural, one {# month ago} other {# months ago}})",
+      "daysAgo": "({count, plural, one {# day ago} other {# days ago}})",
+      "today": "(today)",
+      "lastMovement": "Last Activity",
+      "contribution": "Regular Contribution",
+      "contributionValue": "{amount} / {frequency}",
+      "note": "Note",
+      "history": "Past Activity",
+      "historyEmpty": "No activity yet.",
+      "movement": {
+        "initial": "Opening Balance",
+        "recurring": "Regular Contribution",
+        "manualIn": "Deposit",
+        "manualOut": "Withdrawal",
+        "closing": "Account Closing"
+      },
+      "move": "Deposit / Withdraw",
+      "edit": "Edit account",
+      "close": "Close / Delete savings account"
+    },
+    "frequencyUnit": {
+      "daily": "Day",
+      "weekly": "Week",
+      "monthly": "Month",
+      "yearly": "Year"
+    },
+    "closeDialog": {
+      "title": "Close savings account?",
+      "body": "“{name}” will be permanently deleted. This cannot be undone.",
+      "transferBody": "Where should the {amount} in this account go?",
+      "noTransfer": "Close without transfer",
+      "cancel": "Cancel",
+      "confirm": "Close and delete"
+    },
+    "form": {
+      "newTitle": "New Savings Account",
+      "editTitle": "Edit Account",
+      "cancel": "Cancel",
+      "save": "Save",
+      "required": "required",
+      "initialChip": "Opening / Current Balance",
+      "contributionChip": "Regular Contribution",
+      "transferHint": "Transferred instantly from {account}",
+      "contributionHint": "Transferred from {account} every period",
+      "unitHint": "Piece / gram savings do not affect your accounts",
+      "amount": "Amount",
+      "quickAmounts": "Add quick amount",
+      "addAmount": "Add {amount}",
+      "name": "Title",
+      "namePlaceholder": "e.g. Car Replacement Fund",
+      "kind": "Account Type",
+      "target": "Target Amount",
+      "targetPlaceholder": "Leave empty for no target",
+      "institution": "Institution (Optional)",
+      "institutionPlaceholder": "e.g. İş Bankası (Time Deposit TRY)",
+      "account": "Account",
+      "when": "Date, Time and Repeat",
+      "date": "Date",
+      "time": "Time",
+      "chooseDate": "Choose date",
+      "chooseTime": "Choose time",
+      "repeatTitle": "Recurring Transaction",
+      "repeatHint": "Add the same amount periodically",
+      "frequency": "Repeat Frequency",
+      "reminder": "Reminder",
+      "chooseFrequency": "Choose repeat frequency",
+      "chooseReminder": "Choose reminder",
+      "note": "Note (Optional)",
+      "notePlaceholder": "A short note about this saving",
+      "noteCount": "{count}/{max}",
+      "errors": {
+        "name": "Enter a title.",
+        "nameLength": "Title can be at most {max} characters.",
+        "amount": "Enter a valid amount.",
+        "repeatAmount": "Enter an amount for the regular contribution.",
+        "target": "Enter a valid target amount.",
+        "institution": "Institution can be at most {max} characters.",
+        "account": "Choose an account.",
+        "date": "Choose a valid date.",
+        "time": "Choose a valid time.",
+        "frequency": "Choose a repeat frequency.",
+        "reminder": "Choose a reminder.",
+        "note": "Note can be at most {max} characters.",
+        "summary": "Could not save. Check the marked fields.",
+        "notFound": "This savings account no longer exists."
+      }
+    },
+    "move": {
+      "title": "Deposit / Withdraw",
+      "direction": "Action",
+      "in": "Deposit",
+      "out": "Withdraw",
+      "inChip": "Add to Savings",
+      "outChip": "Withdraw from Savings",
+      "balance": "Savings balance: {amount}",
+      "sourceAccount": "Source Account",
+      "targetAccount": "Target Account",
+      "transfer": "TRY Value (Optional)",
+      "transferHint": "If entered, the selected account is updated; otherwise accounts are untouched.",
+      "date": "Date",
+      "chooseDate": "Choose date",
+      "negativeWarning": "The balance will go negative.",
+      "cancel": "Cancel",
+      "save": "Save",
+      "errors": {
+        "amount": "Enter a valid amount.",
+        "insufficient": "You cannot withdraw more than the savings balance.",
+        "transfer": "Enter a valid TRY amount.",
+        "account": "Choose an account.",
+        "date": "Choose a valid date.",
+        "summary": "Could not save. Check the marked fields.",
+        "notFound": "This savings account no longer exists."
+      }
+    }
+  },
+  "categories": {
+    "title": "Category Management",
+    "back": "Back to profile",
+    "tabs": {
+      "label": "Category type",
+      "finance": "Spending / Income",
+      "calendar": "Tasks / Calendar"
+    },
+    "financeTitle": "Financial Categories",
+    "calendarTitle": "Task / Calendar Categories",
+    "total": "{count, plural, one {# Category} other {# Categories}} in total",
+    "add": "Create New Category",
+    "records": "{count, plural, one {# transaction} other {# transactions}}",
+    "calendarRecords": "{count, plural, one {# item} other {# items}}",
+    "edit": "Edit “{name}”",
+    "remove": "Delete or archive “{name}”",
+    "empty": "No categories in this tab.",
+    "color": {
+      "teal": "Teal",
+      "blue": "Blue",
+      "violet": "Violet",
+      "pink": "Pink",
+      "orange": "Orange",
+      "amber": "Amber",
+      "green": "Green",
+      "red": "Red",
+      "slate": "Slate"
+    },
+    "type": {
+      "income": "Income",
+      "expense": "Expense",
+      "subscription": "Subscription",
+      "calendar": "Tasks / Calendar"
+    },
+    "archived": {
+      "title": "Archived ({count})",
+      "restore": "Restore",
+      "restoreLabel": "Restore “{name}” from archive",
+      "restored": "Category restored.",
+      "conflict": "An active category with the same name and type exists. Rename one of them first."
+    },
+    "removeDialog": {
+      "archiveTitle": "Archive category?",
+      "archiveBody": "{count, plural, one {# item uses} other {# items use}} this category. It will stay visible on past records but can't be chosen for new ones.",
+      "archiveRecurring": "{count, plural, one {# recurring item} other {# recurring items}} will keep using this category; you can edit them to switch to another category.",
+      "archiveConfirm": "Archive",
+      "deleteTitle": "Delete category?",
+      "deleteBody": "“{name}” isn't used anywhere and will be permanently deleted. This cannot be undone.",
+      "deleteConfirm": "Delete",
+      "blockedTitle": "This category can't be removed",
+      "blockedBody": "“{name}” is the last active category of its type. At least one category is required to add records of this type.",
+      "cancel": "Cancel",
+      "close": "OK",
+      "archived": "Category archived.",
+      "deleted": "Category deleted.",
+      "failed": "Could not complete. Please try again."
+    },
+    "form": {
+      "newTitle": "Add New Category",
+      "editTitle": "Edit Category",
+      "cancel": "Cancel",
+      "save": "Save",
+      "required": "required",
+      "preview": "Live Preview",
+      "previewPlaceholder": "Category name",
+      "type": "Type",
+      "name": "Title",
+      "namePlaceholder": "e.g. Pet Expenses",
+      "icon": "Icon",
+      "color": "Color Palette",
+      "budget": "Monthly Budget Limit (Optional)",
+      "budgetHint": "You'll be notified when you exceed this limit.",
+      "note": "Note (Optional)",
+      "notePlaceholder": "e.g. Vet, food and care costs...",
+      "noteCount": "{count}/{max}",
+      "errors": {
+        "name": "Enter a title.",
+        "nameLength": "Title can be at most {max} characters.",
+        "duplicate": "A category with this name already exists for this type.",
+        "icon": "Choose an icon.",
+        "color": "Choose a color.",
+        "budget": "Enter a valid limit.",
+        "note": "Note can be at most {max} characters.",
+        "summary": "Could not save. Check the marked fields.",
+        "notFound": "This category no longer exists."
+      }
+    },
+    "icon": {
+      "birdhouse": "Birdhouse",
+      "car": "Car",
+      "coffee": "Coffee",
+      "briefcase-medical": "Health",
+      "heart": "Heart",
+      "receipt-text": "Bill",
+      "wallet": "Wallet",
+      "gift": "Gift",
+      "paw-print": "Paw",
+      "shopping-cart": "Shopping cart",
+      "store": "Store",
+      "zap": "Electricity",
+      "wifi": "Internet",
+      "fuel": "Fuel",
+      "house": "Home",
+      "hospital": "Hospital",
+      "notebook-pen": "Notebook"
+    }
+  },
+  "reports": {
+    "title": "Monthly Report",
+    "back": "Back to Home",
+    "period": "Period",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "share": "Share",
+    "shareView": {
+      "title": "Report Preview & Share",
+      "close": "Back to report",
+      "subtitle": "{month} Financial Summary",
+      "net": "Net Balance Change",
+      "savingsRate": "Savings Rate: {rate}",
+      "income": "Total Income",
+      "expense": "Total Expenses",
+      "balance": "Income Allocation",
+      "balanceValue": "{spent} Spent / {kept} Saved",
+      "spent": "Spent ({rate})",
+      "kept": "Left to Save ({rate})",
+      "top": "Top Spending",
+      "topHint": "Top 3",
+      "empty": "No expenses this month.",
+      "footer": "Created with Pickaly",
+      "hint": "The card is sized to fit story and message formats.",
+      "emptyMonth": "There are no transactions this month, so there is no report to share.",
+      "shareImage": "Share as Image (Social / Message)",
+      "pdf": "Download PDF / Report Summary",
+      "downloaded": "Report image downloaded.",
+      "failed": "Could not create the image. Please try again."
+    },
+    "monthChip": "{month}",
+    "net": "Net Cash Flow / Savings",
+    "income": "Income",
+    "expense": "Expenses",
+    "savings": "Savings",
+    "incomeCount": "{count, plural, one {# transaction} other {# transactions}}",
+    "expenseCategories": "{count, plural, one {# category} other {# categories}}",
+    "savingsHint": "Of income",
+    "comparison": {
+      "title": "Income & Expense Comparison",
+      "hint": "Share of Income",
+      "income": "Total Income",
+      "expense": "Total Expenses",
+      "transfer": "Moved to Savings",
+      "capacity": "Savings Capacity: {amount}",
+      "netRate": "Net Balance: {rate}"
+    },
+    "top": {
+      "title": "Top Spending",
+      "hint": "Expense Breakdown",
+      "count": "{count, plural, one {# transaction} other {# transactions}}",
+      "empty": "No expenses this month."
+    },
+    "shareOpen": "View Shareable Report"
+  },
+  "settings": {
+    "failed": "Could not save the setting. Please try again.",
+    "profile": {
+      "label": "Profile",
+      "synced": "Synced"
+    },
+    "groups": {
+      "content": "Customization & Content",
+      "preferences": "App Preferences",
+      "data": "Data & Security",
+      "support": "Support & Info"
+    },
+    "categories": {
+      "title": "Category Management",
+      "hint": "Edit your categories",
+      "count": "{count, plural, one {# category} other {# categories}}"
+    },
+    "reminders": {
+      "title": "Reminders & Notifications",
+      "hint": "Reminder preferences",
+      "on": "On",
+      "off": "Off"
+    },
+    "currency": {
+      "title": "Currency",
+      "hint": "Default currency",
+      "value": "Turkish Lira (₺)"
+    },
+    "language": {
+      "title": "App Language",
+      "hint": "Interface language and region"
+    },
+    "weekStart": {
+      "title": "First Day of the Week",
+      "hint": "Calendar and budget period view",
+      "day1": "Monday",
+      "day0": "Sunday"
+    },
+    "export": {
+      "title": "Back Up & Export Data",
+      "hint": "JSON / Excel format",
+      "choose": "Export format",
+      "json": "JSON",
+      "jsonHint": "Full backup",
+      "csvOption": "CSV (Excel)",
+      "csvHint": "Transactions",
+      "csv": {
+        "date": "Date",
+        "time": "Time",
+        "type": "Type",
+        "title": "Title",
+        "amount": "Amount (₺)",
+        "category": "Category",
+        "account": "Account",
+        "note": "Note",
+        "income": "Income",
+        "expense": "Expense"
+      }
+    },
+    "about": {
+      "title": "About & Version",
+      "hint": "Terms of use and privacy",
+      "version": "Pickaly v{version}"
+    },
+    "logout": {
+      "title": "Log Out",
+      "hint": "End the session on this device"
+    }
   }
 }

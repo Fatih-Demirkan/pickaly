@@ -8,7 +8,8 @@
     "loading": "Yükleniyor…",
     "retry": "Tekrar dene",
     "backHome": "Ana sayfaya dön",
-    "skipToContent": "İçeriğe geç"
+    "skipToContent": "İçeriğe geç",
+    "dismissNotification": "Bildirimi kapat"
   },
   "locale": {
     "label": "Dil",
@@ -20,21 +21,826 @@
     "staging": "STAGING",
     "production": "Production"
   },
-  "start": {
-    "title": "Pickaly hazırlanıyor",
-    "body": "Bu ekran geliştirme sürecinin başlangıç ekranıdır. Uygulama modülleri sonraki aşamalarda eklenecek.",
-    "foundationTitle": "Hazır olan altyapı",
-    "items": {
-      "tokens": "Tasarım token'ları",
-      "i18n": "Türkçe ve İngilizce dil desteği",
-      "icons": "Lucide ikon sistemi",
-      "responsive": "Mobil, tablet ve masaüstü yerleşimi"
+  "nav": {
+    "label": "Ana menü",
+    "home": "Ana Sayfa",
+    "calendar": "Takvim",
+    "transactions": "İşlemler",
+    "savings": "Birikimler",
+    "profile": "Profil",
+    "newTransaction": "Yeni işlem",
+    "newShort": "Yeni"
+  },
+  "header": {
+    "brand": "Pickaly",
+    "tagline": "Life & Money Planner",
+    "search": "Ara",
+    "notifications": "Bildirimler",
+    "account": "Hesap",
+    "unavailable": "Bu özellik henüz kullanılamıyor."
+  },
+  "pages": {
+    "calendar": {
+      "title": "Takvim",
+      "subtitle": "Planlanan ödemeler, işler ve randevular"
+    },
+    "transactions": {
+      "title": "İşlemler",
+      "subtitle": "Genel işlemler ve yapılacaklar"
+    },
+    "savings": {
+      "title": "Birikimler",
+      "subtitle": "Birikim hesapları ve finansal hedefler"
+    },
+    "profile": {
+      "title": "Profil ve Ayarlar",
+      "subtitle": "Hesabınızı yönetin ve ayarlar yapın"
     }
+  },
+  "placeholder": {
+    "body": "Bu modül sonraki geliştirme aşamasında eklenecek."
   },
   "errors": {
     "notFoundTitle": "Sayfa bulunamadı",
     "notFoundBody": "Aradığınız sayfa taşınmış ya da hiç var olmamış olabilir.",
     "genericTitle": "Bir şeyler ters gitti",
     "genericBody": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin."
+  },
+  "transactions": {
+    "today": "Bugün",
+    "period": "Dönem",
+    "previousMonth": "Önceki ay",
+    "nextMonth": "Sonraki ay",
+    "summary": {
+      "label": "Dönem özeti",
+      "positive": "Pozitif Bakiye",
+      "negative": "Negatif Bakiye",
+      "net": "Dönem Net Değişimi",
+      "income": "Toplam Gelir",
+      "expense": "Toplam Gider",
+      "count": "{count} işlem"
+    },
+    "filter": {
+      "type": "İşlem türü",
+      "all": "Tümü",
+      "income": "Gelir",
+      "expense": "Gider",
+      "categories": "Kategori filtresi",
+      "allCategories": "Tüm Kategoriler"
+    },
+    "list": {
+      "dayNet": "Net: {amount}",
+      "todayHeading": "Bugün, {date}",
+      "columns": {
+        "transaction": "İşlem",
+        "category": "Kategori",
+        "account": "Hesap",
+        "time": "Saat",
+        "amount": "Tutar",
+        "status": "Durum"
+      },
+      "emptyTitle": "Bu dönemde işlem yok",
+      "emptyFiltered": "Seçili filtrelere uyan işlem yok.",
+      "emptyBody": "Yeni işlem ekleyerek başlayabilirsiniz.",
+      "sampleData": "Örnek veri: Bu ekrandaki kayıtlar geliştirme için üretilmiştir ve sunucu yeniden başladığında sıfırlanır.",
+      "paid": "Ödendi"
+    },
+    "type": {
+      "income": "Gelir",
+      "expense": "Gider"
+    },
+    "detail": {
+      "title": "İşlem Detayı",
+      "back": "İşlemlere dön",
+      "close": "Detayı kapat",
+      "parameters": "Kayıt Parametreleri",
+      "account": "Hesap / Ödeme Yöntemi",
+      "merchant": "Konum / Mağaza",
+      "note": "Kullanıcı Notu",
+      "code": "İşlem Kodu",
+      "copyCode": "Kodu kopyala",
+      "copied": "Kopyalandı",
+      "deleteInfoExpense": "İşlem silindiğinde harcama tutarı ({amount}) {account} bakiyenize eksiksiz iade edilecektir.",
+      "deleteInfoIncome": "İşlem silindiğinde gelir tutarı ({amount}) {account} bakiyenizden düşülecektir.",
+      "delete": "İşlemi sil",
+      "edit": "Düzenle",
+      "repeat": "Tekrar"
+    },
+    "deleteDialog": {
+      "title": "İşlem silinsin mi?",
+      "body": "“{title}” kalıcı olarak silinecek. Bu işlem geri alınamaz.",
+      "cancel": "Vazgeç",
+      "confirm": "Sil",
+      "bodyPayment": "“{title}” kalıcı olarak silinecek ve bağlı ödeme yeniden Bekliyor durumuna dönecek."
+    },
+    "form": {
+      "newTitle": "Yeni İşlem",
+      "editTitle": "İşlemi Düzenle",
+      "cancel": "İptal",
+      "save": "Kaydet",
+      "required": "zorunlu",
+      "type": "İşlem Türü",
+      "subscription": "Abonelik",
+      "amount": "Tutar",
+      "incomeEntry": "Gelir Girişi",
+      "expenseEntry": "Gider Çıkışı",
+      "quickAmounts": "Hızlı tutar ekle",
+      "addAmount": "{amount} ekle",
+      "title": "Başlık",
+      "titlePlaceholder": "Örn. Market alışverişi",
+      "category": "Kategori Seçimi",
+      "account": "İşlem Yapılan Hesap",
+      "balance": "Bakiye",
+      "change": "Değiştir",
+      "when": "İşlem Zamanı",
+      "date": "Tarih",
+      "time": "Saat",
+      "note": "Not (İsteğe Bağlı)",
+      "notePlaceholder": "İşlemle ilgili kısa bir not",
+      "noteCount": "{count}/{max}",
+      "errors": {
+        "amount": "Geçerli bir tutar girin.",
+        "title": "Başlık girin.",
+        "titleLength": "Başlık en fazla {max} karakter olabilir.",
+        "category": "Bir kategori seçin.",
+        "account": "Bir hesap seçin.",
+        "date": "Geçerli bir tarih seçin.",
+        "time": "Geçerli bir saat seçin.",
+        "note": "Not en fazla {max} karakter olabilir.",
+        "summary": "Kaydedilemedi. İşaretli alanları kontrol edin.",
+        "notFound": "Bu işlem artık mevcut değil.",
+        "frequency": "Bir tekrarlama sıklığı seçin.",
+        "reminder": "Bir hatırlatma seçin."
+      },
+      "chooseAccount": "Hesap seçin",
+      "chooseDate": "Tarih seçin",
+      "chooseTime": "Saat seçin",
+      "whenRepeat": "İşlem Zamanı ve Tekrarı",
+      "repeatTitle": "Tekrar Eden İşlem",
+      "repeatHintIncome": "Aynı gelir periyodik eklensin",
+      "repeatHintExpense": "Aynı harcama periyodik eklensin",
+      "oneTimeHint": "Kapalıyken tek seferlik ödeme olarak kaydedilir.",
+      "frequency": "Tekrarlama Sıklığı",
+      "reminder": "Hatırlatma Bildirimi",
+      "chooseFrequency": "Tekrarlama sıklığı seçin",
+      "chooseReminder": "Hatırlatma seçin",
+      "subscriptionEntry": "Abonelik / Tekrarlayan İşlem",
+      "subscriptionHint": "Fatura, Ödeme veya Abonelik ekleyin"
+    }
+  },
+  "picker": {
+    "close": "Kapat",
+    "previousMonth": "Önceki ay",
+    "nextMonth": "Sonraki ay",
+    "hour": "Saat",
+    "minute": "Dakika"
+  },
+  "recurrence": {
+    "frequency": {
+      "daily": "Günlük",
+      "weekly": "Haftalık",
+      "monthly": "Aylık",
+      "yearly": "Yıllık",
+      "once": "Tek seferlik"
+    },
+    "rule": {
+      "daily": "Her gün",
+      "weekly": "Her {weekday}",
+      "monthly": "Her ayın {day}''{suffix}",
+      "yearly": "Her yıl {date}",
+      "once": "Yalnızca bu vade"
+    },
+    "reminder": {
+      "none": "Hatırlatma yok",
+      "1h": "1 saat önce",
+      "1d": "1 gün önce",
+      "2d": "2 gün önce",
+      "1w": "1 hafta önce"
+    }
+  },
+  "payments": {
+    "detail": {
+      "title": "Ödeme Detayı",
+      "back": "Geri",
+      "close": "Detayı kapat",
+      "details": "Ödeme Ayrıntıları",
+      "due": "Son Ödeme Tarihi (Vade)",
+      "frequency": "Tekrarlama Sıklığı",
+      "account": "Kaynak Hesap",
+      "reminder": "Hatırlatıcı",
+      "reminderChannel": "Uygulama içi bildirim",
+      "reminderOffset": "Vadeden {offset}",
+      "reminderOff": "Kapalı",
+      "contract": "Abone / Sözleşme No",
+      "copyContract": "Numarayı kopyala",
+      "copied": "Kopyalandı",
+      "history": "Geçmiş Ödemeler",
+      "historyEmpty": "Henüz ödenmiş bir vade yok.",
+      "delete": "İşlemi sil",
+      "markPaid": "Ödendi olarak işaretle",
+      "paidOn": "{date} tarihinde ödendi"
+    },
+    "status": {
+      "pending": "Bekliyor",
+      "paid": "Ödendi",
+      "overdue": "Gecikmiş"
+    },
+    "due": {
+      "inDays": "{count} gün kaldı",
+      "today": "Bugün son gün",
+      "overdue": "{count} gün gecikti"
+    },
+    "deleteDialog": {
+      "title": "Ödeme silinsin mi?",
+      "body": "“{title}” ve bekleyen tüm vadeleri silinecek. Geçmiş ödemeler ve oluşan işlemler korunur.",
+      "cancel": "Vazgeç",
+      "confirm": "Sil"
+    },
+    "upcoming": {
+      "title": "Yaklaşan Ödemeler",
+      "all": "Tümü ({count})",
+      "empty": "Yaklaşan ödeme yok."
+    },
+    "toast": {
+      "paid": "Ödeme kaydedildi.",
+      "undo": "Geri al",
+      "undone": "Ödeme geri alındı.",
+      "failed": "İşlem tamamlanamadı. Lütfen tekrar deneyin."
+    }
+  },
+  "dashboard": {
+    "balance": {
+      "label": "Toplam Bakiye",
+      "monthlyReport": "Aylık Rapor",
+      "monthIncome": "Bu Ay Gelir",
+      "monthExpense": "Bu Ay Gider",
+      "today": "Bugün:",
+      "todayPayments": "{count} Ödeme",
+      "waiting": "bekleniyor.",
+      "todayNone": "Bugün bekleyen görev veya ödeme yok.",
+      "todayTasks": "{count} Görev"
+    },
+    "quick": {
+      "label": "Hızlı aksiyonlar",
+      "income": "Gelir",
+      "expense": "Gider",
+      "task": "Görev",
+      "payment": "Ödeme"
+    },
+    "agenda": {
+      "title": "Bugünün Akışı",
+      "all": "Tümü ({count})",
+      "empty": "Bugün için planlanmış kayıt yok.",
+      "overdue": "Gecikmiş"
+    },
+    "savings": {
+      "label": "Birikim Hedefi",
+      "completed": "%{percent} Tamamlandı",
+      "target": "Hedef: {amount}",
+      "progress": "İlerleme"
+    }
+  },
+  "calendar": {
+    "today": "Bugün",
+    "period": "Dönem",
+    "views": {
+      "label": "Takvim görünümü",
+      "month": "Aylık",
+      "week": "Haftalık",
+      "day": "Günlük"
+    },
+    "previousMonth": "Önceki ay",
+    "nextMonth": "Sonraki ay",
+    "previousWeek": "Önceki hafta",
+    "nextWeek": "Sonraki hafta",
+    "kind": {
+      "task": "Görev",
+      "appointment": "Randevu",
+      "payment": "Ödeme"
+    },
+    "legend": "Gösterge",
+    "matrix": {
+      "more": "+{count}",
+      "dayItems": "{count} kayıt",
+      "week": "Hafta şeridi"
+    },
+    "summary": {
+      "today": "Bugün:",
+      "day": "Gün:",
+      "tasks": "{count} Görev",
+      "appointments": "{count} Randevu",
+      "payments": "{count} Ödeme",
+      "none": "Bu gün için kayıt yok."
+    },
+    "agenda": {
+      "todo": "Yapılacaklar",
+      "done": "Tamamlandı",
+      "empty": "Bu gün için planlanmış kayıt yok.",
+      "addTask": "Görev ekle"
+    },
+    "card": {
+      "minutes": "{count} dk",
+      "allDay": "Tüm gün",
+      "lastDay": "Son Gün",
+      "finished": "Bitti",
+      "highPriority": "Öncelikli",
+      "complete": "“{title}” tamamlandı olarak işaretle",
+      "reopen": "“{title}” yeniden aç"
+    },
+    "toast": {
+      "completed": "Tamamlandı olarak işaretlendi.",
+      "reopened": "Yeniden açıldı.",
+      "undo": "Geri al",
+      "failed": "İşlem tamamlanamadı. Lütfen tekrar deneyin."
+    },
+    "detail": {
+      "title": "Kayıt Detayı",
+      "back": "Geri",
+      "close": "Detayı kapat",
+      "highPriority": "Yüksek Öncelik",
+      "timeAndReminder": "Zaman & Hatırlatma",
+      "date": "Tarih",
+      "time": "Saat",
+      "allDay": "Tüm gün",
+      "reminders": "Hatırlatıcılar",
+      "locationNotes": "Konum & Notlar",
+      "address": "Adres",
+      "openMap": "Haritada aç",
+      "openMapLabel": "“{place}” adresini haritada aç (yeni sekme)",
+      "notes": "Ek Bilgi ve Notlar",
+      "plannedExpense": "Planlanan Finansal Harcama",
+      "plannedExpenseLabel": "İlişkili harcama tahmini",
+      "delete": "Kaydı kalıcı olarak sil",
+      "edit": "Düzenle",
+      "complete": "Görevi tamamla",
+      "reopen": "Yeniden aç",
+      "hours": "{count} saat",
+      "hoursMinutes": "{hours} saat {minutes} dk",
+      "minutes": "{count} dk"
+    },
+    "deleteDialog": {
+      "title": "Kayıt silinsin mi?",
+      "body": "“{title}” kalıcı olarak silinecek. Bu işlem geri alınamaz.",
+      "cancel": "Vazgeç",
+      "confirm": "Sil"
+    },
+    "form": {
+      "newTitle": "Yeni Görev",
+      "editTitle": "Kaydı Düzenle",
+      "cancel": "İptal",
+      "save": "Kaydet",
+      "required": "zorunlu",
+      "kind": "Tür",
+      "title": "Başlık",
+      "titlePlaceholder": "Örn. Diş hekimi kontrolü",
+      "description": "Açıklama (İsteğe Bağlı)",
+      "descriptionPlaceholder": "Kısa bir açıklama",
+      "priority": "Öncelik",
+      "priorities": {
+        "low": "Düşük",
+        "normal": "Normal",
+        "high": "Yüksek"
+      },
+      "category": "Kategori Seçimi",
+      "when": "Tarih ve Saat",
+      "date": "Tarih",
+      "time": "Saat",
+      "allDay": "Tüm gün",
+      "allDayHint": "Saat seçilmeden günün tamamına eklenir",
+      "duration": "Süre",
+      "durationNone": "Belirtilmedi",
+      "durationMinutes": "{count} dk",
+      "reminder": "Hatırlatma Bildirimi",
+      "chooseDate": "Tarih seçin",
+      "chooseTime": "Saat seçin",
+      "chooseDuration": "Süre seçin",
+      "chooseReminder": "Hatırlatma seçin",
+      "location": "Konum (İsteğe Bağlı)",
+      "locationName": "Konum adı",
+      "locationNamePlaceholder": "Örn. Dt. Selin Yıldız Kliniği",
+      "locationAddress": "Adres",
+      "locationAddressPlaceholder": "Cadde, mahalle, ilçe",
+      "note": "Not (İsteğe Bağlı)",
+      "notePlaceholder": "Kayıtla ilgili kısa bir not",
+      "noteCount": "{count}/{max}",
+      "plannedExpense": "İlişkili Harcama (İsteğe Bağlı)",
+      "plannedExpenseHint": "Bilgi amaçlıdır; bakiyeyi ve raporları etkilemez.",
+      "errors": {
+        "title": "Başlık girin.",
+        "titleLength": "Başlık en fazla {max} karakter olabilir.",
+        "description": "Açıklama en fazla {max} karakter olabilir.",
+        "category": "Geçerli bir kategori seçin.",
+        "date": "Geçerli bir tarih seçin.",
+        "time": "Saat seçin veya “Tüm gün”ü açın.",
+        "duration": "Geçerli bir süre seçin.",
+        "reminder": "Bir hatırlatma seçin.",
+        "location": "Konum en fazla {max} karakter olabilir.",
+        "note": "Not en fazla {max} karakter olabilir.",
+        "plannedExpense": "Geçerli bir tutar girin.",
+        "summary": "Kaydedilemedi. İşaretli alanları kontrol edin.",
+        "notFound": "Bu kayıt artık mevcut değil."
+      }
+    }
+  },
+  "savings": {
+    "summary": {
+      "chip": "Toplam Birikim Varlığı",
+      "monthAdded": "{amount} bu ay eklendi",
+      "monthAddedPercent": "{amount} bu ay eklendi (%{percent} artış)"
+    },
+    "actions": {
+      "monthlyReport": "Aylık Rapor",
+      "add": "Yeni birikim hesabı ekle"
+    },
+    "list": {
+      "title": "Kayıtlı Birikimler",
+      "active": "{count} Aktif Hedef",
+      "target": "Hedef: {amount}",
+      "noTarget": "Hedefsiz birikim",
+      "completed": "Tamamlandı"
+    },
+    "kind": {
+      "gold": "Altın / Kıymetli",
+      "deposit": "Vadeli Mevduat",
+      "fund": "Yatırım Fonu",
+      "currency": "Döviz Sepeti",
+      "cash": "Nakit / Kasa Birikimi"
+    },
+    "kindShort": {
+      "gold": "Altın",
+      "deposit": "Vadeli",
+      "fund": "Fon",
+      "currency": "Döviz",
+      "cash": "Nakit"
+    },
+    "unit": {
+      "label": "Birim",
+      "piece": "Adet",
+      "gram": "Gram"
+    },
+    "empty": {
+      "title": "Bir Birikim Hesabı bulunmuyor!",
+      "body": "Birikimlerinizi kontrol altına almak ve finansal gelişiminize katkıda bulunmak için hemen bir birikim hesabı oluşturun!",
+      "action": "Birikim hesabı ekle"
+    },
+    "detail": {
+      "title": "Kayıt Detayı",
+      "back": "Birikimlere dön",
+      "active": "Aktif Birikim",
+      "completed": "Tamamlandı",
+      "target": "Hedef: {amount}",
+      "remaining": "(Kalan: {amount})",
+      "progress": "Tamamlanma Oranı",
+      "progressValue": "%{percent} Tamamlandı",
+      "progressLabel": "İlerleme",
+      "info": "Bu hesapta tutulan bakiye, günlük harcanabilir cüzdan bakiyenizden ayrı tutulur ve yalnızca birikim toplamınıza dahil edilir.",
+      "parameters": "Hesap Parametreleri",
+      "institution": "Saklama Kurumu",
+      "openedAt": "Açılış Tarihi",
+      "monthsAgo": "({count} ay önce)",
+      "daysAgo": "({count} gün önce)",
+      "today": "(bugün)",
+      "lastMovement": "Son İşlem Tarihi",
+      "contribution": "Aylık Hedef Katkı",
+      "contributionValue": "{amount} / {frequency}",
+      "note": "Kullanıcı Notu",
+      "history": "Geçmiş Hareketler",
+      "historyEmpty": "Henüz hareket yok.",
+      "movement": {
+        "initial": "Açılış Bakiyesi",
+        "recurring": "Düzenli Katkı",
+        "manualIn": "Para Ekleme",
+        "manualOut": "Para Çekme",
+        "closing": "Hesap Kapatma"
+      },
+      "move": "Para ekle / Çek",
+      "edit": "Hesabı düzenle",
+      "close": "Birikim hesabını kapat / Sil"
+    },
+    "frequencyUnit": {
+      "daily": "Gün",
+      "weekly": "Hafta",
+      "monthly": "Ay",
+      "yearly": "Yıl"
+    },
+    "closeDialog": {
+      "title": "Birikim hesabı kapatılsın mı?",
+      "body": "“{name}” kalıcı olarak silinecek. Bu işlem geri alınamaz.",
+      "transferBody": "Hesaptaki {amount} hangi hesaba aktarılsın?",
+      "noTransfer": "Aktarmadan kapat",
+      "cancel": "Vazgeç",
+      "confirm": "Kapat ve sil"
+    },
+    "form": {
+      "newTitle": "Yeni Birikim Hesabı",
+      "editTitle": "Hesabı Düzenle",
+      "cancel": "İptal",
+      "save": "Kaydet",
+      "required": "zorunlu",
+      "initialChip": "Başlangıç / Mevcut Bakiye",
+      "contributionChip": "Düzenli Katkı Tutarı",
+      "transferHint": "{account} hesabınızdan anında aktarılacaktır",
+      "contributionHint": "Her dönem {account} hesabınızdan aktarılır",
+      "unitHint": "Adet / gram birimli birikimde hesaplara dokunulmaz",
+      "amount": "Tutar",
+      "quickAmounts": "Hızlı tutar ekle",
+      "addAmount": "{amount} ekle",
+      "name": "Başlık",
+      "namePlaceholder": "Örn. Araba Yenileme Fonu",
+      "kind": "Hesap Türü",
+      "target": "Hedef Tutar",
+      "targetPlaceholder": "Boş bırakılırsa hedefsiz birikim",
+      "institution": "Saklama Kurumu (İsteğe Bağlı)",
+      "institutionPlaceholder": "Örn. İş Bankası (Vadeli TL)",
+      "account": "İşlem Yapılan Hesap",
+      "when": "İşlem Zamanı ve Tekrarı",
+      "date": "Tarih",
+      "time": "Saat",
+      "chooseDate": "Tarih seçin",
+      "chooseTime": "Saat seçin",
+      "repeatTitle": "Tekrar Eden İşlem",
+      "repeatHint": "Aynı birikim periyodik eklensin",
+      "frequency": "Tekrarlama Sıklığı",
+      "reminder": "Hatırlatma Bildirimi",
+      "chooseFrequency": "Tekrarlama sıklığı seçin",
+      "chooseReminder": "Hatırlatma seçin",
+      "note": "Not (İsteğe Bağlı)",
+      "notePlaceholder": "Birikimle ilgili kısa bir not",
+      "noteCount": "{count}/{max}",
+      "errors": {
+        "name": "Başlık girin.",
+        "nameLength": "Başlık en fazla {max} karakter olabilir.",
+        "amount": "Geçerli bir tutar girin.",
+        "repeatAmount": "Düzenli katkı için bir tutar girin.",
+        "target": "Geçerli bir hedef tutar girin.",
+        "institution": "Saklama kurumu en fazla {max} karakter olabilir.",
+        "account": "Bir hesap seçin.",
+        "date": "Geçerli bir tarih seçin.",
+        "time": "Geçerli bir saat seçin.",
+        "frequency": "Bir tekrarlama sıklığı seçin.",
+        "reminder": "Bir hatırlatma seçin.",
+        "note": "Not en fazla {max} karakter olabilir.",
+        "summary": "Kaydedilemedi. İşaretli alanları kontrol edin.",
+        "notFound": "Bu birikim hesabı artık mevcut değil."
+      }
+    },
+    "move": {
+      "title": "Para ekle / Çek",
+      "direction": "İşlem",
+      "in": "Ekle",
+      "out": "Çek",
+      "inChip": "Birikime Ekle",
+      "outChip": "Birikimden Çek",
+      "balance": "Birikim bakiyesi: {amount}",
+      "sourceAccount": "Kaynak Hesap",
+      "targetAccount": "Hedef Hesap",
+      "transfer": "TL Karşılığı (İsteğe Bağlı)",
+      "transferHint": "Girilirse seçili hesaba yansır; girilmezse hesaplara dokunulmaz.",
+      "date": "Tarih",
+      "chooseDate": "Tarih seçin",
+      "negativeWarning": "Bakiye eksiye düşecek.",
+      "cancel": "İptal",
+      "save": "Kaydet",
+      "errors": {
+        "amount": "Geçerli bir tutar girin.",
+        "insufficient": "Çekilecek miktar birikim bakiyesinden büyük olamaz.",
+        "transfer": "Geçerli bir TL tutarı girin.",
+        "account": "Bir hesap seçin.",
+        "date": "Geçerli bir tarih seçin.",
+        "summary": "Kaydedilemedi. İşaretli alanları kontrol edin.",
+        "notFound": "Bu birikim hesabı artık mevcut değil."
+      }
+    }
+  },
+  "categories": {
+    "title": "Kategori Yönetimi",
+    "back": "Profile dön",
+    "tabs": {
+      "label": "Kategori türü",
+      "finance": "Harcama / Gelir",
+      "calendar": "Görev / Takvim"
+    },
+    "financeTitle": "Finansal Kategoriler",
+    "calendarTitle": "Görev / Takvim Kategorileri",
+    "total": "Toplam {count} Kategori",
+    "add": "Yeni Kategori Oluştur",
+    "records": "{count} işlem",
+    "calendarRecords": "{count} kayıt",
+    "edit": "“{name}” kategorisini düzenle",
+    "remove": "“{name}” kategorisini sil veya arşivle",
+    "empty": "Bu sekmede kategori yok.",
+    "color": {
+      "teal": "Turkuaz",
+      "blue": "Mavi",
+      "violet": "Mor",
+      "pink": "Pembe",
+      "orange": "Turuncu",
+      "amber": "Kehribar",
+      "green": "Yeşil",
+      "red": "Kırmızı",
+      "slate": "Gri"
+    },
+    "type": {
+      "income": "Gelir",
+      "expense": "Gider",
+      "subscription": "Abonelik",
+      "calendar": "Görev / Takvim"
+    },
+    "archived": {
+      "title": "Arşivlenenler ({count})",
+      "restore": "Geri al",
+      "restoreLabel": "“{name}” kategorisini arşivden geri al",
+      "restored": "Kategori geri alındı.",
+      "conflict": "Aynı türde aynı adlı aktif bir kategori var. Önce birini yeniden adlandırın."
+    },
+    "removeDialog": {
+      "archiveTitle": "Kategori arşivlensin mi?",
+      "archiveBody": "{count} kayıt bu kategoride. Geçmiş kayıtlarda görünmeye devam edecek, yeni kayıtlarda seçilemeyecek.",
+      "archiveRecurring": "{count} tekrarlayan kayıt bu kategoriyle oluşmaya devam edecek; dilerseniz bu kayıtları düzenleyerek başka bir kategoriye geçebilirsiniz.",
+      "archiveConfirm": "Arşivle",
+      "deleteTitle": "Kategori silinsin mi?",
+      "deleteBody": "“{name}” hiçbir kayıtta kullanılmıyor ve kalıcı olarak silinecek. Bu işlem geri alınamaz.",
+      "deleteConfirm": "Sil",
+      "blockedTitle": "Bu kategori kaldırılamaz",
+      "blockedBody": "“{name}” bu türdeki son aktif kategori. Bu türde kayıt girmek için en az bir kategori gerekir.",
+      "cancel": "Vazgeç",
+      "close": "Tamam",
+      "archived": "Kategori arşivlendi.",
+      "deleted": "Kategori silindi.",
+      "failed": "İşlem tamamlanamadı. Lütfen tekrar deneyin."
+    },
+    "form": {
+      "newTitle": "Yeni Kategori Ekle",
+      "editTitle": "Kategoriyi Düzenle",
+      "cancel": "İptal",
+      "save": "Kaydet",
+      "required": "zorunlu",
+      "preview": "Canlı Önizleme",
+      "previewPlaceholder": "Kategori adı",
+      "type": "İşlem Türü",
+      "name": "Başlık",
+      "namePlaceholder": "Örn. Evcil Hayvan Giderleri",
+      "icon": "İkon Seçimi",
+      "color": "Renk Paleti",
+      "budget": "Aylık Bütçe Limiti (İsteğe Bağlı)",
+      "budgetHint": "Belirlenen limiti aştığınızda bildirim alırsınız.",
+      "note": "Not (İsteğe Bağlı)",
+      "notePlaceholder": "Örn. Veteriner, mama ve bakım masrafları...",
+      "noteCount": "{count}/{max}",
+      "errors": {
+        "name": "Başlık girin.",
+        "nameLength": "Başlık en fazla {max} karakter olabilir.",
+        "duplicate": "Bu türde aynı adlı bir kategori zaten var.",
+        "icon": "Bir ikon seçin.",
+        "color": "Bir renk seçin.",
+        "budget": "Geçerli bir limit girin.",
+        "note": "Not en fazla {max} karakter olabilir.",
+        "summary": "Kaydedilemedi. İşaretli alanları kontrol edin.",
+        "notFound": "Bu kategori artık mevcut değil."
+      }
+    },
+    "icon": {
+      "birdhouse": "Kuş evi",
+      "car": "Araba",
+      "coffee": "Kahve",
+      "briefcase-medical": "Sağlık",
+      "heart": "Kalp",
+      "receipt-text": "Fatura",
+      "wallet": "Cüzdan",
+      "gift": "Hediye",
+      "paw-print": "Pati",
+      "shopping-cart": "Alışveriş sepeti",
+      "store": "Mağaza",
+      "zap": "Elektrik",
+      "wifi": "İnternet",
+      "fuel": "Yakıt",
+      "house": "Ev",
+      "hospital": "Hastane",
+      "notebook-pen": "Defter"
+    }
+  },
+  "reports": {
+    "title": "Aylık Rapor",
+    "back": "Ana Sayfaya dön",
+    "period": "Dönem",
+    "previousMonth": "Önceki ay",
+    "nextMonth": "Sonraki ay",
+    "share": "Paylaş",
+    "shareView": {
+      "title": "Rapor Önizleme & Paylaş",
+      "close": "Rapora dön",
+      "subtitle": "{month} Finansal Özeti",
+      "net": "Net Bakiye Değişimi",
+      "savingsRate": "Tasarruf Oranı: {rate}",
+      "income": "Toplam Gelir",
+      "expense": "Toplam Gider",
+      "balance": "Gelir Dağılımı Dengesi",
+      "balanceValue": "{spent} Harcama / {kept} Birikim",
+      "spent": "Harcanan ({rate})",
+      "kept": "Birikime Kalan ({rate})",
+      "top": "En Yüksek Harcamalar",
+      "topHint": "İlk 3 kalem",
+      "empty": "Bu ay gider kaydı yok.",
+      "footer": "Pickaly ile oluşturuldu",
+      "hint": "Kart görünümü hikaye ve mesaj formatlarına tam uyumlu olarak ölçeklendirildi.",
+      "emptyMonth": "Bu ayda işlem olmadığı için paylaşılacak bir rapor yok.",
+      "shareImage": "Görsel Olarak Paylaş (Sosyal / Mesaj)",
+      "pdf": "PDF / Rapor Özeti İndir",
+      "downloaded": "Rapor görseli indirildi.",
+      "failed": "Görsel oluşturulamadı. Lütfen tekrar deneyin."
+    },
+    "monthChip": "{month} Ayı",
+    "net": "Net Nakit Akışı / Birikim",
+    "income": "Gelir",
+    "expense": "Gider",
+    "savings": "Tasarruf",
+    "incomeCount": "{count} Kalem İşlem",
+    "expenseCategories": "{count} Temel Gider",
+    "savingsHint": "Gelire oranla",
+    "comparison": {
+      "title": "Gelir & Gider Karşılaştırması",
+      "hint": "Gelir Oranı",
+      "income": "Toplam Gelir",
+      "expense": "Toplam Gider",
+      "transfer": "Birikim Hesabına Aktarılan",
+      "capacity": "Tasarruf Kapasitesi: {amount}",
+      "netRate": "Net Bakiye: {rate}"
+    },
+    "top": {
+      "title": "En Çok Harcama Yapılanlar",
+      "hint": "Gider Dağılımı",
+      "count": "{count} işlem",
+      "empty": "Bu ay gider kaydı yok."
+    },
+    "shareOpen": "Paylaşılabilir Raporu Görüntüle"
+  },
+  "settings": {
+    "failed": "Ayar kaydedilemedi. Lütfen tekrar deneyin.",
+    "profile": {
+      "label": "Profil",
+      "synced": "Senkronize"
+    },
+    "groups": {
+      "content": "Özelleştirme & İçerik",
+      "preferences": "Uygulama Tercihleri",
+      "data": "Veri & Güvenlik",
+      "support": "Destek & Bilgi"
+    },
+    "categories": {
+      "title": "Kategori Yönetimi",
+      "hint": "Görev kategorilerini düzenle",
+      "count": "{count} kategori"
+    },
+    "reminders": {
+      "title": "Hatırlatma ve Bildirimler",
+      "hint": "Hatırlatma tercihleri",
+      "on": "Açık",
+      "off": "Kapalı"
+    },
+    "currency": {
+      "title": "Para Birimi",
+      "hint": "Varsayılan para birimi",
+      "value": "Türk Lirası (₺)"
+    },
+    "language": {
+      "title": "Uygulama Dili",
+      "hint": "Arayüz dili ve bölge ayarı"
+    },
+    "weekStart": {
+      "title": "Haftanın İlk Günü",
+      "hint": "Takvim ve bütçe periyot görünümü",
+      "day1": "Pazartesi",
+      "day0": "Pazar"
+    },
+    "export": {
+      "title": "Verileri Yedekle & Dışa Aktar",
+      "hint": "JSON / Excel formatında",
+      "choose": "Dışa aktarma biçimi",
+      "json": "JSON",
+      "jsonHint": "Tam yedek",
+      "csvOption": "CSV (Excel)",
+      "csvHint": "İşlemler",
+      "csv": {
+        "date": "Tarih",
+        "time": "Saat",
+        "type": "Tür",
+        "title": "Başlık",
+        "amount": "Tutar (₺)",
+        "category": "Kategori",
+        "account": "Hesap",
+        "note": "Not",
+        "income": "Gelir",
+        "expense": "Gider"
+      }
+    },
+    "about": {
+      "title": "Hakkında & Sürüm",
+      "hint": "Kullanım koşulları ve gizlilik",
+      "version": "Pickaly v{version}"
+    },
+    "logout": {
+      "title": "Çıkış Yap",
+      "hint": "Oturumu bu cihazda sonlandır"
+    }
   }
 }

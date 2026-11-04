@@ -20,13 +20,24 @@
       "info": { "$type": "color", "$value": "{primitive.blue.600}" },
       "on-task": { "$type": "color", "$value": "{primitive.indigo.700}" },
       "on-payment": { "$type": "color", "$value": "{primitive.rose.700}" },
-      "on-warning": { "$type": "color", "$value": "{primitive.amber.800}" }
+      "on-warning": { "$type": "color", "$value": "{primitive.amber.800}" },
+      "on-neutral": { "$type": "color", "$value": "{primitive.neutral.600}", "$description": "Genel chip metni (Figma: Neutral/600)" }
     },
     "surface": {
       "page": { "$type": "color", "$value": "{primitive.neutral.50}" },
       "card": { "$type": "color", "$value": "{primitive.white}" },
       "muted": { "$type": "color", "$value": "{primitive.neutral.100}" },
-      "selected": { "$type": "color", "$value": "{primitive.teal.100}" }
+      "selected": { "$type": "color", "$value": "{primitive.neutral.100}", "$description": "Seçili satır/öğe zemini. Ürün sahibi kararı (2026-11-04): teal yerine gri ton (Neutral/100)" },
+      "nav-active": { "$type": "color", "$value": "{primitive.neutral.200}", "$description": "Aktif nav öğesi zemini. Figma: Nav Bar Buttons on → Neutral/200 [Karar Ç-3]" },
+      "inverse": { "$type": "color", "$value": "{primitive.neutral.900}", "$description": "Toast zemini (RESPONSIVE §8.2.7: Neutral/900); Ana Sayfa Toplam Bakiye kartı gradyan sonu", "$extensions": { "pickaly": { "status": "proposed" } } },
+      "inverse-raised": { "$type": "color", "$value": "{primitive.neutral.700}", "$description": "Pages → Ana Sayfa Toplam Bakiye kartı: gradyan başı ve Gelir/Gider/Bugün kutuları (Neutral/700)" },
+      "inverse-control": { "$type": "color", "$value": "{primitive.neutral.600}", "$description": "Pages → Ana Sayfa Toplam Bakiye kartı: ok ikon kutuları (Neutral/600)" }
+    },
+    "control": {
+      "track-off": { "$type": "color", "$value": "{primitive.neutral.200}", "$description": "Switch kapalı zemin. Pages: Toggle Switch Background → Neutral/200" },
+      "thumb-off": { "$type": "color", "$value": "{primitive.neutral.400}", "$description": "Switch kapalı düğme. Pages: Toggle Switch → Neutral/400" },
+      "track-on": { "$type": "color", "$value": "{primitive.green.600}", "$description": "Switch açık zemin. Pages: Toggle Switch Background → Chart/Income" },
+      "thumb-on": { "$type": "color", "$value": "{primitive.white}", "$description": "Switch açık düğme. Pages: Brand/White" }
     },
     "border": {
       "default": { "$type": "color", "$value": "{primitive.neutral.200}" },
