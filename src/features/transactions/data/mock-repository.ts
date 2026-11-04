@@ -2,6 +2,7 @@ import "server-only";
 // [Geçici istisna] Örnek veride ödenmiş abonelik vadelerinin işlemleri payments örnek verisinden gelir;
 // iki modülün örnek verisi tutarlı kalsın diye iç dosya import edilir. Supabase geldiğinde kaldırılır.
 import { buildPaymentSeed } from "@/features/payments/data/seed";
+import { isDemoDataEnabled } from "@/lib/env";
 import { localDateTimeToIso, toDateKey, toMonthKey, type MonthKey } from "@/lib/dates";
 import { majorToMinor } from "@/lib/money";
 import type { RecurringRule, Transaction, TransactionInput, TransactionType } from "../domain/types";
@@ -11,6 +12,7 @@ import type { RecurringRuleRepository, TransactionRepository } from "./repositor
 // Veriler sunucu belleğinde tutulur: sunucu yeniden başlayınca örnek verilere döner.
 // Başlık, tutar, saat ve notlar Pages → İşlemler ve İşlem Detayı örneklerinden alınmıştır;
 // tarihler ekranın boş görünmemesi için bugüne göre üretilir.
+// Örnek içerik yalnızca PICKALY_DEMO_DATA=true iken yüklenir; varsayılan olarak depo boş başlar (lib/env.ts).
 
 type Seed = [daysAgo: number, time: string, type: TransactionType, title: string, amount: number, categoryId: string, accountId: string, extra?: Partial<Transaction>];
 
@@ -65,7 +67,7 @@ function buildSeed(): Transaction[] {
 const store = globalThis as typeof globalThis & { __pickalyMockTransactions?: Transaction[]; __pickalyMockRecurringRules?: RecurringRule[] };
 
 function rows(): Transaction[] {
-  store.__pickalyMockTransactions ??= buildSeed();
+  store.__pickalyMockTransactions ??= isDemoDataEnabled() ? buildSeed() : [];
   return store.__pickalyMockTransactions;
 }
 

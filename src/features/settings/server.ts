@@ -1,9 +1,14 @@
 import "server-only";
-import type { WeekStart } from "@/lib/dates";
+import { isWeekStart, type WeekStart } from "@/lib/dates";
+import { isSupabaseConfigured } from "@/lib/env";
+import { db, unwrap } from "@/lib/supabase/data";
 import type { UserProfile, UserSettings } from "./domain/types";
 
-// Profil ve tercihlere sunucu tarafı erişim. Şimdilik yerel örnek veri (gerçek kullanıcı verisi yok);
-// [Auth aşaması] Profil oturumdaki kullanıcıdan, tercihler user_settings tablosundan okunur.
+// Profil ve tercihlere sunucu tarafı erişim. Supabase tanımlıysa tercihler user_settings tablosundan okunur
+// (kayıtta tetikleyiciyle oluşturulur); profil oturumdaki kullanıcıdan gelir (features/auth/server.ts).
+// Supabase tanımlı değilse yerel örnek profil ve tercihler kullanılır.
+
+const DEFAULT_SETTINGS: UserSettings = { weekStart: 1, remindersEnabled: true };
 
 type Store = { profile: UserProfile; settings: UserSettings };
 
@@ -23,9 +28,20 @@ export async function getProfile(): Promise<UserProfile> {
 }
 
 export async function getSettings(): Promise<UserSettings> {
-  return store().settings;
+  if (!isSupabaseConfigured()) return store().settings;
+  const row = unwrap(await (await db()).from("user_settings").select("week_start, reminders_enabled").maybeSingle()) as {
+    week_start: number;
+    reminders_enabled: boolean;
+  } | null;
+  if (!row) return DEFAULT_SETTINGS;
+  return { weekStart: isWeekStart(row.week_start) ? row.week_start : 1, remindersEnabled: row.reminders_enabled };
 }
 
 export async function updateWeekStart(weekStart: WeekStart): Promise<void> {
-  store().settings = { ...store().settings, weekStart };
+  if (!isSupabaseConfigured()) {
+    store().settings = { ...store().settings, weekStart };
+    return;
+  }
+  // Satır kayıtta oluşturulur; yine de yoksa (ör. eski hesap) eklenir.
+  unwrap(await (await db()).from("user_settings").upsert({ week_start: weekStart }, { onConflict: "user_id" }));
 }

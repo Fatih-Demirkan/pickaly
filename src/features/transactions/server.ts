@@ -1,15 +1,20 @@
 import "server-only";
+import { cache } from "react";
 import { listAccounts } from "@/features/accounts/server";
 import { getSavingsTransfersByAccount } from "@/features/savings/server";
 import { localDateTimeToIso, toDateKey } from "@/lib/dates";
+import { isSupabaseConfigured } from "@/lib/env";
 import { occurrencesBetween } from "@/lib/recurrence";
+import { DuplicateRecordError } from "@/lib/supabase/data";
 import type { RecurringRuleRepository, TransactionRepository } from "./data/repository";
 import { mockRecurringRuleRepository, mockTransactionRepository } from "./data/mock-repository";
+import { supabaseRecurringRuleRepository, supabaseTransactionRepository } from "./data/supabase-repository";
 import { accountBalance } from "./domain/summary";
 
-// İşlem verisine sunucu tarafı erişim. Supabase repository'si geldiğinde yalnızca burada değiştirilir.
+// İşlem verisine sunucu tarafı erişim. Supabase tanımlıysa veritabanı (kullanıcıya özel, RLS), değilse yerel depo.
 
-export const recurringRuleRepository: RecurringRuleRepository = mockRecurringRuleRepository;
+const baseTransactionRepository: TransactionRepository = isSupabaseConfigured() ? supabaseTransactionRepository : mockTransactionRepository;
+export const recurringRuleRepository: RecurringRuleRepository = isSupabaseConfigured() ? supabaseRecurringRuleRepository : mockRecurringRuleRepository;
 
 /**
  * Tarihi gelen Tekrar Eden İşlem örneklerini gerçekleşmiş işlem olarak oluşturur (BR-REC-003, onay istenmez).
@@ -22,31 +27,34 @@ async function generateDueTransactions(now: Date) {
     for (const date of occurrencesBetween(rule.startDate, rule.frequency, rule.generatedThrough, today)) {
       const occurredAt = localDateTimeToIso(date, rule.time);
       if (new Date(occurredAt) > now) break; // Bugünkü örnek saati gelince oluşur.
-      await mockTransactionRepository.create({ ...rule.template, occurredAt }, { source: "recurring", recurringRuleId: rule.id });
+      try {
+        await baseTransactionRepository.create({ ...rule.template, occurredAt }, { source: "recurring", recurringRuleId: rule.id });
+      } catch (error) {
+        // Aynı örnek eşzamanlı bir istekte zaten oluşturuldu (BR-DUP-004).
+        if (!(error instanceof DuplicateRecordError)) throw error;
+      }
       through = date;
     }
     if (through !== rule.generatedThrough) await recurringRuleRepository.markGenerated(rule.id, through);
   }
 }
 
-// Aynı istekte paralel okumalar (ör. liste + bakiye) aynı örneği iki kez üretmesin diye tek çalıştırma paylaşılır.
-let generating: Promise<void> | null = null;
+// Aynı istekteki paralel okumalar (ör. liste + bakiye) üretimi bir kez çalıştırır. İstek başınadır: kullanıcılar
+// birbirinin üretimini beklemez. Eşzamanlı isteklerde mükerrer kaydı veritabanı kuralı engeller.
+const ensureGenerated = cache(() => generateDueTransactions(new Date()));
 
 function withGeneratedOccurrences<T extends unknown[], R>(read: (...args: T) => Promise<R>) {
   return async (...args: T) => {
-    generating ??= generateDueTransactions(new Date()).finally(() => {
-      generating = null;
-    });
-    await generating;
+    await ensureGenerated();
     return read(...args);
   };
 }
 
 export const transactionRepository: TransactionRepository = {
-  ...mockTransactionRepository,
-  listByMonth: withGeneratedOccurrences(mockTransactionRepository.listByMonth),
-  listAll: withGeneratedOccurrences(mockTransactionRepository.listAll),
-  get: withGeneratedOccurrences(mockTransactionRepository.get),
+  ...baseTransactionRepository,
+  listByMonth: withGeneratedOccurrences(baseTransactionRepository.listByMonth),
+  listAll: withGeneratedOccurrences(baseTransactionRepository.listAll),
+  get: withGeneratedOccurrences(baseTransactionRepository.get),
 };
 
 /**

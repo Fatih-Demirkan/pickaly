@@ -37,6 +37,7 @@ export type AuthFormError =
   | "invalidCredentials"
   | "emailNotConfirmed"
   | "codeInvalid"
+  | "linkInvalid"
   | "rateLimited"
   | "weakPassword"
   | "samePassword"

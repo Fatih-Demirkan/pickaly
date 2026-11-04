@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { isPublicPath, SIGN_IN_PATH } from "@/features/auth/routes";
+import { AUTH_CALLBACK_PATH, isPublicPath, SIGN_IN_PATH } from "@/features/auth/routes";
 import { getSupabasePublicEnv, isSupabaseConfigured } from "@/lib/env";
 
 // Oturum proxy'si (Next.js 16'da middleware.ts yerine proxy.ts; TECH_STACK §6.3):
@@ -11,6 +11,16 @@ import { getSupabasePublicEnv, isSupabaseConfigured } from "@/lib/env";
 
 export async function proxy(request: NextRequest) {
   if (!isSupabaseConfigured()) return NextResponse.next({ request });
+
+  // E-postadaki doğrulama bağlantısı Supabase'in izin listesine göre Site URL'e (ör. "/?code=…") dönebilir.
+  // Kod hangi adrese gelirse gelsin oturum açmak için /auth/callback'e aktarılır; yoksa yönlendirmede kaybolur.
+  const { searchParams: incoming, pathname: incomingPath } = request.nextUrl;
+  if (!incomingPath.startsWith(AUTH_CALLBACK_PATH) && (incoming.has("code") || (incoming.has("token_hash") && incoming.has("type")))) {
+    const target = request.nextUrl.clone();
+    target.pathname = AUTH_CALLBACK_PATH;
+    if (incomingPath !== "/" && !target.searchParams.has("sonra")) target.searchParams.set("sonra", incomingPath);
+    return NextResponse.redirect(target);
+  }
 
   let response = NextResponse.next({ request });
   const { url, anonKey } = getSupabasePublicEnv();

@@ -1,5 +1,6 @@
 import "server-only";
 import { toDateKey } from "@/lib/dates";
+import { isDemoDataEnabled } from "@/lib/env";
 import type { Payment, RecurringPayment } from "../domain/types";
 import type { PaymentRepository } from "./repository";
 import { buildPaymentSeed } from "./seed";
@@ -7,13 +8,14 @@ import { buildPaymentSeed } from "./seed";
 // GEÇİCİ YEREL ÖRNEK VERİ DEPOSU — gerçek kullanıcı verisi değildir.
 // Veriler sunucu belleğinde tutulur: sunucu yeniden başlayınca örnek verilere döner.
 // Örnek veriler: ./seed.ts.
+// Örnek içerik yalnızca PICKALY_DEMO_DATA=true iken yüklenir; varsayılan olarak depo boş başlar (lib/env.ts).
 
 type Store = { series: RecurringPayment[]; payments: Payment[] };
 
 const store = globalThis as typeof globalThis & { __pickalyMockPayments?: Store };
 
 async function data(): Promise<Store> {
-  store.__pickalyMockPayments ??= buildPaymentSeed(toDateKey(new Date()));
+  store.__pickalyMockPayments ??= isDemoDataEnabled() ? buildPaymentSeed(toDateKey(new Date())) : { series: [], payments: [] };
   return store.__pickalyMockPayments;
 }
 

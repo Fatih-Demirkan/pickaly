@@ -1,15 +1,19 @@
 import "server-only";
+import { cache } from "react";
 import { localDateTimeToIso, toDateKey, toMonthKey, type DateKey } from "@/lib/dates";
+import { isSupabaseConfigured } from "@/lib/env";
 import { occurrencesBetween } from "@/lib/recurrence";
+import { DuplicateRecordError } from "@/lib/supabase/data";
 import type { SavingsRepository } from "./data/repository";
 import { mockSavingsRepository } from "./data/mock-repository";
+import { supabaseSavingsRepository } from "./data/supabase-repository";
 import { progressPercent, signedMovement, type SavingsAccount, type SavingsAccountView, type SavingsMovement } from "./domain/types";
 
 // Birikim verisine sunucu tarafı erişim ve kuralları (PRD §7, BR-SAV). Supabase geldiğinde yalnızca burası değişir.
 // [Supabase aşaması] Düzenli katkı üretimi zamanlanmış işe, aktarımlar transactions.type = transfer kaydına taşınır
 // (TECH_STACK §5.2); imzalar korunur.
 
-export const savingsRepository: SavingsRepository = mockSavingsRepository;
+export const savingsRepository: SavingsRepository = isSupabaseConfigured() ? supabaseSavingsRepository : mockSavingsRepository;
 
 /** Tarihi gelen Düzenli Katkı'ları kaynak hesaptan aktarım olarak oluşturur (FR-SAV-007, BR-SAV-001). */
 async function generateContributions(now: Date) {
@@ -21,29 +25,28 @@ async function generateContributions(now: Date) {
     for (const date of occurrencesBetween(rule.startDate, rule.frequency, rule.generatedThrough, today)) {
       const occurredAt = localDateTimeToIso(date, rule.time);
       if (new Date(occurredAt) > now) break;
-      await savingsRepository.createMovement({
-        accountId: account.id,
-        direction: "in",
-        amount: rule.amount,
-        transferMinor: account.unit === "TRY" ? rule.amount : null,
-        bankAccountId: account.unit === "TRY" ? rule.sourceAccountId : null,
-        occurredAt,
-        source: "recurring",
-      });
+      try {
+        await savingsRepository.createMovement({
+          accountId: account.id,
+          direction: "in",
+          amount: rule.amount,
+          transferMinor: account.unit === "TRY" ? rule.amount : null,
+          bankAccountId: account.unit === "TRY" ? rule.sourceAccountId : null,
+          occurredAt,
+          source: "recurring",
+        });
+      } catch (error) {
+        // Eşzamanlı bir istek aynı dönemi oluşturdu.
+        if (!(error instanceof DuplicateRecordError)) throw error;
+      }
       through = date;
     }
     if (through !== rule.generatedThrough) await savingsRepository.updateAccount(account.id, { contribution: { ...rule, generatedThrough: through } });
   }
 }
 
-let generating: Promise<void> | null = null;
-
-async function ensureGenerated() {
-  generating ??= generateContributions(new Date()).finally(() => {
-    generating = null;
-  });
-  await generating;
-}
+// İstek başına tek üretim; kullanıcılar birbirinin üretimini beklemez.
+const ensureGenerated = cache(() => generateContributions(new Date()));
 
 function toView(account: SavingsAccount, movements: readonly SavingsMovement[]): SavingsAccountView {
   const own = movements.filter((movement) => movement.accountId === account.id).sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));

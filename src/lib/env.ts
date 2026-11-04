@@ -21,6 +21,15 @@ export type SupabasePublicEnv = {
 };
 
 /**
+ * Yerel veri depoları örnek içerikle mi başlasın? Yalnızca sunucuda okunur (gizli değil, NEXT_PUBLIC_ öneki yok).
+ * Varsayılan: hayır — yeni hesap boş başlar (yalnızca varsayılan kategoriler ve "Ana Hesap", PRD FR-AUTH-005).
+ * Tasarım incelemesi gibi dolu ekran gereken durumlarda .env.local'de PICKALY_DEMO_DATA=true verilir.
+ */
+export function isDemoDataEnabled(): boolean {
+  return process.env.PICKALY_DEMO_DATA === "true";
+}
+
+/**
  * Supabase bağlantı değerleri tanımlı mı? Tanımlı değilse uygulama yerel örnek veriyle, oturumsuz çalışır
  * (giriş zorunlu değildir, giriş ekranları kurulum notu gösterir). Değerler girildiğinde oturum zorunlu olur.
  */

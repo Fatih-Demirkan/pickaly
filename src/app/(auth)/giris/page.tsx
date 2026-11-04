@@ -15,7 +15,7 @@ export default async function SignInPage({ searchParams }: PageProps<"/giris">) 
   return (
     <>
       <AuthHeading title={t("title")} subtitle={t("subtitle")} />
-      <SignInForm next={safeNextPath(params.sonra)} initialError={params.hata === "baglanti" ? "codeInvalid" : undefined} />
+      <SignInForm next={safeNextPath(params.sonra)} initialError={params.hata === "baglanti" ? "linkInvalid" : undefined} />
     </>
   );
 }

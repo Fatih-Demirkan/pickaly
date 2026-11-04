@@ -157,7 +157,18 @@ function CodeForm({ email, next, kind }: { email: string; next?: string; kind: "
 }
 
 export function VerifySignUpForm({ email, next }: { email: string; next?: string }) {
-  return <CodeForm email={email} next={next} kind="signup" />;
+  const t = useTranslations("auth");
+  return (
+    <div className="flex flex-col gap-16">
+      <CodeForm email={email} next={next} kind="signup" />
+      <p className="text-center text-body-md text-text-secondary">
+        {t("verify.linkDone")}{" "}
+        <Link href={SIGN_IN_PATH} className={linkClass}>
+          {t("signUp.signIn")}
+        </Link>
+      </p>
+    </div>
+  );
 }
 
 export function ResetRequestForm() {
