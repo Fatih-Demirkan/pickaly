@@ -102,11 +102,11 @@ export async function CalendarScreen({ query }: { query: CalendarQuery }) {
 
       {view === "month" ? (
         <div className="flex flex-col gap-(--layout-section-gap) laptop:grid laptop:grid-cols-12 laptop:items-start laptop:gap-24">
-          <div className="flex flex-col gap-8 laptop:col-span-8">
+          <div className="flex min-w-0 flex-col gap-8 laptop:col-span-8">
             {controls}
             <MonthMatrix month={month} day={day} today={today} byDate={byDate} locale={locale} query={current} weekStart={weekStart} />
           </div>
-          <div className="flex flex-col gap-12 laptop:sticky laptop:top-(--layout-topbar-height) laptop:col-span-4">
+          <div className="flex min-w-0 flex-col gap-12 laptop:sticky laptop:top-(--layout-topbar-height) laptop:col-span-4">
             {summary}
             <DayAgenda day={day} today={today} entries={dayEntries} categories={categories} locale={locale} query={current} />
           </div>

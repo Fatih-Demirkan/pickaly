@@ -842,5 +842,77 @@
       "title": "Çıkış Yap",
       "hint": "Oturumu bu cihazda sonlandır"
     }
+  },
+  "auth": {
+    "notConfigured": "Supabase bağlantısı henüz yapılandırılmadı. Uygulama şu an yerel örnek verilerle, oturum açmadan çalışıyor. Giriş ve kayıt için .env.local dosyasına staging bağlantı değerlerini girin.",
+    "showPassword": "Göster",
+    "hidePassword": "Gizle",
+    "fields": {
+      "name": "Ad Soyad",
+      "email": "E-posta",
+      "password": "Şifre",
+      "passwordHint": "En az {min} karakter.",
+      "newPassword": "Yeni şifre",
+      "confirmPassword": "Yeni şifre (tekrar)"
+    },
+    "signIn": {
+      "title": "Giriş yap",
+      "subtitle": "Hesabınıza e-posta ve şifrenizle giriş yapın.",
+      "submit": "Giriş yap",
+      "forgot": "Şifremi unuttum",
+      "noAccount": "Hesabınız yok mu?",
+      "createAccount": "Hesap oluştur"
+    },
+    "signUp": {
+      "title": "Hesap oluştur",
+      "subtitle": "E-posta adresinize 6 haneli bir doğrulama kodu göndereceğiz.",
+      "terms": "Kullanım koşullarını ve gizlilik politikasını okudum, kabul ediyorum.",
+      "submit": "Hesap oluştur",
+      "haveAccount": "Zaten hesabınız var mı?",
+      "signIn": "Giriş yap"
+    },
+    "verify": {
+      "title": "E-postanızı doğrulayın",
+      "subtitle": "<strong>{email}</strong> adresine gönderdiğimiz 6 haneli kodu girin.",
+      "codeLabel": "Doğrulama kodu",
+      "digit": "{index}. hane",
+      "submit": "Doğrula",
+      "resend": "Kodu tekrar gönder",
+      "resendIn": "Kodu tekrar gönder ({seconds} sn)",
+      "resent": "Yeni kod gönderildi."
+    },
+    "reset": {
+      "title": "Şifremi unuttum",
+      "subtitle": "Hesabınızın e-posta adresini girin; size 6 haneli bir kod gönderelim.",
+      "codeSubtitle": "<strong>{email}</strong> adresine gönderdiğimiz 6 haneli kodu girin.",
+      "newTitle": "Yeni şifre belirleyin",
+      "newSubtitle": "Hesabınız için yeni bir şifre seçin.",
+      "step": "Adım {step} / {total}",
+      "send": "Kod gönder",
+      "save": "Şifreyi kaydet",
+      "backToSignIn": "Girişe dön",
+      "restart": "Baştan başla"
+    },
+    "errors": {
+      "email": "Geçerli bir e-posta adresi girin.",
+      "password": "Şifrenizi girin.",
+      "passwordLength": "Şifre en az {min} karakter olmalı.",
+      "name": "Adınızı girin.",
+      "nameLength": "Ad en fazla {max} karakter olabilir.",
+      "terms": "Devam etmek için koşulları kabul edin.",
+      "code": "6 haneli kodu eksiksiz girin.",
+      "mismatch": "Şifreler eşleşmiyor."
+    },
+    "formErrors": {
+      "invalidCredentials": "E-posta veya şifre hatalı.",
+      "emailNotConfirmed": "E-posta adresiniz henüz doğrulanmadı.",
+      "codeInvalid": "Kod geçersiz veya süresi dolmuş. Yeni kod isteyin.",
+      "rateLimited": "Çok fazla deneme yapıldı. Lütfen biraz sonra tekrar deneyin.",
+      "weakPassword": "Bu şifre yeterince güçlü değil. Daha uzun ve tahmin edilmesi zor bir şifre seçin.",
+      "samePassword": "Yeni şifre eskisiyle aynı olamaz.",
+      "sessionMissing": "Oturum süresi doldu. Şifre sıfırlamaya baştan başlayın.",
+      "notConfigured": "Supabase bağlantısı yapılandırılmadığı için bu işlem yapılamıyor.",
+      "unknown": "Bir sorun oluştu. Lütfen tekrar deneyin."
+    }
   }
 }

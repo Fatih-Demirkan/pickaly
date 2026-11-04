@@ -6,3 +6,19 @@ allowBuilds:
   # next-intl'in isteğe bağlı mesaj çıkarma aracının bağımlılıkları; Pickaly'de kullanılmıyor.
   "@parcel/watcher": false
   "@swc/core": false
+# Yeni yayımlanan sürümleri bekletme kuralının bilinçli istisnası (ürün sahibi kararı, 2026-11-04):
+# Next.js 16.4.5, 16.4.4'teki dinamik intercept rotası hatasını (geliştirme sunucusunda drawer'ın 404 vermesi) düzeltiyor.
+# Bekleme süresi dolduktan sonra (yayın 2026-11-03) bu liste kaldırılabilir.
+minimumReleaseAgeExclude:
+  - "@next/env@16.4.5"
+  - "@next/swc-darwin-arm64@16.4.5"
+  - "@next/swc-darwin-x64@16.4.5"
+  - "@next/swc-linux-arm64-gnu@16.4.5"
+  - "@next/swc-linux-arm64-musl@16.4.5"
+  - "@next/swc-linux-x64-gnu@16.4.5"
+  - "@next/swc-linux-x64-musl@16.4.5"
+  - "@next/swc-win32-arm64-msvc@16.4.5"
+  - "@next/swc-win32-x64-msvc@16.4.5"
+  - next@16.4.5
+  - "@next/eslint-plugin-next@16.4.5"
+  - eslint-config-next@16.4.5

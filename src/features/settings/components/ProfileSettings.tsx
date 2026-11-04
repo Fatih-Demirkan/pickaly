@@ -2,11 +2,14 @@ import { getTranslations } from "next-intl/server";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Chip } from "@/components/ui/Chip";
+import { getSessionUser } from "@/features/auth/server";
 import { listCategories } from "@/features/categories/server";
+import { isSupabaseConfigured } from "@/lib/env";
 import packageJson from "../../../../package.json";
 import { getProfile, getSettings } from "../server";
 import { ExportRow, LanguageRow, WeekStartRow } from "./PreferenceRows";
 import { SettingsDisabledRow, SettingsGroup, SettingsLinkRow, SettingsStaticRow, SettingsValue } from "./SettingsRow";
+import { SignOutRow } from "./SignOutRow";
 
 // Pages → Profil ve Ayarlar (145:9490, PRD FR-SET-001…013), RESPONSIVE §3.6.1.
 //   Sayfa başlığı "Profil ve Ayarlar" Heading/H2 + alt başlık Body/Small
@@ -21,9 +24,11 @@ import { SettingsDisabledRow, SettingsGroup, SettingsLinkRow, SettingsStaticRow,
 //   Uygulama Dili, Haftanın İlk Günü: değer seçici · Verileri Yedekle & Dışa Aktar: JSON / CSV.
 //   PIN / Biyometrik Kilit: V1'de yok, satır gizlenir (FR-SET-011, D-4).
 //   Hakkında & Sürüm: metinler hukuki onay bekliyor [Eksik] (LB-01) — sürüm görünür, satır devre dışı.
-//   Çıkış Yap: oturum (auth) aşamasında [Ertelendi] — satır devre dışı.
+//   Çıkış Yap: Supabase oturumu açıksa bu cihazdaki oturumu kapatır (FR-AUTH-006); Supabase tanımlı değilse
+//     (yerel örnek veri modu, oturum yok) devre dışı.
+// Profil kartı oturumdaki kullanıcının adı ve e-postasıyla dolar; oturum yoksa yerel örnek profil gösterilir.
 // [Varsayım] Avatar görseli yokken ad-soyad baş harfleri gösterilir (Pages'taki fotoğraf örnek görseldir).
-// [Ertelendi] Profil düzenleme (FR-SET-002) ve "Senkronize" durumunun gerçek değeri oturum / Supabase aşamasında.
+// [Ertelendi] Profil düzenleme (FR-SET-002) ve "Senkronize" durumunun gerçek değeri veri katmanı Supabase'e geçince.
 // Pages'taki "UygulamaAdi v1.0" yer tutucusu "Pickaly" + package.json sürümüyle değiştirildi (RESPONSIVE §8.3 madde 9).
 
 function initials(name: string) {
@@ -36,14 +41,17 @@ function initials(name: string) {
 }
 
 export async function ProfileSettings() {
-  const [t, tPage, tHeader, profile, settings, categories] = await Promise.all([
+  const [t, tPage, tHeader, mockProfile, sessionUser, settings, categories] = await Promise.all([
     getTranslations("settings"),
     getTranslations("pages.profile"),
     getTranslations("header"),
     getProfile(),
+    getSessionUser(),
     getSettings(),
     listCategories(),
   ]);
+  const profile = sessionUser ? { name: sessionUser.name, email: sessionUser.email } : mockProfile;
+  const authEnabled = isSupabaseConfigured();
   const activeCategories = categories.filter((category) => !category.archived).length;
 
   return (
@@ -123,7 +131,11 @@ export async function ProfileSettings() {
                 />
               </li>
               <li>
-                <SettingsDisabledRow describedBy="settings-unavailable" icon="logout" title={t("logout.title")} hint={t("logout.hint")} danger />
+                {authEnabled ? (
+                  <SignOutRow title={t("logout.title")} hint={t("logout.hint")} />
+                ) : (
+                  <SettingsDisabledRow describedBy="settings-unavailable" icon="logout" title={t("logout.title")} hint={t("logout.hint")} danger />
+                )}
               </li>
             </SettingsGroup>
           </div>
