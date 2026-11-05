@@ -343,8 +343,9 @@ Mobil ve tablette en az **44×44** (eski kural, korunur). Görsel olarak daha k�
   - Noktalı iz: dolu kısım `blue.500`, iz noktaları `blue.300` %40, knob halesi `blue.200`.
   - Alt satır: "x ₺ / y ₺" | "%n". Yüzde her zaman metin olarak da yazılır (renk tek başına anlam taşımaz).
   - Teal gradyan **kaldırılır**.
-- **Hızlı Aksiyonlar** (Gelir · Gider · Görev · Ödeme) → standart kart, `radius.md`, padding 12, `elev-1`; 36 px ikon karosu (`radius.sm`, kategori zemini + ön planı) + `caption-strong` etiket. 4'lü ızgara, gap 8 [Türetme: DS stat kartı ölçüleri + işlem satırı ikon karosu].
-  - Renkler: Gelir `category.green` · Gider `category.red` · Görev `category.violet` · Ödeme `category.pink`.
+- **Hızlı Aksiyonlar** (Gelir · Gider · Ödeme · Görev) → standart kart, `radius.md`, padding 12, `elev-1`; 36 px ikon karosu (`radius.sm`, kategori zemini + ön planı) + `caption-strong` etiket. 4'lü ızgara, gap 8 [Türetme: DS stat kartı ölçüleri + işlem satırı ikon karosu].
+  - Sıra [Karar ürün sahibi 2026-11-05]: Gelir · Gider · Ödeme · Görev (Yeni İşlem sheet'inin tür seçimiyle aynı).
+  - Renkler: Gelir `category.green` · Gider `category.red` · Ödeme `category.pink` · Görev `category.violet`.
 - **Ajanda kartı (Takvim)** → standart kart; solda saat kutusu `neutral.50` zemin, `radius.sm`, `body-strong` saat.
 - **Durum & Başlık kartı (detay ekranları)** → standart kart, `radius.lg`; tutar `title-lg`, durum chip'i (§5.4).
 - **Birikim hesabı kartı** → standart kart + basit ilerleme çubuğu (§5.9).
@@ -458,7 +459,7 @@ Part A'da form tasarımı yok; DS'nin composer'ı (pill input) ve kart diliyle t
 | Arka plan (backdrop) | `black` %40 |
 | Modal / onay diyaloğu | `white`, `radius.xl`, padding 24, `elev-3`; başlık `title-md`, metin `body` `text.secondary`; butonlar sağa hizalı (mobilde alt alta, tam genişlik) |
 | Bottom sheet (mobil) | `white`, üst köşeler `radius.xl`, `elev-3`; 36×4 tutamak `neutral.100`; başlık `title-sm` |
-| Yeni İşlem sheet'i [ürün sahibi isteği 2026-11-05] | Bottom sheet stili, her boyutta; **zemin `neutral.50`** (canvas; içindeki beyaz kart ve alanlar ekranlardaki gibi ayrışır) [Karar ürün sahibi 2026-11-05]; alttan header'ın altına (64) kadar, tablet+ ortada 560 genişlik [Varsayım: ölçü]. Üstte tür seçimi Ana Sayfa Hızlı Aksiyonlar ile aynı sırada: Gelir · Gider · Görev · Ödeme; Görev seçilince Görev Ekle formu açılır. Bulunulan ekranın üstünde açılır; İptal, tutamak/başlık sürükleme, karartma ve Esc kapatır |
+| Yeni İşlem sheet'i [ürün sahibi isteği 2026-11-05] | Bottom sheet stili, her boyutta; **zemin `neutral.50`** (canvas; içindeki beyaz kart ve alanlar ekranlardaki gibi ayrışır) [Karar ürün sahibi 2026-11-05]; alttan header'ın altına (64) kadar, tablet+ ortada 560 genişlik [Varsayım: ölçü]. Üstte tür seçimi Ana Sayfa Hızlı Aksiyonlar ile aynı sırada: Gelir · Gider · Ödeme · Görev; Görev seçilince Görev Ekle formu açılır. Bulunulan ekranın üstünde açılır; İptal, tutamak/başlık sürükleme, karartma ve Esc kapatır |
 | Drawer (tablet+) | `white`, iç köşeler `radius.lg`, `elev-3`; genişlikler RESPONSIVE §6.2 |
 | Popover / menü | `white`, `radius.md`, padding 6, `elev-2`; satır 44 yükseklik, `radius.sm`, hover `neutral.50` |
 | Seçici satırı | 48 yükseklik, seçili satırda sağda check (`blue.600`) + `body-strong` |

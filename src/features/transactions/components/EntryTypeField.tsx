@@ -5,10 +5,10 @@ import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import type { NewEntryType } from "../routes";
 
 // Yeni İşlem sheet'inin tür seçimi (ürün sahibi kararı 2026-11-05): Ana Sayfa Hızlı Aksiyonlar ile aynı seçenekler,
-// aynı sıra ve aynı adlar: Gelir · Gider · Görev · Ödeme (= Abonelik). Görev, Görev Ekle formunu gösterir.
+// aynı sıra ve aynı adlar: Gelir · Gider · Ödeme (= Abonelik) · Görev. Görev, Görev Ekle formunu gösterir.
 // Segmented control: DESIGN_SYSTEM_PICKALY §5.5. Etiket Yeni İşlem formundaki "İşlem Türü *" ile aynı.
 
-const ORDER: readonly NewEntryType[] = ["income", "expense", "task", "subscription"];
+const ORDER: readonly NewEntryType[] = ["income", "expense", "subscription", "task"];
 const LABEL_KEY = { income: "income", expense: "expense", task: "task", subscription: "payment" } as const;
 
 export function EntryTypeField({ value, onChange }: { value: NewEntryType; onChange: (value: NewEntryType) => void }) {

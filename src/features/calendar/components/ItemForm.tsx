@@ -58,7 +58,7 @@ type ItemFormProps = {
   initialValues: ItemFormValues;
   categories: Category[];
   cancelHref: string;
-  /** Formun en üstünde gösterilecek alan (Yeni İşlem sheet'inde Gelir · Gider · Görev · Ödeme seçimi). */
+  /** Formun en üstünde gösterilecek alan (Yeni İşlem sheet'inde Gelir · Gider · Ödeme · Görev seçimi). */
   leading?: ReactNode;
 };
 

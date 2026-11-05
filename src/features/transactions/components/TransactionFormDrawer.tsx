@@ -20,7 +20,7 @@ import { TransactionForm, type TransactionFormValues } from "./TransactionForm";
 
 // Yeni İşlem: bottom sheet (ürün sahibi isteği 2026-11-05; src/components/ui/Sheet.tsx). Uygulama içinden açıldığında
 //   (intercepted) bulunulan ekranın üstünde açılır; kapanınca ve kayıttan sonra aynı ekrana dönülür.
-//   Tür seçimi Gelir · Gider · Görev · Ödeme (NewEntryForm); Görev, Takvim'in Görev Ekle formunu gösterir.
+//   Tür seçimi Gelir · Gider · Ödeme · Görev (NewEntryForm); Görev, Takvim'in Görev Ekle formunu gösterir.
 // Düzenle (RESPONSIVE §3.3.3): mobil tam ekran form (Pages) · tablet+ sağ drawer 560 px.
 // Hem doğrudan adresle açılan sayfa hem de intercept edilen slot bu bileşeni kullanır. İçerik iki sunumda aynıdır.
 

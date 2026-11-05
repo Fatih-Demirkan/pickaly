@@ -75,7 +75,7 @@ type TransactionFormProps = {
   categories: Category[];
   accounts: AccountOption[];
   cancelHref: string;
-  /** Yeni İşlem sheet'i: tür seçimine Görev eklenir (Gelir · Gider · Görev · Ödeme); seçilince çağrılır. */
+  /** Yeni İşlem sheet'i: tür seçimine Görev eklenir (Gelir · Gider · Ödeme · Görev); seçilince çağrılır. */
   onSelectTask?: () => void;
 };
 

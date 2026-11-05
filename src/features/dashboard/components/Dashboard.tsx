@@ -20,7 +20,7 @@ import { TodayAgenda } from "./TodayAgenda";
 //   Mobil sıra [Figma]: Toplam Bakiye · Hızlı Aksiyonlar · Bugünün Akışı · (ayırıcı) · Yaklaşan Ödemeler · Birikim Hedefi
 //   Tablet [Karar]: Bakiye 8/8 · Hızlı Aksiyonlar 8/8 · Bugünün Akışı 4/8 | Yaklaşan Ödemeler 4/8 · Birikim Hedefi 8/8
 //   Laptop+ [Karar]: Bakiye 8/12 | Birikim Hedefi 4/12 · Bugünün Akışı 7/12 | Hızlı Aksiyonlar 2×2 + Yaklaşan Ödemeler 5/12
-// "İşlemler" (son 3 işlem, ürün sahibi isteği 2026-11-05): Hızlı Aksiyonların (Gelir · Gider · Görev · Ödeme) bir alt
+// "İşlemler" (son 3 işlem, ürün sahibi isteği 2026-11-05): Hızlı Aksiyonların (Gelir · Gider · Ödeme · Görev) bir alt
 //   sırasında (ürün sahibi isteği 2026-11-05). Mobil/tablet: Bakiye · Başlarken · Hızlı Aksiyonlar · İşlemler · Bugünün Akışı.
 //   [Varsayım: yerleşim] laptop+: Hızlı Aksiyonlar 7/12 (4 sütun) · altında İşlemler 7/12 · altında Bugünün Akışı 7/12;
 //   sağ sütunda Birikim Hedefi ve Yaklaşan Ödemeler.

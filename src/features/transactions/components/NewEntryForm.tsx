@@ -9,7 +9,7 @@ import type { TransactionFormType } from "../schemas";
 import { EntryTypeField } from "./EntryTypeField";
 import { TransactionForm, type TransactionFormValues } from "./TransactionForm";
 
-// Yeni İşlem sheet'inin içeriği (ürün sahibi kararı 2026-11-05): üstte Gelir · Gider · Görev · Ödeme seçimi.
+// Yeni İşlem sheet'inin içeriği (ürün sahibi kararı 2026-11-05): üstte Gelir · Gider · Ödeme · Görev seçimi.
 //   Gelir / Gider / Ödeme → Yeni İşlem formu (aralarında geçişte girilen değerler korunur).
 //   Görev → Görev Ekle formu (Takvim ile aynı form; kayıt Takvim'e düşer).
 // İki form arasında geçişte diğer formun girilmiş değerleri sıfırlanır (iki ayrı kayıt türü).
