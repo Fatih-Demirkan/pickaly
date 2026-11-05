@@ -16,8 +16,8 @@ export default function Error({ error, retry }: { error: unknown; retry: () => v
   return (
     <main id="main-content" className="min-h-dvh bg-surface-page">
       <PageContainer width="form" className="flex min-h-dvh flex-col justify-center gap-(--layout-stack-gap)">
-        <h1 className="text-heading-h2 text-text-primary">{t("errors.genericTitle")}</h1>
-        <p className="text-body-md text-text-secondary">{t("errors.genericBody")}</p>
+        <h1 className="text-title-md text-text-primary">{t("errors.genericTitle")}</h1>
+        <p className="text-body text-text-secondary">{t("errors.genericBody")}</p>
         <button
           type="button"
           onClick={() => retry()}

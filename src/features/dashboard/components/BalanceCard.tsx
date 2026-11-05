@@ -3,88 +3,166 @@ import { getTranslations } from "next-intl/server";
 import { Chip } from "@/components/ui/Chip";
 import { Icon } from "@/components/ui/Icon";
 import type { AppIconName } from "@/config/icons";
+import { reportHref } from "@/features/reports/routes";
+import { listHref } from "@/features/transactions/routes";
 import type { Locale } from "@/i18n/config";
-import { formatMoney } from "@/lib/money";
+import { cn } from "@/lib/cn";
+import type { MonthKey } from "@/lib/dates";
+import { formatMoney, splitMoneyDecimals } from "@/lib/money";
 
-// Pages → Ana Sayfa "Section - 1. Ana Finansal Odak" (6:1862, PRD FR-DSH-001/002).
-//   Kart: radius-2xl, padding 16, aralık 12, gradyan Neutral/700 → Neutral/900 (yukarıdan aşağı), shadow-floating
-//   "TOPLAM BAKİYE" Label/Small Neutral/300 · tutar Data/Large beyaz · sağda "Aylık Rapor ›" Button/Default Neutral/300
-//   Bu Ay Gelir / Gider kutuları: Neutral/700, radius-md, padding 4, aralık 8; 30 px Neutral/600 ok kutusu (radius-sm),
-//     etiket Body/Small Neutral/300, tutar Button/Default beyaz
-//   Bugün satırı: 44 px kutu, calendar-check, "Bugün:" + "n Görev" (Görev çipi) + "n Ödeme" (Ödeme çipi) + "bekleniyor."
+// Ana Sayfa toplam bakiye (PRD FR-DSH-001/002). DESIGN_SYSTEM.md §A8 Balance header + Stat card,
+// DESIGN_SYSTEM_PICKALY.md §5.2. Gradyanlı koyu kart kaldırıldı (Part A'da gradyan yok).
+//   Canvas üzerinde ortalı: caption "Toplam bakiye" → display-balance tutar (ondalık text-tertiary) → caption "n hesapta".
+//   Stat ızgarası (aralık 8): Bu ay gelir (income tint) · Bu ay gider (expense tint) · Geçen aya göre (compare tint).
+//     [Uyarlama] DS 3'lü; TR tutarları 390 px'te 3 sütuna sığmadığı için mobilde 2 + 1 (karşılaştırma tam genişlik).
+//     Kart: radius-md, padding 12, gölgesiz; etiket caption, değer title-sm (işaretli); tüm metin text-primary
+//     (renkli zeminde ikincil gri AA'yı karşılamaz). Köşede 28 px beyaz ok butonu → ilgili liste / rapor.
+//   Alt satır: "Bugün: n Görev, n Ödeme bekleniyor." + "Aylık Rapor ›" metin butonu.
 // Toplam Bakiye: tüm hesapların bakiyesi, birikimler hariç (BR-BAL-003). Gelir/gider: bu ayın gerçekleşmiş işlemleri.
-// "Aylık Rapor" → içinde bulunulan ayın Aylık Finans Raporu (RESPONSIVE Karar #9).
-// Sayılar yalnızca bugün tarihli, tamamlanmamış görev/randevu ve bekleyen ödemelerdir (PRD FR-DSH-001, BR-TSK-002);
-// sıfır olan türün çipi gösterilmez.
+// "Geçen aya göre": bu ayki giderin geçen ayın toplam giderine göre yüzde değişimi; geçen ay gider yoksa "—".
+// Sayılar yalnızca bugün tarihli, tamamlanmamış görev/randevu ve bekleyen ödemelerdir (FR-DSH-001, BR-TSK-002).
 
 type BalanceCardProps = {
   totalMinor: bigint;
+  accountCount: number;
   incomeMinor: bigint;
   expenseMinor: bigint;
+  previousExpenseMinor: bigint;
+  month: MonthKey;
   pendingTasks: number;
   pendingPayments: number;
   locale: Locale;
 };
 
-function MonthTile({ icon, label, value }: { icon: AppIconName; label: string; value: string }) {
+type StatTone = "income" | "expense" | "compare";
+
+const toneClass: Record<StatTone, string> = {
+  income: "bg-surface-income",
+  expense: "bg-surface-expense",
+  compare: "bg-surface-compare",
+};
+
+function StatCard({
+  tone,
+  label,
+  value,
+  href,
+  linkLabel,
+  icon,
+  className,
+}: {
+  tone: StatTone;
+  label: string;
+  value: string;
+  href: string;
+  linkLabel: string;
+  icon: AppIconName;
+  className?: string;
+}) {
   return (
-    <div className="flex min-w-0 flex-1 items-stretch gap-8 rounded-md bg-surface-inverse-raised p-4">
-      <span aria-hidden className="inline-flex w-30 shrink-0 items-center justify-center rounded-sm bg-surface-inverse-control text-text-inverse">
-        <Icon icon={icon} size="sm" />
+    <div className={cn("relative flex min-w-0 flex-col gap-4 rounded-md p-12 text-text-primary", toneClass[tone], className)}>
+      <span className="flex items-start justify-between gap-8">
+        <span className="min-w-0 truncate pt-4 text-caption">{label}</span>
+        {/* Kartın tamamı tıklanır (after:inset-0); görünür hedef 28 px beyaz ok butonu. */}
+        <Link
+          href={href}
+          aria-label={linkLabel}
+          title={linkLabel}
+          className="inline-flex size-28 shrink-0 items-center justify-center rounded-sm bg-surface-card text-text-primary transition-colors after:absolute after:inset-0 after:rounded-md hover:bg-action-tertiary-hover"
+        >
+          <Icon icon={icon} size="sm" />
+        </Link>
       </span>
-      <span className="flex min-w-0 flex-col py-2">
-        <span className="truncate text-body-sm text-text-inverse-secondary">{label}</span>
-        <span className="truncate text-button text-text-inverse">{value}</span>
-      </span>
+      <span className="truncate text-title-sm">{value}</span>
     </div>
   );
 }
 
-export async function BalanceCard({ totalMinor, incomeMinor, expenseMinor, pendingTasks, pendingPayments, locale }: BalanceCardProps) {
+function percentChange(current: bigint, previous: bigint): number | null {
+  if (previous === BigInt(0)) return null;
+  // Kuruş tam sayıdır; yüzde bir ondalık basamakla gösterilir.
+  return Number(((current - previous) * BigInt(1000)) / previous) / 10;
+}
+
+export async function BalanceCard({
+  totalMinor,
+  accountCount,
+  incomeMinor,
+  expenseMinor,
+  previousExpenseMinor,
+  month,
+  pendingTasks,
+  pendingPayments,
+  locale,
+}: BalanceCardProps) {
   const t = await getTranslations("dashboard.balance");
+  const [whole, fraction] = splitMoneyDecimals(formatMoney(totalMinor, locale), locale);
+  const change = percentChange(expenseMinor, previousExpenseMinor);
+  const changeText =
+    change === null
+      ? "—"
+      : new Intl.NumberFormat(locale === "tr" ? "tr-TR" : "en-US", { style: "percent", maximumFractionDigits: 1, signDisplay: "exceptZero" }).format(change / 100);
 
   return (
-    <section
-      aria-labelledby="balance-title"
-      className="flex h-full flex-col gap-12 rounded-2xl bg-linear-to-b from-surface-inverse-raised to-surface-inverse p-16 text-text-inverse shadow-floating"
-    >
-      <div className="flex items-start justify-between gap-12">
-        <div className="flex min-w-0 flex-col">
-          <h2 id="balance-title" className="text-label-sm text-text-inverse-secondary uppercase">
-            {t("label")}
-          </h2>
-          <p className="truncate text-data-lg">{formatMoney(totalMinor, locale)}</p>
-        </div>
-        <Link
-          href="/raporlar"
-          className="touch-target inline-flex shrink-0 items-center gap-4 rounded-sm text-button text-text-inverse-secondary transition-colors hover:text-text-inverse"
-        >
-          {t("monthlyReport")}
-          <Icon icon="next" />
-        </Link>
+    <section aria-labelledby="balance-title" className="flex h-full flex-col gap-20">
+      <div className="flex flex-col items-center gap-4 pt-8 text-center">
+        <h2 id="balance-title" className="text-caption text-text-secondary">
+          {t("label")}
+        </h2>
+        <p className="max-w-full text-display-balance break-words text-text-primary">
+          {whole}
+          <span className="text-text-tertiary">{fraction}</span>
+        </p>
+        <p className="text-caption text-text-secondary">{t("accounts", { count: accountCount })}</p>
       </div>
-      <div className="mt-auto flex flex-col gap-8">
-        <div className="flex gap-8">
-          <MonthTile icon="trendUp" label={t("monthIncome")} value={formatMoney(incomeMinor, locale, "always")} />
-          <MonthTile icon="trendDown" label={t("monthExpense")} value={formatMoney(-expenseMinor, locale, "always")} />
-        </div>
-        <div className="flex h-44 items-stretch gap-8 rounded-md bg-surface-inverse-raised p-4">
-          <span aria-hidden className="inline-flex w-30 shrink-0 items-center justify-center rounded-sm bg-surface-inverse-control text-text-inverse">
-            <Icon icon="today" size="sm" />
-          </span>
-          <p className="flex min-w-0 items-center gap-4 text-body-sm text-text-inverse-secondary">
-            {pendingTasks + pendingPayments > 0 ? (
-              <>
-                {t("today")}
-                {pendingTasks > 0 && <Chip variant="task">{t("todayTasks", { count: pendingTasks })}</Chip>}
-                {pendingPayments > 0 && <Chip variant="payment">{t("todayPayments", { count: pendingPayments })}</Chip>}
-                {t("waiting")}
-              </>
-            ) : (
-              t("todayNone")
-            )}
-          </p>
-        </div>
+
+      {/* Mobilde TR tutarları 3 sütuna sığmaz: gelir/gider yan yana, karşılaştırma tam genişlik; tablet+ 3 sütun. */}
+      <div className="grid grid-cols-2 gap-8 tablet:grid-cols-3">
+        <StatCard
+          tone="income"
+          label={t("monthIncome")}
+          value={formatMoney(incomeMinor, locale, "always")}
+          href={listHref({ month, type: "income" })}
+          linkLabel={t("openIncome")}
+          icon="arrowUpRight"
+        />
+        <StatCard
+          tone="expense"
+          label={t("monthExpense")}
+          value={formatMoney(-expenseMinor, locale, "always")}
+          href={listHref({ month, type: "expense" })}
+          linkLabel={t("openExpense")}
+          icon="arrowDownLeft"
+        />
+        <StatCard
+          tone="compare"
+          label={t("vsLastMonth")}
+          value={changeText}
+          href={reportHref(month)}
+          linkLabel={t("monthlyReport")}
+          icon="arrowUpRight"
+          className="col-span-2 tablet:col-span-1"
+        />
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-x-12 gap-y-8">
+        <p className="flex min-w-0 flex-wrap items-center gap-4 text-caption text-text-secondary">
+          <Icon icon="today" size="sm" className="text-text-primary" />
+          {pendingTasks + pendingPayments > 0 ? (
+            <>
+              {t("today")}
+              {pendingTasks > 0 && <Chip variant="task">{t("todayTasks", { count: pendingTasks })}</Chip>}
+              {pendingPayments > 0 && <Chip variant="payment">{t("todayPayments", { count: pendingPayments })}</Chip>}
+              {t("waiting")}
+            </>
+          ) : (
+            t("todayNone")
+          )}
+        </p>
+        <Link href={reportHref(month)} className="touch-target inline-flex shrink-0 items-center gap-4 text-caption-strong text-text-brand hover:underline">
+          {t("monthlyReport")}
+          <Icon icon="next" size="sm" />
+        </Link>
       </div>
     </section>
   );

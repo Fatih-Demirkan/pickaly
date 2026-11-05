@@ -29,7 +29,7 @@ import { WeekStrip } from "./WeekStrip";
 // Haftalık görünümde ileri/geri bir hafta kaydırır; başlıkta seçili günün ayı yazar (Pages: "Mayıs 2026").
 
 const arrowClass =
-  "touch-target inline-flex size-24 items-center justify-center rounded-full text-text-secondary transition-colors hover:bg-action-tertiary-hover hover:text-text-primary";
+  "touch-target inline-flex size-32 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-action-tertiary-hover";
 
 export async function CalendarScreen({ query }: { query: CalendarQuery }) {
   const today = toDateKey(new Date());
@@ -68,11 +68,12 @@ export async function CalendarScreen({ query }: { query: CalendarQuery }) {
           { value: "day" as CalendarView, label: t("views.day"), href: "", disabled: true },
         ]}
       />
-      <div className="flex h-40 items-center justify-between gap-8 rounded-md border border-border-default bg-surface-card px-16 py-8">
+      {/* Dönem seçici: MonthSwitcher ile aynı görünüm (44 px beyaz pill, elev-1). */}
+      <div className="flex h-44 items-center justify-between gap-8 rounded-full bg-surface-card px-6 shadow-elev-1">
         <Link href={calendarHref({ view: query.view, day: shift(-1) })} scroll={false} aria-label={view === "month" ? t("previousMonth") : t("previousWeek")} className={arrowClass}>
           <Icon icon="previous" size="sm" />
         </Link>
-        <p className="flex items-center gap-8 text-body-lg text-text-primary" aria-live="polite">
+        <p className="flex items-center gap-8 text-body-strong text-text-primary" aria-live="polite">
           <span className="text-text-secondary">
             <Icon icon="calendar" size="sm" />
           </span>

@@ -18,16 +18,16 @@ import { signedAmount, transactionCode } from "../domain/summary";
 import type { RecurringRule, Transaction } from "../domain/types";
 
 // Pages → İşlem Detayı (115:2029, PRD FR-FIN-012).
-//   Durum kartı: radius-2xl, padding 16, aralık 12, gradyan beyaz → Neutral/100, border, shadow-floating;
+//   Durum kartı: radius-2xl, padding 16, aralık 12, gradyan beyaz → Neutral/100, border, shadow-elev-2;
 //                kategori + tür çipleri, başlık Label/Small text-secondary, tutar Data/Large, tarih çipi Category/Slate
 //   Kayıt Parametreleri: liste kartı (radius-lg); satır padding 16, aralık 16, alt çizgi;
 //                solda 32 px ikon kutusu (Category/Slate, radius-sm) + Body/Default text-secondary,
 //                sağda Label/Default + Body/Small
-//   Bilgi notu: Category/Orange zemin, radius-md, padding 12, aralık 8, info ikonu
+//   Bilgi notu (DESIGN_SYSTEM_PICKALY §5.9 inline alert): warning-subtle zemin, radius-lg, padding 16, info ikonu amber.700
 // [Eksik] Pages'taki ikinci kategori çipi ("Mutfak") alt kategori gösteriyor; veri modelinde alt kategori yok.
 // [Ertelendi] "Fiş / Belge" satırı: ek dosya yükleme sonraki dilimde (PRD FR-FIN-013); kayıt yoksa satır gösterilmez.
 // [Varsayım] "Tekrar" satırı: Tekrar Eden İşlem kuralından gelen kayıtta sıklık gösterilir; Pages İşlem Detayı'nda yok.
-// Bilgi notu metni AA kontrast için text-on-warning (Pages'taki #D97706 Category/Orange üstünde 4,5:1'i sağlamaz).
+// Bilgi notu metni text-primary (renkli zeminde tüm metin siyah).
 
 type TransactionDetailProps = {
   transaction: Transaction;
@@ -46,10 +46,10 @@ export async function TransactionDetail({ transaction, category, account, rule, 
 
   return (
     <article className="flex flex-1 flex-col gap-(--layout-section-gap)">
-      <section className="flex flex-col items-start gap-12 rounded-2xl border border-border-default bg-linear-to-r from-surface-card to-surface-muted p-16 shadow-floating">
+      <section className="flex flex-col items-start gap-12 rounded-lg bg-surface-card p-16 shadow-elev-1">
         <div className="flex flex-wrap items-center gap-8">
           {category && (
-            <span className={cn("inline-flex h-24 items-center gap-4 rounded-full px-8 text-label-sm", categoryChipClass(category.color))}>
+            <span className={cn("inline-flex h-24 items-center gap-4 rounded-full px-8 text-caption-strong", categoryChipClass(category.color))}>
               <Icon icon={resolveCategoryIcon(category)} size="xs" />
               {category.name}
             </span>
@@ -60,8 +60,8 @@ export async function TransactionDetail({ transaction, category, account, rule, 
           </Chip>
         </div>
         <div className="flex min-w-0 flex-col">
-          <h2 className="text-label-sm text-text-secondary">{transaction.title}</h2>
-          <p className={cn("text-data-lg", income ? "text-text-success" : "text-text-danger")}>{formatMoney(signedAmount(transaction), locale, "always")}</p>
+          <h2 className="text-caption text-text-secondary">{transaction.title}</h2>
+          <p className={cn("text-title-lg", income ? "text-text-success" : "text-text-danger")}>{formatMoney(signedAmount(transaction), locale, "always")}</p>
         </div>
         <Chip variant="neutral">
           {formatDateWithWeekday(transaction.occurredAt, locale)} • {formatTime(transaction.occurredAt, locale)}
@@ -69,29 +69,29 @@ export async function TransactionDetail({ transaction, category, account, rule, 
       </section>
 
       <section aria-labelledby={`parameters-${transaction.id}`} className="flex flex-col gap-12">
-        <h3 id={`parameters-${transaction.id}`} className="text-heading-h4 text-text-primary">
+        <h3 id={`parameters-${transaction.id}`} className="text-title-sm text-text-primary">
           {t("detail.parameters")}
         </h3>
-        <dl className="overflow-hidden rounded-lg border border-border-default bg-surface-card">
+        <dl className="overflow-hidden rounded-md bg-surface-card shadow-elev-1">
           <DetailRow icon="paymentMethod" label={t("detail.account")}>
-            <p className="text-label-md text-text-primary">{accountName}</p>
-            {account?.detail && <p className="text-body-sm text-text-secondary">{account.detail}</p>}
+            <p className="text-body-strong text-text-primary">{accountName}</p>
+            {account?.detail && <p className="text-caption text-text-secondary">{account.detail}</p>}
           </DetailRow>
           {rule && ruleText && (
             <DetailRow icon="repeat" label={t("detail.repeat")}>
-              <p className="text-label-md text-text-primary">{tRecurrence(`frequency.${rule.frequency}`)}</p>
-              <p className="text-body-sm text-text-secondary">{tRecurrence(`rule.${ruleText.key}`, ruleText.values)}</p>
+              <p className="text-body-strong text-text-primary">{tRecurrence(`frequency.${rule.frequency}`)}</p>
+              <p className="text-caption text-text-secondary">{tRecurrence(`rule.${ruleText.key}`, ruleText.values)}</p>
             </DetailRow>
           )}
           {transaction.merchantName && (
             <DetailRow icon="store" label={t("detail.merchant")}>
-              <p className="text-label-md text-text-primary">{transaction.merchantName}</p>
-              {transaction.merchantLocation && <p className="text-body-sm text-text-secondary">{transaction.merchantLocation}</p>}
+              <p className="text-body-strong text-text-primary">{transaction.merchantName}</p>
+              {transaction.merchantLocation && <p className="text-caption text-text-secondary">{transaction.merchantLocation}</p>}
             </DetailRow>
           )}
           {transaction.note && (
             <DetailRow icon="note" label={t("detail.note")} stacked>
-              <p className="rounded-sm border border-border-subtle bg-surface-page p-8 text-body-md text-text-primary">{transaction.note}</p>
+              <p className="rounded-sm bg-surface-page p-12 text-body text-text-primary">{transaction.note}</p>
             </DetailRow>
           )}
           <DetailRow icon="code" label={t("detail.code")}>
@@ -100,8 +100,8 @@ export async function TransactionDetail({ transaction, category, account, rule, 
         </dl>
       </section>
 
-      <p className="flex gap-8 rounded-md bg-category-orange p-12 text-body-md text-text-on-warning">
-        <span className="mt-2 shrink-0 text-text-warning">
+      <p className="flex gap-8 rounded-lg bg-status-warning-subtle p-16 text-body text-text-primary">
+        <span className="shrink-0 text-text-warning">
           <Icon icon="info" size="sm" />
         </span>
         {t(income ? "detail.deleteInfoIncome" : "detail.deleteInfoExpense", { amount, account: accountName })}

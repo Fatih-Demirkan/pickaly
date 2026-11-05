@@ -30,7 +30,7 @@ export function CopyButton({ value, label, copiedLabel }: CopyButtonProps) {
       type="button"
       onClick={copy}
       aria-label={`${label}: ${value}`}
-      className="touch-target inline-flex h-32 shrink-0 items-center gap-4 rounded-full border border-border-default bg-surface-card px-8 text-label-sm text-text-primary transition-colors hover:border-border-strong"
+      className="touch-target inline-flex h-32 shrink-0 items-center gap-4 rounded-full border border-border-default bg-surface-card px-8 text-caption-strong text-text-primary transition-colors hover:border-border-strong"
     >
       {value}
       <span className="text-text-secondary">

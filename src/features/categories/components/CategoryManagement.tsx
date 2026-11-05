@@ -71,11 +71,11 @@ export async function CategoryManagement({ tab }: { tab: CategoryTab }) {
             <Link
               href="/profil"
               aria-label={t("back")}
-              className="touch-target -ms-8 inline-flex size-40 shrink-0 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-action-tertiary-hover"
+              className="touch-target inline-flex size-36 shrink-0 items-center justify-center rounded-full border border-border-subtle bg-surface-card text-text-primary transition-colors hover:border-border-strong hover:bg-action-tertiary-hover"
             >
               <Icon icon="back" />
             </Link>
-            <h1 className="truncate text-heading-h2 text-text-primary">{t("title")}</h1>
+            <h1 className="truncate text-title-md text-text-primary">{t("title")}</h1>
           </div>
           <ButtonLink href={newHref} scroll={false} leadingIcon="add">
             {t("add")}
@@ -95,29 +95,29 @@ export async function CategoryManagement({ tab }: { tab: CategoryTab }) {
 
         <section aria-labelledby="categories-list" className="flex flex-col gap-8">
           <div className="flex items-center justify-between gap-12">
-            <h2 id="categories-list" className="text-heading-h4 text-text-primary">
+            <h2 id="categories-list" className="text-title-sm text-text-primary">
               {tab === "calendar" ? t("calendarTitle") : t("financeTitle")}
             </h2>
-            <p className="text-label-sm text-text-secondary">{t("total", { count: active.length })}</p>
+            <p className="text-caption-strong text-text-secondary">{t("total", { count: active.length })}</p>
           </div>
           {active.length === 0 ? (
-            <p className="rounded-lg border border-border-default bg-surface-card p-12 text-body-md text-text-secondary">{t("empty")}</p>
+            <p className="rounded-lg bg-surface-card p-16 text-body text-text-secondary shadow-elev-1">{t("empty")}</p>
           ) : (
             <ul className="grid grid-cols-1 gap-8 tablet:grid-cols-2 desktop:grid-cols-3">
               {active.map((row) => {
                 const remove = removeLabels(row);
                 return (
-                  <li key={row.category.id} className="flex items-center justify-between gap-12 rounded-lg border border-border-default bg-surface-card p-12">
+                  <li key={row.category.id} className="flex items-center justify-between gap-12 rounded-lg bg-surface-card p-12 shadow-elev-1">
                     <div className="flex min-w-0 items-center gap-12">
                       <CategoryIcon category={row.category} />
                       <div className="flex min-w-0 flex-col gap-2">
                         <span className="flex min-w-0 flex-wrap items-center gap-x-8 gap-y-2">
-                          <span className="truncate text-label-md text-text-primary">{row.category.name}</span>
-                          <span className={cn("inline-flex h-24 shrink-0 items-center rounded-full px-8 text-label-sm", categoryChipClass(row.category.color))}>
+                          <span className="truncate text-body-strong text-text-primary">{row.category.name}</span>
+                          <span className={cn("inline-flex h-24 shrink-0 items-center rounded-full px-8 text-caption-strong", categoryChipClass(row.category.color))}>
                             {t(`color.${row.category.color}`)}
                           </span>
                         </span>
-                        <span className="text-body-sm text-text-secondary">
+                        <span className="text-caption text-text-secondary">
                           {tab === "finance" && `${t(`type.${row.category.type}`)} · `}
                           {countLabel(row)}
                         </span>
@@ -143,7 +143,7 @@ export async function CategoryManagement({ tab }: { tab: CategoryTab }) {
 
         {archived.length > 0 && (
           <details className="group flex flex-col gap-8">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-12 rounded-md py-8 text-label-md text-text-secondary [&::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-12 rounded-md py-8 text-body-strong text-text-secondary [&::-webkit-details-marker]:hidden">
               {t("archived.title", { count: archived.length })}
               <span aria-hidden className="transition-transform group-open:rotate-180">
                 <Icon icon="dropdown" size="sm" />
@@ -151,12 +151,12 @@ export async function CategoryManagement({ tab }: { tab: CategoryTab }) {
             </summary>
             <ul className="mt-8 grid grid-cols-1 gap-8 tablet:grid-cols-2 desktop:grid-cols-3">
               {archived.map((row) => (
-                <li key={row.category.id} className="flex items-center justify-between gap-12 rounded-lg border border-border-default bg-surface-muted p-12">
-                  <div className="flex min-w-0 items-center gap-12 opacity-70">
+                <li key={row.category.id} className="flex items-center justify-between gap-12 rounded-lg border border-border-subtle bg-surface-card p-12">
+                  <div className="flex min-w-0 items-center gap-12">
                     <CategoryIcon category={row.category} />
                     <div className="flex min-w-0 flex-col gap-2">
-                      <span className="truncate text-label-md text-text-secondary">{row.category.name}</span>
-                      <span className="text-body-sm text-text-secondary">{countLabel(row)}</span>
+                      <span className="truncate text-body-strong text-text-secondary">{row.category.name}</span>
+                      <span className="text-caption text-text-secondary">{countLabel(row)}</span>
                     </div>
                   </div>
                   <RestoreCategoryButton

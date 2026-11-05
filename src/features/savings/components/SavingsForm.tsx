@@ -4,13 +4,14 @@ import { useActionState, useState, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ActionFooter } from "@/components/layout/ActionFooter";
 import { Button, ButtonLink } from "@/components/ui/Button";
-import { ChipSelect } from "@/components/ui/ChipSelect";
+import { ChipSelect, chipSelectClasses } from "@/components/ui/ChipSelect";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { Icon } from "@/components/ui/Icon";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { SelectPicker } from "@/components/ui/SelectPicker";
 import { Switch } from "@/components/ui/Switch";
 import { TimePicker } from "@/components/ui/TimePicker";
+import { amountBoxClass, amountCardClass, amountChipClass, amountInputClass, fieldBoxClass, inputClass, textareaClass } from "@/components/ui/field";
 import { AccountPicker, type AccountOption } from "@/features/accounts/components/AccountPicker";
 import { isLocale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
@@ -60,14 +61,12 @@ type SavingsFormProps = {
 
 const QUICK_AMOUNTS = [1000, 2500, 10000].map(majorToMinor); // Pages: "+ 1.000 ₺", "+ 2.500 ₺", "+ 10.000 ₺"
 
-const inputClass =
-  "h-46 w-full rounded-md border border-border-default bg-surface-card px-16 text-body-md text-text-primary placeholder:text-text-tertiary transition-colors hover:border-border-strong aria-invalid:border-border-error";
 
 function Label({ htmlFor, id, required, children }: { htmlFor?: string; id?: string; required?: boolean; children: ReactNode }) {
   const t = useTranslations("savings.form");
   const Tag = htmlFor ? "label" : "p";
   return (
-    <Tag htmlFor={htmlFor} id={id} className="text-label-md text-text-primary">
+    <Tag htmlFor={htmlFor} id={id} className="text-body-strong text-text-primary">
       {children}
       {required && (
         <>
@@ -84,7 +83,7 @@ function Label({ htmlFor, id, required, children }: { htmlFor?: string; id?: str
 function ErrorText({ id, message }: { id: string; message?: string }) {
   if (!message) return null;
   return (
-    <p id={id} className="text-body-sm text-text-danger">
+    <p id={id} className="text-caption text-text-danger">
       {message}
     </p>
   );
@@ -160,15 +159,15 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
       )}
 
       {state.formError && (
-        <p role="alert" className="rounded-md bg-status-danger-subtle p-12 text-body-md text-text-danger">
+        <p role="alert" className="rounded-lg bg-status-danger-subtle p-16 text-body text-text-on-danger">
           {t(`form.errors.${state.formError}`)}
         </p>
       )}
 
       {/* Tutar kartı */}
-      <div className="flex flex-col items-center gap-12 rounded-2xl border border-border-default bg-linear-to-b from-surface-card to-category-blue p-16 shadow-floating">
-        <span className="inline-flex h-24 items-center gap-4 rounded-full bg-category-blue px-8 text-label-sm text-text-on-task">
-          <span aria-hidden className="size-6 rounded-full bg-chart-balance" />
+      <div className={amountCardClass}>
+        <span className={cn(amountChipClass, "bg-category-blue text-category-fg-blue")}>
+          <span aria-hidden className="size-6 rounded-full bg-category-fg-blue" />
           {create ? t("form.initialChip") : t("form.contributionChip")}
         </span>
         <label htmlFor="amount" className="sr-only">
@@ -176,10 +175,7 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
         </label>
         <label
           htmlFor="amount"
-          className={cn(
-            "flex h-54 max-w-full min-w-222 cursor-text items-center justify-center gap-4 rounded-full border bg-surface-card px-16 py-4 text-data-lg text-text-primary shadow-floating focus-within:outline-2 focus-within:outline-border-focus",
-            invalid("amount") ? "border-border-error" : "border-border-default",
-          )}
+          className={cn(amountBoxClass(Boolean(invalid("amount"))), "text-text-primary")}
         >
           <input
             id="amount"
@@ -192,17 +188,17 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
             onBlur={() => complete("amount")}
             aria-invalid={invalid("amount")}
             aria-describedby={describedBy("amount") ?? "amount-hint"}
-            className="min-w-[4ch] bg-transparent text-center outline-none field-sizing-content placeholder:text-text-tertiary"
+            className={amountInputClass}
           />
           <span aria-hidden>{unitSuffix}</span>
         </label>
-        <p id="amount-hint" className="text-center text-label-sm text-text-secondary">
+        <p id="amount-hint" className="text-center text-caption text-text-secondary">
           {hint}
         </p>
         <ErrorText id="amount-error" message={errorText("amount")} />
         {money && (
           <>
-            <div className="w-full border-t border-border-default" />
+            <div className="w-full border-t border-border-subtle" />
             <div role="group" aria-label={t("form.quickAmounts")} className="flex flex-wrap justify-center gap-6">
               {QUICK_AMOUNTS.map((minor) => (
                 <button
@@ -210,7 +206,7 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
                   type="button"
                   onClick={() => addQuickAmount(minor)}
                   aria-label={t("form.addAmount", { amount: formatMoneyShort(minor, locale) })}
-                  className="touch-target inline-flex h-32 items-center rounded-full border border-border-default bg-surface-card px-8 py-4 text-label-sm text-text-secondary transition-colors hover:border-border-strong"
+                  className={chipSelectClasses(false)}
                 >
                   + {formatMoneyShort(minor, locale)}
                 </button>
@@ -270,10 +266,7 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
         <Label htmlFor="target">{t("form.target")}</Label>
         <label
           htmlFor="target"
-          className={cn(
-            "flex h-46 cursor-text items-center gap-8 rounded-md border bg-surface-card px-16 text-body-md text-text-primary transition-colors focus-within:outline-2 focus-within:outline-border-focus hover:border-border-strong",
-            invalid("target") ? "border-border-error" : "border-border-default",
-          )}
+          className={fieldBoxClass(Boolean(invalid("target")))}
         >
           <input
             id="target"
@@ -286,7 +279,7 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
             onBlur={() => complete("target")}
             aria-invalid={invalid("target")}
             aria-describedby={describedBy("target")}
-            className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-tertiary"
+            className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-secondary"
           />
           <span aria-hidden className="text-text-secondary">
             {money ? <Icon icon="currency" size="sm" /> : unitSuffix}
@@ -329,18 +322,18 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
       )}
 
       <fieldset className="flex flex-col gap-8">
-        <legend className="mb-8 text-label-md text-text-primary">{t("form.when")}</legend>
+        <legend className="mb-8 text-body-strong text-text-primary">{t("form.when")}</legend>
         {create && (
           <div className="grid grid-cols-2 gap-12">
             <div className="flex min-w-0 flex-col gap-4">
-              <p id="date-label" className="text-body-sm text-text-secondary">
+              <p id="date-label" className="text-caption text-text-secondary">
                 {t("form.date")}
               </p>
               <DatePicker id="date" name="date" value={values.date} onChange={(next) => set("date", next)} labelledBy="date-label" title={t("form.chooseDate")} invalid={invalid("date")} describedBy={describedBy("date")} />
               <ErrorText id="date-error" message={errorText("date")} />
             </div>
             <div className="flex min-w-0 flex-col gap-4">
-              <p id="time-label" className="text-body-sm text-text-secondary">
+              <p id="time-label" className="text-caption text-text-secondary">
                 {t("form.time")}
               </p>
               <TimePicker id="time" name="time" value={values.time} onChange={(next) => set("time", next)} labelledBy="time-label" title={t("form.chooseTime")} invalid={invalid("time")} describedBy={describedBy("time")} />
@@ -348,17 +341,17 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
             </div>
           </div>
         )}
-        <div className="flex flex-col gap-12 rounded-lg border border-border-default bg-surface-card p-12">
+        <div className="flex flex-col gap-12 rounded-lg bg-surface-card shadow-elev-1 p-12">
           <div className="flex items-center justify-between gap-12">
             <div className="flex min-w-0 items-center gap-12">
-              <span aria-hidden className="inline-flex size-40 shrink-0 items-center justify-center rounded-md bg-category-slate text-text-secondary">
+              <span aria-hidden className="inline-flex size-40 shrink-0 items-center justify-center rounded-md bg-category-slate text-category-fg-slate">
                 <Icon icon="repeat" />
               </span>
               <div className="flex min-w-0 flex-col gap-2">
-                <p id="repeat-label" className="text-label-md text-text-primary">
+                <p id="repeat-label" className="text-body-strong text-text-primary">
                   {t("form.repeatTitle")}
                 </p>
-                <p id="repeat-hint" className="text-body-sm text-text-secondary">
+                <p id="repeat-hint" className="text-caption text-text-secondary">
                   {t("form.repeatHint")}
                 </p>
               </div>
@@ -370,7 +363,7 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
               <div className="border-t border-border-default" />
               <div className="grid grid-cols-2 gap-8">
                 <div className="flex min-w-0 flex-col gap-4">
-                  <p id="frequency-label" className="text-label-sm text-text-secondary">
+                  <p id="frequency-label" className="text-caption-strong text-text-secondary">
                     {t("form.frequency")}
                   </p>
                   <SelectPicker
@@ -387,7 +380,7 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
                   />
                 </div>
                 <div className="flex min-w-0 flex-col gap-4">
-                  <p id="reminder-label" className="text-label-sm text-text-secondary">
+                  <p id="reminder-label" className="text-caption-strong text-text-secondary">
                     {t("form.reminder")}
                   </p>
                   <SelectPicker
@@ -412,7 +405,7 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
       <div className="flex flex-col gap-8">
         <div className="flex items-baseline justify-between gap-8">
           <Label htmlFor="note">{t("form.note")}</Label>
-          <span className="text-body-sm text-text-secondary" aria-live="polite">
+          <span className="text-caption text-text-secondary" aria-live="polite">
             {t("form.noteCount", { count: values.note.length, max: NOTE_MAX_LENGTH })}
           </span>
         </div>
@@ -426,12 +419,12 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
           onChange={(event) => set("note", event.target.value)}
           aria-invalid={invalid("note")}
           aria-describedby={describedBy("note")}
-          className={cn(inputClass, "h-auto resize-y py-12")}
+          className={textareaClass}
         />
         <ErrorText id="note-error" message={errorText("note")} />
       </div>
 
-      <p className="flex gap-8 rounded-md bg-category-blue p-12 text-body-md text-text-primary">
+      <p className="flex gap-8 rounded-md bg-category-blue p-12 text-body text-text-primary">
         <span className="mt-2 shrink-0 text-text-on-task">
           <Icon icon="info" />
         </span>

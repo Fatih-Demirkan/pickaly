@@ -80,14 +80,14 @@ export function OptionList<T extends string>({ options, value, onSelect, labelle
               }
             }}
             className={cn(
-              "flex h-48 shrink-0 cursor-pointer items-center gap-12 rounded-md px-12 text-body-md transition-colors outline-none",
+              "flex h-48 shrink-0 cursor-pointer items-center gap-12 rounded-md px-12 text-body transition-colors outline-none",
               "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-border-focus",
               selected ? "bg-surface-selected text-text-brand" : "text-text-primary hover:bg-surface-page",
             )}
           >
             {option.leading}
-            <span className={cn("min-w-0 flex-1 truncate", selected && "text-label-md")}>{option.label}</span>
-            {option.description && <span className="shrink-0 text-body-sm text-text-secondary">{option.description}</span>}
+            <span className={cn("min-w-0 flex-1 truncate", selected && "text-body-strong")}>{option.label}</span>
+            {option.description && <span className="shrink-0 text-caption text-text-secondary">{option.description}</span>}
             {selected && (
               <span className="shrink-0 text-brand-primary">
                 <Icon icon="confirm" size="sm" />

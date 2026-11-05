@@ -5,8 +5,8 @@ import type { AppIconName } from "@/config/icons";
 import { cn } from "@/lib/cn";
 import { Icon } from "./Icon";
 
-// Pages kalıbı → Select alanı (Tarih, Saat): 46 px [Ç-2], padding 12, radius-md, surface-card, border-default;
-// sol ikon + değer (Body/Default) + sağda chevron-down. Seçiciyi açan buton olarak çalışır.
+// Select tetikleyici (Tarih, Saat): input ile aynı kutu (DESIGN_SYSTEM_PICKALY §5.7, 48 px, border-control);
+// sol ikon + değer (body) + sağda chevron-down. Seçiciyi açan buton olarak çalışır.
 // Tekrarlama Sıklığı ve Hatırlatma Bildirimi alanlarında Pages ikon göstermez (icon verilmez).
 
 type PickerFieldProps = Omit<ComponentProps<"button">, "children"> & {
@@ -23,7 +23,7 @@ export function PickerField({ icon, value, open, invalid, className, type = "but
       aria-expanded={open}
       data-invalid={invalid || undefined}
       className={cn(
-        "flex h-46 w-full items-center gap-8 rounded-md border border-border-default bg-surface-card px-12 text-start text-body-md text-text-primary transition-colors hover:border-border-strong",
+        "flex h-48 w-full items-center gap-8 rounded-md border border-border-control bg-surface-card px-16 text-start text-body text-text-primary transition-colors hover:border-border-control-hover",
         open && "border-border-focus",
         // Hata metni aria-describedby ile okunur; aria-invalid buton rolünde geçerli değildir.
         "data-invalid:border-border-error",

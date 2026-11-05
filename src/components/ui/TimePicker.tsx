@@ -67,13 +67,13 @@ export function TimePicker({ id, name, value, onChange, labelledBy, title, inval
       >
         <div className="grid grid-cols-2 gap-8">
           <div className="flex min-w-0 flex-col gap-4">
-            <p id={hourLabelId} className="px-12 pt-4 text-label-sm text-text-secondary">
+            <p id={hourLabelId} className="px-12 pt-4 text-caption-strong text-text-secondary">
               {t("hour")}
             </p>
             <OptionList options={hours} value={hour} labelledBy={hourLabelId} autoFocus onSelect={(next) => onChange(`${next}:${minute}`)} className="max-h-[240px] overflow-y-auto [scrollbar-width:thin]" />
           </div>
           <div className="flex min-w-0 flex-col gap-4">
-            <p id={minuteLabelId} className="px-12 pt-4 text-label-sm text-text-secondary">
+            <p id={minuteLabelId} className="px-12 pt-4 text-caption-strong text-text-secondary">
               {t("minute")}
             </p>
             <OptionList

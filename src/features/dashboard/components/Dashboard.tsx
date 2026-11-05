@@ -7,7 +7,7 @@ import { getFeaturedGoal } from "@/features/savings/server";
 import { summarize } from "@/features/transactions";
 import { getAccountBalances, transactionRepository } from "@/features/transactions/server";
 import { isLocale } from "@/i18n/config";
-import { toDateKey, toMonthKey } from "@/lib/dates";
+import { shiftMonth, toDateKey, toMonthKey } from "@/lib/dates";
 import { BalanceCard } from "./BalanceCard";
 import { QuickActions } from "./QuickActions";
 import { SavingsGoalCard } from "./SavingsGoalCard";
@@ -24,11 +24,13 @@ export async function Dashboard() {
   await connection(); // Bakiye, bugünün akışı ve vadeler istek anına göre hesaplanır (cacheComponents).
   const now = new Date();
   const today = toDateKey(now);
-  const [t, rawLocale, balances, monthTransactions, dueToday, goal, todayItems, overdue] = await Promise.all([
+  const currentMonth = toMonthKey(now);
+  const [t, rawLocale, balances, monthTransactions, previousTransactions, dueToday, goal, todayItems, overdue] = await Promise.all([
     getTranslations("nav"),
     getLocale(),
     getAccountBalances(),
-    transactionRepository.listByMonth(toMonthKey(now)),
+    transactionRepository.listByMonth(currentMonth),
+    transactionRepository.listByMonth(shiftMonth(currentMonth, -1)),
     listPaymentsDueOn(today),
     getFeaturedGoal(),
     calendarRepository.listBetween(today, today),
@@ -36,6 +38,7 @@ export async function Dashboard() {
   ]);
   const locale = isLocale(rawLocale) ? rawLocale : "tr";
   const month = summarize(monthTransactions);
+  const previousMonth = summarize(previousTransactions);
   const totalMinor = [...balances.values()].reduce((sum, balance) => sum + balance, BigInt(0));
 
   return (
@@ -44,6 +47,9 @@ export async function Dashboard() {
       <div className="tablet:col-span-2 laptop:col-span-8 laptop:col-start-1 laptop:row-start-1">
         <BalanceCard
           totalMinor={totalMinor}
+          accountCount={balances.size}
+          previousExpenseMinor={previousMonth.expenseMinor}
+          month={currentMonth}
           incomeMinor={month.incomeMinor}
           expenseMinor={month.expenseMinor}
           pendingPayments={dueToday.filter(({ payment }) => payment.status === "pending").length}
@@ -59,7 +65,7 @@ export async function Dashboard() {
         <TodayAgenda today={today} items={todayItems} overdue={overdue} payments={dueToday} />
       </div>
       {/* Pages: mobilde Bugünün Akışı ile Yaklaşan Ödemeler arasında ayırıcı çizgi. */}
-      <hr className="border-border-default tablet:hidden" />
+      <hr className="border-border-subtle tablet:hidden" />
       <div className="laptop:col-span-5 laptop:col-start-8 laptop:row-start-3 laptop:self-start">
         <UpcomingPayments today={today} />
       </div>

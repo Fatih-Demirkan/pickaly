@@ -10,6 +10,7 @@ import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { SelectPicker } from "@/components/ui/SelectPicker";
 import { Switch } from "@/components/ui/Switch";
 import { TimePicker } from "@/components/ui/TimePicker";
+import { fieldBoxClass, inputClass, textareaClass } from "@/components/ui/field";
 import type { Category } from "@/features/categories";
 import { isLocale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
@@ -53,14 +54,12 @@ type ItemFormProps = {
   cancelHref: string;
 };
 
-const inputClass =
-  "h-46 w-full rounded-md border border-border-default bg-surface-card px-16 text-body-md text-text-primary placeholder:text-text-tertiary transition-colors hover:border-border-strong aria-invalid:border-border-error";
 
 function Label({ htmlFor, id, required, children }: { htmlFor?: string; id?: string; required?: boolean; children: ReactNode }) {
   const t = useTranslations("calendar.form");
   const Tag = htmlFor ? "label" : "p";
   return (
-    <Tag htmlFor={htmlFor} id={id} className="text-label-md text-text-primary">
+    <Tag htmlFor={htmlFor} id={id} className="text-body-strong text-text-primary">
       {children}
       {required && (
         <>
@@ -77,7 +76,7 @@ function Label({ htmlFor, id, required, children }: { htmlFor?: string; id?: str
 function ErrorText({ id, message }: { id: string; message?: string }) {
   if (!message) return null;
   return (
-    <p id={id} className="text-body-sm text-text-danger">
+    <p id={id} className="text-caption text-text-danger">
       {message}
     </p>
   );
@@ -146,7 +145,7 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
       )}
 
       {state.formError && (
-        <p role="alert" className="rounded-md bg-status-danger-subtle p-12 text-body-md text-text-danger">
+        <p role="alert" className="rounded-lg bg-status-danger-subtle p-16 text-body text-text-on-danger">
           {t(`form.errors.${state.formError}`)}
         </p>
       )}
@@ -230,10 +229,10 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
       )}
 
       <fieldset className="flex flex-col gap-8">
-        <legend className="mb-8 text-label-md text-text-primary">{t("form.when")}</legend>
+        <legend className="mb-8 text-body-strong text-text-primary">{t("form.when")}</legend>
         <div className={cn("grid gap-12", values.allDay ? "grid-cols-1" : "grid-cols-2")}>
           <div className="flex min-w-0 flex-col gap-4">
-            <p id="date-label" className="text-body-sm text-text-secondary">
+            <p id="date-label" className="text-caption text-text-secondary">
               {t("form.date")}
               <span aria-hidden className="text-text-danger">
                 {" "}*
@@ -253,7 +252,7 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
           </div>
           {!values.allDay && (
             <div className="flex min-w-0 flex-col gap-4">
-              <p id="time-label" className="text-body-sm text-text-secondary">
+              <p id="time-label" className="text-caption text-text-secondary">
                 {t("form.time")}
               </p>
               <TimePicker
@@ -271,13 +270,13 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
           )}
         </div>
 
-        <div className="flex flex-col gap-12 rounded-lg border border-border-default bg-surface-card p-12">
+        <div className="flex flex-col gap-12 rounded-lg bg-surface-card shadow-elev-1 p-12">
           <div className="flex items-center justify-between gap-12">
             <div className="flex min-w-0 flex-col gap-2">
-              <p id="allDay-label" className="text-label-md text-text-primary">
+              <p id="allDay-label" className="text-body-strong text-text-primary">
                 {t("form.allDay")}
               </p>
-              <p id="allDay-hint" className="text-body-sm text-text-secondary">
+              <p id="allDay-hint" className="text-caption text-text-secondary">
                 {t("form.allDayHint")}
               </p>
             </div>
@@ -287,7 +286,7 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
           <div className={cn("grid gap-8", values.allDay ? "grid-cols-1" : "grid-cols-2")}>
             {!values.allDay && (
               <div className="flex min-w-0 flex-col gap-4">
-                <p id="duration-label" className="text-label-sm text-text-secondary">
+                <p id="duration-label" className="text-caption-strong text-text-secondary">
                   {t("form.duration")}
                 </p>
                 <SelectPicker
@@ -306,7 +305,7 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
               </div>
             )}
             <div className="flex min-w-0 flex-col gap-4">
-              <p id="reminder-label" className="text-label-sm text-text-secondary">
+              <p id="reminder-label" className="text-caption-strong text-text-secondary">
                 {t("form.reminder")}
               </p>
               <SelectPicker
@@ -327,7 +326,7 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
       </fieldset>
 
       <fieldset className="flex flex-col gap-8">
-        <legend className="mb-8 text-label-md text-text-primary">{t("form.location")}</legend>
+        <legend className="mb-8 text-body-strong text-text-primary">{t("form.location")}</legend>
         <label htmlFor="locationName" className="sr-only">
           {t("form.locationName")}
         </label>
@@ -363,7 +362,7 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
       <div className="flex flex-col gap-8">
         <div className="flex items-baseline justify-between gap-8">
           <Label htmlFor="note">{t("form.note")}</Label>
-          <span className="text-body-sm text-text-secondary" aria-live="polite">
+          <span className="text-caption text-text-secondary" aria-live="polite">
             {t("form.noteCount", { count: values.note.length, max: NOTE_MAX_LENGTH })}
           </span>
         </div>
@@ -377,7 +376,7 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
           onChange={(event) => set("note", event.target.value)}
           aria-invalid={invalid("note")}
           aria-describedby={describedBy("note")}
-          className={cn(inputClass, "h-auto resize-y py-12")}
+          className={textareaClass}
         />
         <ErrorText id="note-error" message={errorText("note")} />
       </div>
@@ -386,10 +385,7 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
         <Label htmlFor="plannedExpense">{t("form.plannedExpense")}</Label>
         <label
           htmlFor="plannedExpense"
-          className={cn(
-            "flex h-46 cursor-text items-center gap-4 rounded-md border bg-surface-card px-16 text-body-md text-text-primary transition-colors focus-within:outline-2 focus-within:outline-border-focus hover:border-border-strong",
-            invalid("plannedExpense") ? "border-border-error" : "border-border-default",
-          )}
+          className={fieldBoxClass(Boolean(invalid("plannedExpense")))}
         >
           <input
             id="plannedExpense"
@@ -402,13 +398,13 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
             onBlur={completeExpense}
             aria-invalid={invalid("plannedExpense")}
             aria-describedby={errors.plannedExpense ? "plannedExpense-error" : "plannedExpense-hint"}
-            className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-tertiary"
+            className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-secondary"
           />
           <span aria-hidden className="text-text-secondary">
             ₺
           </span>
         </label>
-        <p id="plannedExpense-hint" className="text-body-sm text-text-secondary">
+        <p id="plannedExpense-hint" className="text-caption text-text-secondary">
           {t("form.plannedExpenseHint")}
         </p>
         <ErrorText id="plannedExpense-error" message={errorText("plannedExpense")} />

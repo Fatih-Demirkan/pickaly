@@ -7,7 +7,7 @@ import { Button, type ButtonVariant } from "./Button";
 
 // Silme onayı (RESPONSIVE §4.5.2, DESIGN §8.10): yerel <dialog> — odak tuzağı, Esc ile kapanma ve
 // arka planın etkisizleşmesi tarayıcıdan gelir. Butonlar: Vazgeç (Tertiary) + Sil (Destructive).
-// [Eksik] Modal Figma'da tasarlanmadı; genişlik --layout-modal-confirm-width, radius-2xl, shadow-overlay.
+// [Eksik] Modal Figma'da tasarlanmadı; genişlik --layout-modal-confirm-width, radius-2xl, shadow-elev-3.
 
 type ConfirmDialogProps = {
   trigger: { label: string; icon?: AppIconName; variant?: ButtonVariant; className?: string };
@@ -42,14 +42,14 @@ export function ConfirmDialog({ trigger, title, body, cancelLabel, confirmLabel,
         ref={dialogRef}
         aria-labelledby={titleId}
         aria-describedby={bodyId}
-        className="m-auto w-[calc(100%-32px)] max-w-(--layout-modal-confirm-width) rounded-2xl border border-border-default bg-surface-card p-24 text-text-primary shadow-overlay backdrop:bg-text-primary/40 open:animate-pop-enter open:backdrop:animate-fade-in"
+        className="m-auto w-[calc(100%-32px)] max-w-(--layout-modal-confirm-width) rounded-xl bg-surface-card p-24 text-text-primary shadow-elev-3 backdrop:bg-text-primary/40 open:animate-pop-enter open:backdrop:animate-fade-in"
       >
         <form action={action} className="flex flex-col gap-24">
           <div className="flex flex-col gap-8">
-            <h2 id={titleId} className="text-heading-h4">
+            <h2 id={titleId} className="text-title-md">
               {title}
             </h2>
-            <p id={bodyId} className="text-body-md text-text-secondary">
+            <p id={bodyId} className="text-body text-text-secondary">
               {body}
             </p>
           </div>

@@ -1,85 +1,425 @@
 {
-  "$description": "Anlamsal renkler, açık tema. Bileşenler ve Tailwind sınıfları YALNIZCA bunları kullanır. Dark mode geldiğinde aynı yapıda color.semantic.dark.json eklenir. Kaynak: DESIGN.md §2.2–§2.7, §9.2.1",
+  "$description": "Semantic renkler, açık tema. Bileşenler YALNIZCA bunları kullanır. Adlar TECH_STACK §8.2 yapısında; değerler DESIGN_SYSTEM_PICKALY.md §2.3 eşleme tablosundan",
   "color": {
     "brand": {
-      "primary": { "$type": "color", "$value": "{primitive.teal.700}" },
-      "primary-hover": { "$type": "color", "$value": "{primitive.teal.800}" },
-      "primary-subtle": { "$type": "color", "$value": "{primitive.teal.100}" },
-      "accent": { "$type": "color", "$value": "{primitive.teal.500}", "$description": "Metin rengi olarak kullanılmaz (DESIGN §9.2)" }
+      "primary": {
+        "$type": "color",
+        "$value": "{primitive.blue.600}"
+      },
+      "primary-hover": {
+        "$type": "color",
+        "$value": "{primitive.blue.650}"
+      },
+      "primary-subtle": {
+        "$type": "color",
+        "$value": "{primitive.blue.100}"
+      },
+      "accent": {
+        "$type": "color",
+        "$value": "{primitive.blue.500}",
+        "$description": "Marka mavisi #41A1FD: logo, ilerleme dolgusu, dekor. Metin olarak kullanılmaz"
+      }
     },
     "text": {
-      "primary": { "$type": "color", "$value": "{primitive.neutral.900}" },
-      "secondary": { "$type": "color", "$value": "{primitive.neutral.500}" },
-      "tertiary": { "$type": "color", "$value": "{primitive.neutral.400}" },
-      "inverse": { "$type": "color", "$value": "{primitive.white}" },
-      "inverse-secondary": { "$type": "color", "$value": "{primitive.neutral.300}" },
-      "brand": { "$type": "color", "$value": "{primitive.teal.700}" },
-      "success": { "$type": "color", "$value": "{primitive.green.700}" },
-      "danger": { "$type": "color", "$value": "{primitive.red.600}" },
-      "warning": { "$type": "color", "$value": "{primitive.amber.700}" },
-      "info": { "$type": "color", "$value": "{primitive.blue.600}" },
-      "on-task": { "$type": "color", "$value": "{primitive.indigo.700}" },
-      "on-payment": { "$type": "color", "$value": "{primitive.rose.700}" },
-      "on-warning": { "$type": "color", "$value": "{primitive.amber.800}" },
-      "on-neutral": { "$type": "color", "$value": "{primitive.neutral.600}", "$description": "Genel chip metni (Figma: Neutral/600)" }
+      "primary": {
+        "$type": "color",
+        "$value": "{primitive.black}"
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "{primitive.neutral.600}",
+        "$description": "Yalnızca beyaz ve canvas üzerinde. Renkli kartlarda text.primary"
+      },
+      "secondary-on-muted": {
+        "$type": "color",
+        "$value": "{primitive.neutral.700}"
+      },
+      "tertiary": {
+        "$type": "color",
+        "$value": "{primitive.neutral.500}",
+        "$description": "Yalnızca büyük metin (≥24 px veya ≥18,66 px bold): bakiyedeki soluk ondalık"
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": "{primitive.neutral.400}"
+      },
+      "inverse": {
+        "$type": "color",
+        "$value": "{primitive.white}"
+      },
+      "inverse-secondary": {
+        "$type": "color",
+        "$value": "{primitive.white-70}"
+      },
+      "brand": {
+        "$type": "color",
+        "$value": "{primitive.blue.600}"
+      },
+      "success": {
+        "$type": "color",
+        "$value": "{primitive.green.700}"
+      },
+      "danger": {
+        "$type": "color",
+        "$value": "{primitive.red.600}"
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "{primitive.amber.700}"
+      },
+      "info": {
+        "$type": "color",
+        "$value": "{primitive.blue.600}"
+      },
+      "on-task": {
+        "$type": "color",
+        "$value": "{primitive.category.violet.fg}"
+      },
+      "on-payment": {
+        "$type": "color",
+        "$value": "{primitive.category.pink.fg}"
+      },
+      "on-warning": {
+        "$type": "color",
+        "$value": "{primitive.amber.700}"
+      },
+      "on-neutral": {
+        "$type": "color",
+        "$value": "{primitive.category.slate.fg}"
+      },
+      "on-success": {
+        "$type": "color",
+        "$value": "{primitive.category.green.fg}"
+      },
+      "on-danger": {
+        "$type": "color",
+        "$value": "{primitive.category.red.fg}"
+      }
     },
     "surface": {
-      "page": { "$type": "color", "$value": "{primitive.neutral.50}" },
-      "card": { "$type": "color", "$value": "{primitive.white}" },
-      "muted": { "$type": "color", "$value": "{primitive.neutral.100}" },
-      "selected": { "$type": "color", "$value": "{primitive.neutral.100}", "$description": "Seçili satır/öğe zemini. Ürün sahibi kararı (2026-11-04): teal yerine gri ton (Neutral/100)" },
-      "nav-active": { "$type": "color", "$value": "{primitive.neutral.200}", "$description": "Aktif nav öğesi zemini. Figma: Nav Bar Buttons on → Neutral/200 [Karar Ç-3]" },
-      "inverse": { "$type": "color", "$value": "{primitive.neutral.900}", "$description": "Toast zemini (RESPONSIVE §8.2.7: Neutral/900); Ana Sayfa Toplam Bakiye kartı gradyan sonu", "$extensions": { "pickaly": { "status": "proposed" } } },
-      "inverse-raised": { "$type": "color", "$value": "{primitive.neutral.700}", "$description": "Pages → Ana Sayfa Toplam Bakiye kartı: gradyan başı ve Gelir/Gider/Bugün kutuları (Neutral/700)" },
-      "inverse-control": { "$type": "color", "$value": "{primitive.neutral.600}", "$description": "Pages → Ana Sayfa Toplam Bakiye kartı: ok ikon kutuları (Neutral/600)" }
+      "page": {
+        "$type": "color",
+        "$value": "{primitive.neutral.50}"
+      },
+      "card": {
+        "$type": "color",
+        "$value": "{primitive.white}"
+      },
+      "muted": {
+        "$type": "color",
+        "$value": "{primitive.neutral.100}"
+      },
+      "selected": {
+        "$type": "color",
+        "$value": "{primitive.blue.100}",
+        "$description": "Seçili liste satırı / seçici satırı"
+      },
+      "selected-strong": {
+        "$type": "color",
+        "$value": "{primitive.black}",
+        "$description": "Seçili chip, seçili gün: seçim = siyah dolgu (DS filter chips)"
+      },
+      "nav-active": {
+        "$type": "color",
+        "$value": "{primitive.black}",
+        "$description": "Rail / sidebar aktif öğe"
+      },
+      "tabbar": {
+        "$type": "color",
+        "$value": "{primitive.black}",
+        "$description": "Mobil yüzen tab bar"
+      },
+      "tabbar-active": {
+        "$type": "color",
+        "$value": "{primitive.white}",
+        "$description": "Tab bar içindeki aktif beyaz daire"
+      },
+      "inverse": {
+        "$type": "color",
+        "$value": "{primitive.black}"
+      },
+      "inverse-raised": {
+        "$type": "color",
+        "$value": "{primitive.neutral.900}"
+      },
+      "inverse-control": {
+        "$type": "color",
+        "$value": "{primitive.neutral.800}"
+      },
+      "income": {
+        "$type": "color",
+        "$value": "{primitive.blue.100}",
+        "$description": "DS card-income"
+      },
+      "expense": {
+        "$type": "color",
+        "$value": "{primitive.lavender.200}",
+        "$description": "DS card-expense"
+      },
+      "compare": {
+        "$type": "color",
+        "$value": "{primitive.lilac.200}",
+        "$description": "DS card-compare"
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": "{primitive.neutral.150}"
+      }
     },
     "control": {
-      "track-off": { "$type": "color", "$value": "{primitive.neutral.200}", "$description": "Switch kapalı zemin. Pages: Toggle Switch Background → Neutral/200" },
-      "thumb-off": { "$type": "color", "$value": "{primitive.neutral.400}", "$description": "Switch kapalı düğme. Pages: Toggle Switch → Neutral/400" },
-      "track-on": { "$type": "color", "$value": "{primitive.green.600}", "$description": "Switch açık zemin. Pages: Toggle Switch Background → Chart/Income" },
-      "thumb-on": { "$type": "color", "$value": "{primitive.white}", "$description": "Switch açık düğme. Pages: Brand/White" }
+      "track-off": {
+        "$type": "color",
+        "$value": "{primitive.neutral.500}"
+      },
+      "thumb-off": {
+        "$type": "color",
+        "$value": "{primitive.white}"
+      },
+      "track-on": {
+        "$type": "color",
+        "$value": "{primitive.blue.600}"
+      },
+      "thumb-on": {
+        "$type": "color",
+        "$value": "{primitive.white}"
+      }
     },
     "border": {
-      "default": { "$type": "color", "$value": "{primitive.neutral.200}" },
-      "subtle": { "$type": "color", "$value": "{primitive.neutral.100}" },
-      "strong": { "$type": "color", "$value": "{primitive.neutral.300}" },
-      "focus": { "$type": "color", "$value": "{primitive.teal.700}" },
-      "error": { "$type": "color", "$value": "{primitive.red.600}" },
-      "success": { "$type": "color", "$value": "{primitive.green.700}" }
+      "default": {
+        "$type": "color",
+        "$value": "{primitive.neutral.100}",
+        "$description": "DS border-subtle; dekoratif ayrım"
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": "{primitive.neutral.100}"
+      },
+      "strong": {
+        "$type": "color",
+        "$value": "{primitive.neutral.200}",
+        "$description": "Hover çerçevesi"
+      },
+      "control": {
+        "$type": "color",
+        "$value": "{primitive.neutral.500}",
+        "$description": "Input, checkbox, radio sınırı (WCAG 1.4.11, 3:1)"
+      },
+      "control-hover": {
+        "$type": "color",
+        "$value": "{primitive.black}",
+        "$description": "Form kontrolü hover çerçevesi (DESIGN_SYSTEM_PICKALY §5.7)"
+      },
+      "focus": {
+        "$type": "color",
+        "$value": "{primitive.blue.600}"
+      },
+      "error": {
+        "$type": "color",
+        "$value": "{primitive.red.600}"
+      },
+      "success": {
+        "$type": "color",
+        "$value": "{primitive.green.700}"
+      }
     },
     "status": {
-      "success": { "$type": "color", "$value": "{primitive.green.700}" },
-      "danger": { "$type": "color", "$value": "{primitive.red.600}" },
-      "warning": { "$type": "color", "$value": "{primitive.amber.600}", "$description": "İkon/nokta/çerçeve için. Küçük metinde text.warning kullanılır" },
-      "info": { "$type": "color", "$value": "{primitive.blue.600}" },
-      "success-subtle": { "$type": "color", "$value": "{primitive.green.100}" },
-      "danger-subtle": { "$type": "color", "$value": "{primitive.red.100}" },
-      "warning-subtle": { "$type": "color", "$value": "{primitive.orange.100}" },
-      "info-subtle": { "$type": "color", "$value": "{primitive.blue.100}" }
+      "success": {
+        "$type": "color",
+        "$value": "{primitive.green.700}"
+      },
+      "danger": {
+        "$type": "color",
+        "$value": "{primitive.red.600}"
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "{primitive.amber.700}"
+      },
+      "warning-fill": {
+        "$type": "color",
+        "$value": "{primitive.amber.500}",
+        "$description": "Yalnızca siyah metinli zemin (çevrimdışı bandı)"
+      },
+      "info": {
+        "$type": "color",
+        "$value": "{primitive.blue.600}"
+      },
+      "success-subtle": {
+        "$type": "color",
+        "$value": "{primitive.category.green.bg}"
+      },
+      "danger-subtle": {
+        "$type": "color",
+        "$value": "{primitive.category.red.bg}"
+      },
+      "warning-subtle": {
+        "$type": "color",
+        "$value": "{primitive.category.amber.bg}"
+      },
+      "info-subtle": {
+        "$type": "color",
+        "$value": "{primitive.blue.100}"
+      }
     },
     "action": {
-      "primary-pressed": { "$type": "color", "$value": "{primitive.teal.900}", "$extensions": { "pickaly": { "status": "proposed" } } },
-      "secondary-hover": { "$type": "color", "$value": "{primitive.teal.200}", "$extensions": { "pickaly": { "status": "proposed" } } },
-      "tertiary-hover": { "$type": "color", "$value": "{primitive.neutral.50}" },
-      "danger-hover": { "$type": "color", "$value": "{primitive.red.700}", "$extensions": { "pickaly": { "status": "proposed" } } }
+      "primary-pressed": {
+        "$type": "color",
+        "$value": "{primitive.blue.700}"
+      },
+      "secondary-hover": {
+        "$type": "color",
+        "$value": "{primitive.blue.150}"
+      },
+      "secondary-pressed": {
+        "$type": "color",
+        "$value": "{primitive.blue.200}"
+      },
+      "tertiary-hover": {
+        "$type": "color",
+        "$value": "{primitive.neutral.50}"
+      },
+      "contrast-hover": {
+        "$type": "color",
+        "$value": "{primitive.neutral.900}"
+      },
+      "danger-hover": {
+        "$type": "color",
+        "$value": "{primitive.red.700}"
+      }
     },
     "category": {
-      "teal": { "$type": "color", "$value": "{primitive.teal.100}" },
-      "blue": { "$type": "color", "$value": "{primitive.blue.100}" },
-      "violet": { "$type": "color", "$value": "{primitive.violet.100}" },
-      "pink": { "$type": "color", "$value": "{primitive.pink.100}" },
-      "orange": { "$type": "color", "$value": "{primitive.orange.100}" },
-      "amber": { "$type": "color", "$value": "{primitive.amber.100}" },
-      "green": { "$type": "color", "$value": "{primitive.green.100}" },
-      "red": { "$type": "color", "$value": "{primitive.red.100}" },
-      "slate": { "$type": "color", "$value": "{primitive.neutral.200}" }
+      "teal": {
+        "$type": "color",
+        "$value": "{primitive.category.teal.bg}"
+      },
+      "blue": {
+        "$type": "color",
+        "$value": "{primitive.category.blue.bg}"
+      },
+      "violet": {
+        "$type": "color",
+        "$value": "{primitive.category.violet.bg}"
+      },
+      "pink": {
+        "$type": "color",
+        "$value": "{primitive.category.pink.bg}"
+      },
+      "orange": {
+        "$type": "color",
+        "$value": "{primitive.category.orange.bg}"
+      },
+      "amber": {
+        "$type": "color",
+        "$value": "{primitive.category.amber.bg}"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "{primitive.category.green.bg}"
+      },
+      "red": {
+        "$type": "color",
+        "$value": "{primitive.category.red.bg}"
+      },
+      "slate": {
+        "$type": "color",
+        "$value": "{primitive.category.slate.bg}"
+      }
+    },
+    "category-fg": {
+      "teal": {
+        "$type": "color",
+        "$value": "{primitive.category.teal.fg}"
+      },
+      "blue": {
+        "$type": "color",
+        "$value": "{primitive.category.blue.fg}"
+      },
+      "violet": {
+        "$type": "color",
+        "$value": "{primitive.category.violet.fg}"
+      },
+      "pink": {
+        "$type": "color",
+        "$value": "{primitive.category.pink.fg}"
+      },
+      "orange": {
+        "$type": "color",
+        "$value": "{primitive.category.orange.fg}"
+      },
+      "amber": {
+        "$type": "color",
+        "$value": "{primitive.category.amber.fg}"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "{primitive.category.green.fg}"
+      },
+      "red": {
+        "$type": "color",
+        "$value": "{primitive.category.red.fg}"
+      },
+      "slate": {
+        "$type": "color",
+        "$value": "{primitive.category.slate.fg}"
+      }
     },
     "chart": {
-      "income": { "$type": "color", "$value": "{primitive.green.600}" },
-      "expense": { "$type": "color", "$value": "{primitive.rose.600}" },
-      "savings": { "$type": "color", "$value": "{primitive.teal.600}" },
-      "balance": { "$type": "color", "$value": "{primitive.indigo.500}" },
-      "neutral": { "$type": "color", "$value": "{primitive.neutral.300}" }
+      "current": {
+        "$type": "color",
+        "$value": "{primitive.black}"
+      },
+      "income": {
+        "$type": "color",
+        "$value": "{primitive.chart.income}"
+      },
+      "expense": {
+        "$type": "color",
+        "$value": "{primitive.chart.expense}"
+      },
+      "savings": {
+        "$type": "color",
+        "$value": "{primitive.chart.savings}"
+      },
+      "compare": {
+        "$type": "color",
+        "$value": "{primitive.chart.compare}"
+      },
+      "balance": {
+        "$type": "color",
+        "$value": "{primitive.chart.compare}",
+        "$description": "Eski ad; chart.compare ile aynı. Yeni kodda chart.compare kullanın"
+      },
+      "grid": {
+        "$type": "color",
+        "$value": "{primitive.neutral.100}"
+      },
+      "neutral": {
+        "$type": "color",
+        "$value": "{primitive.neutral.100}",
+        "$description": "Eski ad; chart.grid ile aynı"
+      }
+    },
+    "progress": {
+      "fill": {
+        "$type": "color",
+        "$value": "{primitive.blue.500}",
+        "$description": "İlerleme dolgusu (DS brand-500)"
+      },
+      "track": {
+        "$type": "color",
+        "$value": "{primitive.blue.300}",
+        "$description": "Noktalı iz; %40 opaklıkla (DS)"
+      },
+      "halo": {
+        "$type": "color",
+        "$value": "{primitive.blue.200}",
+        "$description": "Knob halesi (DS)"
+      },
+      "track-bar": {
+        "$type": "color",
+        "$value": "{primitive.blue.100}",
+        "$description": "Basit ilerleme çubuğu izi"
+      }
     }
   }
 }

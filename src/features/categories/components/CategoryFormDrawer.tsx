@@ -51,7 +51,7 @@ export async function CategoryFormDrawer(props: CategoryFormDrawerProps) {
           <Link
             href={cancelHref}
             scroll={false}
-            className="touch-target -me-8 inline-flex h-40 items-center gap-4 rounded-full px-8 text-label-md text-text-secondary transition-colors hover:bg-action-tertiary-hover hover:text-text-primary"
+            className="touch-target -me-8 inline-flex h-40 items-center gap-4 rounded-full px-8 text-body-strong text-text-secondary transition-colors hover:bg-action-tertiary-hover hover:text-text-primary"
           >
             <Icon icon="close" size="sm" />
             {t("cancel")}

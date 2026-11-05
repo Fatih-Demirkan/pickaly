@@ -1,38 +1,128 @@
 {
-  "$description": "Boşluk, köşe yarıçapı, çerçeve kalınlığı ve ikon boyutları. Kaynak: DESIGN.md §4, §5, §7.2 ve Figma 'Spacing' / 'Border & Radius' koleksiyonları",
+  "$description": "Boşluk, köşe yarıçapı, çerçeve kalınlığı ve ikon boyutları. Kaynak: DESIGN_SYSTEM.md Part A §A4, §A6 + DESIGN_SYSTEM_PICKALY.md §4",
   "space": {
-    "$description": "4 px tabanlı ölçek. Token adı değerin kendisidir (Figma ile aynı). Tailwind'de --spacing: 1px olduğundan p-16 = 16px",
-    "4": { "$type": "dimension", "$value": "4px" },
-    "8": { "$type": "dimension", "$value": "8px" },
-    "12": { "$type": "dimension", "$value": "12px" },
-    "16": { "$type": "dimension", "$value": "16px" },
-    "20": { "$type": "dimension", "$value": "20px" },
-    "24": { "$type": "dimension", "$value": "24px" },
-    "32": { "$type": "dimension", "$value": "32px" },
-    "40": { "$type": "dimension", "$value": "40px" },
-    "48": { "$type": "dimension", "$value": "48px" },
-    "64": { "$type": "dimension", "$value": "64px" }
+    "4": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "8": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "12": {
+      "$type": "dimension",
+      "$value": "12px"
+    },
+    "16": {
+      "$type": "dimension",
+      "$value": "16px"
+    },
+    "20": {
+      "$type": "dimension",
+      "$value": "20px"
+    },
+    "24": {
+      "$type": "dimension",
+      "$value": "24px"
+    },
+    "32": {
+      "$type": "dimension",
+      "$value": "32px"
+    },
+    "40": {
+      "$type": "dimension",
+      "$value": "40px"
+    },
+    "48": {
+      "$type": "dimension",
+      "$value": "48px"
+    },
+    "64": {
+      "$type": "dimension",
+      "$value": "64px"
+    },
+    "$description": "4 pt ölçeği (DS 4–32) + düzen token ihtiyacı için 40/48/64. Tailwind'de --spacing: 1px olduğundan p-16 = 16px"
   },
   "radius": {
-    "none": { "$type": "dimension", "$value": "0px" },
-    "xs": { "$type": "dimension", "$value": "4px" },
-    "sm": { "$type": "dimension", "$value": "8px" },
-    "md": { "$type": "dimension", "$value": "12px" },
-    "lg": { "$type": "dimension", "$value": "16px" },
-    "xl": { "$type": "dimension", "$value": "20px" },
-    "2xl": { "$type": "dimension", "$value": "24px" },
-    "full": { "$type": "dimension", "$value": "999px" }
+    "none": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "xs": {
+      "$type": "dimension",
+      "$value": "6px",
+      "$description": "DS radius-xs: rozetler"
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "8px",
+      "$description": "ikon karosu, segmented seçeneği"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "12px",
+      "$description": "stat kartı, liste grubu, input, popover"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "16px",
+      "$description": "ana kartlar"
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "24px",
+      "$description": "bottom sheet, modal, paylaşım kartı"
+    },
+    "2xl": {
+      "$type": "dimension",
+      "$value": "28px",
+      "$description": "uygulama ikonu"
+    },
+    "full": {
+      "$type": "dimension",
+      "$value": "9999px",
+      "$description": "buton, chip, tab bar, avatar"
+    }
   },
   "border-width": {
-    "none": { "$type": "dimension", "$value": "0px" },
-    "thin": { "$type": "dimension", "$value": "1px" },
-    "medium": { "$type": "dimension", "$value": "1.5px" },
-    "thick": { "$type": "dimension", "$value": "2px" }
+    "none": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "thin": {
+      "$type": "dimension",
+      "$value": "1px"
+    },
+    "medium": {
+      "$type": "dimension",
+      "$value": "1.5px"
+    },
+    "thick": {
+      "$type": "dimension",
+      "$value": "2px"
+    }
   },
   "icon-size": {
-    "$description": "Lucide ikon boyutları. Stroke 24 px grid'deki 2 px'in orantılı ölçeğidir (absoluteStrokeWidth kapalı). DESIGN §7.2",
-    "xs": { "$type": "dimension", "$value": "14px" },
-    "sm": { "$type": "dimension", "$value": "16px" },
-    "md": { "$type": "dimension", "$value": "20px" }
+    "$description": "Lucide ikon boyutları (DS §A4: 16 / 20 / 24). Stroke orantılı ölçeklenir (absoluteStrokeWidth kapalı)",
+    "xs": {
+      "$type": "dimension",
+      "$value": "16px",
+      "$description": "ESKİ AD (14 px idi) → sm ile aynı"
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "16px",
+      "$description": "inline, meta"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "20px",
+      "$description": "liste, buton"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "24px",
+      "$description": "navigasyon"
+    }
   }
 }

@@ -11,9 +11,9 @@ export default function GlobalError({ retry }: { error: unknown; retry: () => vo
     <html lang="tr">
       <body>
         <main className="flex min-h-dvh flex-col items-start justify-center gap-12 bg-surface-page px-(--layout-page-padding-x)">
-          <h1 className="text-heading-h2 text-text-primary">{trMessages.errors.genericTitle}</h1>
-          <p className="text-body-md text-text-secondary">{trMessages.errors.genericBody}</p>
-          <p lang="en" className="text-body-sm text-text-secondary">
+          <h1 className="text-title-md text-text-primary">{trMessages.errors.genericTitle}</h1>
+          <p className="text-body text-text-secondary">{trMessages.errors.genericBody}</p>
+          <p lang="en" className="text-caption text-text-secondary">
             {enMessages.errors.genericTitle}. {enMessages.errors.genericBody}
           </p>
           <button

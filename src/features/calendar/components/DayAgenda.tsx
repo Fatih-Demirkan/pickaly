@@ -27,8 +27,8 @@ export async function DayAgenda({ day, today, entries, categories, locale, query
 
   if (entries.length === 0) {
     return (
-      <div className="flex flex-col items-start gap-12 rounded-lg border border-border-default bg-surface-card p-16">
-        <p className="text-body-md text-text-secondary">{t("empty")}</p>
+      <div className="flex flex-col items-start gap-12 rounded-lg bg-surface-card p-16 shadow-elev-1">
+        <p className="text-body text-text-secondary">{t("empty")}</p>
         <ButtonLink href={newItemHref({ date: day })} scroll={false} variant="secondary" size="sm" leadingIcon="add">
           {t("addTask")}
         </ButtonLink>
@@ -39,7 +39,7 @@ export async function DayAgenda({ day, today, entries, categories, locale, query
   const section = (title: string, list: AgendaEntry[], id: string) =>
     list.length > 0 && (
       <section aria-labelledby={id} className="flex min-w-0 flex-col gap-8">
-        <h3 id={id} className="text-label-md text-text-secondary">
+        <h3 id={id} className="text-caption-strong text-text-secondary">
           {title}
         </h3>
         <ul className="flex flex-col gap-8">
@@ -54,7 +54,7 @@ export async function DayAgenda({ day, today, entries, categories, locale, query
     // Tablet iki sütun; laptop+ ajanda yan panelde olduğu için yine tek sütun.
     <div className="flex flex-col gap-16 tablet:grid tablet:grid-cols-2 tablet:items-start laptop:flex">
       {section(t("todo"), todo, `agenda-todo-${day}`)}
-      {todo.length > 0 && done.length > 0 && <hr className="border-border-default tablet:hidden laptop:block" />}
+      {todo.length > 0 && done.length > 0 && <hr className="border-border-subtle tablet:hidden laptop:block" />}
       {section(t("done"), done, `agenda-done-${day}`)}
     </div>
   );

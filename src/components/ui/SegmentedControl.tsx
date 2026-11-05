@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 
-// Pages kalıbı → Segmented Control (DESIGN §8.8): kap 42 px, surface-muted + border-default, radius-md,
-// iç boşluk ve aralık 4; seçenek 32 px, radius-sm, seçili surface-card + shadow-sm, metin button.
-// Görünüm Figma ölçüsündedir; dokunma alanı touch-target ile 44 px'e genişler.
+// DESIGN_SYSTEM_PICKALY.md §5.5 Segmented control [Türetme, Karar K-4]: kap 40 px, neutral.100 zemin, tam yuvarlak,
+// iç boşluk ve aralık 4; seçenek 32 px, tam yuvarlak; seçili beyaz + elev-1 + siyah metin, seçili değil neutral.700 metin.
+// Dokunma alanı touch-target ile 44 px'e genişler.
 
 export type SegmentedOption<T extends string> = {
   value: T;
@@ -16,16 +16,16 @@ export type SegmentedOption<T extends string> = {
 };
 
 function groupClasses(fullWidth?: boolean, className?: string) {
-  return cn("inline-flex gap-4 rounded-md border border-border-default bg-surface-muted p-4", fullWidth && "flex w-full", className);
+  return cn("inline-flex h-40 gap-4 rounded-full bg-surface-muted p-4", fullWidth && "flex w-full", className);
 }
 
 function optionClasses(selected: boolean, fullWidth?: boolean) {
   return cn(
-    "touch-target inline-flex h-32 items-center justify-center rounded-sm px-12 text-button whitespace-nowrap transition-colors",
+    "touch-target inline-flex h-32 items-center justify-center rounded-full px-14 text-button whitespace-nowrap transition-colors",
     fullWidth && "flex-1",
-    selected ? "bg-surface-card text-text-primary shadow-sm" : "text-text-secondary hover:text-text-primary",
-    "disabled:cursor-not-allowed disabled:text-text-tertiary disabled:hover:text-text-tertiary",
-    "aria-disabled:cursor-not-allowed aria-disabled:text-text-tertiary aria-disabled:hover:text-text-tertiary",
+    selected ? "bg-surface-card text-text-primary shadow-elev-1" : "text-text-secondary-on-muted hover:text-text-primary",
+    "disabled:cursor-not-allowed disabled:text-text-disabled disabled:hover:text-text-disabled",
+    "aria-disabled:cursor-not-allowed aria-disabled:text-text-disabled aria-disabled:hover:text-text-disabled",
   );
 }
 

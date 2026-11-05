@@ -1,8 +1,8 @@
 import type { LucideIcon } from "lucide-react";
 import { appIcons, type AppIconName } from "@/config/icons";
 
-// Boyutlar tokens/dimension.json → icon-size ile aynıdır (DESIGN §7.2).
-const iconSizePx = { xs: 14, sm: 16, md: 20 } as const;
+// Boyutlar tokens/dimension.json → icon-size ile aynıdır (DESIGN_SYSTEM.md §A4: 16 / 20 / 24). xs eski addır (= sm).
+const iconSizePx = { xs: 16, sm: 16, md: 20, lg: 24 } as const;
 export type IconSize = keyof typeof iconSizePx;
 
 type IconProps = {

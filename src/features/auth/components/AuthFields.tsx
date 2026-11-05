@@ -3,14 +3,13 @@
 import { useState, type ComponentProps, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/Icon";
+import { inputClass } from "@/components/ui/field";
 import { cn } from "@/lib/cn";
 import type { AuthErrorKey, AuthFormError } from "../schemas";
 
-// Oturum formlarının ortak alanları. Form alanı kalıbı diğer formlarla aynı (46 px, radius-md, border-default,
-// Label/Default etiket, Body/Small hata metni).
+// Oturum formlarının ortak alanları. Form alanı kalıbı diğer formlarla aynı (src/components/ui/field.ts: 48 px,
+// radius-md, border-control; body-strong etiket, caption hata metni). Başlık display-hero (DESIGN_SYSTEM_PICKALY §3.2).
 
-export const inputClass =
-  "h-46 w-full rounded-md border border-border-default bg-surface-card px-16 text-body-md text-text-primary placeholder:text-text-tertiary transition-colors hover:border-border-strong aria-invalid:border-border-error";
 
 type FieldProps = Omit<ComponentProps<"input">, "id" | "name"> & {
   id: string;
@@ -25,17 +24,17 @@ export function TextField({ id, label, error, errorValues, hint, className, ...r
   const describedBy = [error && `${id}-error`, hint && `${id}-hint`].filter(Boolean).join(" ") || undefined;
   return (
     <div className="flex flex-col gap-8">
-      <label htmlFor={id} className="text-label-md text-text-primary">
+      <label htmlFor={id} className="text-body-strong text-text-primary">
         {label}
       </label>
       <input id={id} name={id} aria-invalid={error ? true : undefined} aria-describedby={describedBy} className={cn(inputClass, className)} {...rest} />
       {hint && !error && (
-        <p id={`${id}-hint`} className="text-body-sm text-text-secondary">
+        <p id={`${id}-hint`} className="text-caption text-text-secondary">
           {hint}
         </p>
       )}
       {error && (
-        <p id={`${id}-error`} className="text-body-sm text-text-danger">
+        <p id={`${id}-error`} className="text-caption text-text-danger">
           {t(error, errorValues)}
         </p>
       )}
@@ -51,7 +50,7 @@ export function PasswordField({ id, label, error, errorValues, hint, ...rest }: 
   const describedBy = [error && `${id}-error`, hint && `${id}-hint`].filter(Boolean).join(" ") || undefined;
   return (
     <div className="flex flex-col gap-8">
-      <label htmlFor={id} className="text-label-md text-text-primary">
+      <label htmlFor={id} className="text-body-strong text-text-primary">
         {label}
       </label>
       <div className="relative">
@@ -69,18 +68,18 @@ export function PasswordField({ id, label, error, errorValues, hint, ...rest }: 
           onClick={() => setVisible((current) => !current)}
           aria-pressed={visible}
           aria-controls={id}
-          className="touch-target absolute end-8 top-1/2 -translate-y-1/2 rounded-sm px-8 text-label-sm text-text-brand hover:underline"
+          className="touch-target absolute end-8 top-1/2 -translate-y-1/2 rounded-sm px-8 text-caption-strong text-text-brand hover:underline"
         >
           {visible ? t("hidePassword") : t("showPassword")}
         </button>
       </div>
       {hint && !error && (
-        <p id={`${id}-hint`} className="text-body-sm text-text-secondary">
+        <p id={`${id}-hint`} className="text-caption text-text-secondary">
           {hint}
         </p>
       )}
       {error && (
-        <p id={`${id}-error`} className="text-body-sm text-text-danger">
+        <p id={`${id}-error`} className="text-caption text-text-danger">
           {tErrors(error, errorValues)}
         </p>
       )}
@@ -95,8 +94,8 @@ export function FormAlert({ error, tone = "error", children }: { error?: AuthFor
     <p
       role={tone === "error" ? "alert" : "status"}
       className={cn(
-        "flex gap-8 rounded-md p-12 text-body-md",
-        tone === "error" ? "bg-status-danger-subtle text-text-danger" : "bg-category-blue text-text-primary",
+        "flex gap-8 rounded-lg p-16 text-body text-text-primary",
+        tone === "error" ? "bg-status-danger-subtle [&>span:first-child]:text-text-on-danger" : "bg-status-info-subtle [&>span:first-child]:text-text-info",
       )}
     >
       <span className="mt-2 shrink-0">
@@ -110,8 +109,8 @@ export function FormAlert({ error, tone = "error", children }: { error?: AuthFor
 export function AuthHeading({ title, subtitle }: { title: string; subtitle?: ReactNode }) {
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-heading-h2 text-text-primary">{title}</h1>
-      {subtitle && <p className="text-body-md text-text-secondary">{subtitle}</p>}
+      <h1 className="text-display-hero text-text-primary">{title}</h1>
+      {subtitle && <p className="text-body text-text-secondary">{subtitle}</p>}
     </div>
   );
 }

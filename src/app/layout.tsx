@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
-import { Manrope } from "next/font/google";
+import { Geist } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { defaultLocale, LOCALE_COOKIE, locales } from "@/i18n/config";
@@ -10,12 +10,11 @@ import { semanticColors } from "@/styles/tokens";
 import trMessages from "@/locales/tr.json";
 import "@/styles/globals.css";
 
-// Manrope: Regular 400, SemiBold 600, Bold 700 (DESIGN §3.1). latin-ext: ğ, ş, ı, İ.
-const manrope = Manrope({
+// Geist değişken font: 400 / 500 / 600 / 700 (DESIGN_SYSTEM.md §A3). latin-ext: ğ, ş, ı, İ.
+const geist = Geist({
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "600", "700"],
   display: "swap",
-  variable: "--font-manrope",
+  variable: "--font-geist",
 });
 
 // Varsayılan dil Türkçe olduğu için statik metadata Türkçe kaynak dosyadan gelir.
@@ -31,7 +30,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: semanticColors["brand-primary"],
+  // Tarayıcı çubuğu uygulama zeminiyle aynı renk (DESIGN_SYSTEM_PICKALY §7).
+  themeColor: semanticColors["surface-page"],
 };
 
 // <html lang> cookie'deki dil tercihine göre BOYAMADAN ÖNCE ayarlanır. Sunucuda cookie okumak
@@ -42,7 +42,7 @@ const setLangScript = `(function(){try{var m=document.cookie.match(/(?:^|; )${LO
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang={defaultLocale} className={manrope.variable} suppressHydrationWarning>
+    <html lang={defaultLocale} className={geist.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: setLangScript }} />
       </head>
@@ -61,7 +61,7 @@ async function LocalizedRoot({ children }: { children: ReactNode }) {
 
   return (
     <NextIntlClientProvider>
-      <a href="#main-content" className="skip-link text-label-md text-text-brand">
+      <a href="#main-content" className="skip-link text-body-strong text-text-brand">
         {t("skipToContent")}
       </a>
       <EnvironmentBadge />

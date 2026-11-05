@@ -17,7 +17,7 @@ export async function ModulePlaceholder({ page, children }: { page: PageKey; chi
     <PageContainer className="flex flex-col gap-(--layout-section-gap)">
       <PageHeader title={t(`pages.${page}.title`)} subtitle={t(`pages.${page}.subtitle`)} />
       <Card>
-        <p className="text-body-md text-text-secondary">{t("placeholder.body")}</p>
+        <p className="text-body text-text-secondary">{t("placeholder.body")}</p>
       </Card>
       {children}
     </PageContainer>

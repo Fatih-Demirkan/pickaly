@@ -1,13 +1,47 @@
 {
-  "$description": "Gölgeler. Hepsi #0F172A renkli drop shadow. Kaynak: Figma effect style'ları, DESIGN.md §6.2. Kullanım seviyeleri DESIGN §6.3",
+  "$description": "Gölgeler: elev-1/2/3. Kaynak: DESIGN_SYSTEM.md Part A §A5 + DESIGN_SYSTEM_PICKALY.md §4.3",
   "shadow": {
-    "xs": { "$type": "shadow", "$value": { "color": "#0F172A0D", "offsetX": "0px", "offsetY": "1px", "blur": "2px", "spread": "0px" } },
-    "sm": { "$type": "shadow", "$value": { "color": "#0F172A0F", "offsetX": "0px", "offsetY": "2px", "blur": "4px", "spread": "0px" } },
-    "md": { "$type": "shadow", "$value": { "color": "#0F172A14", "offsetX": "0px", "offsetY": "4px", "blur": "8px", "spread": "0px" } },
-    "lg": { "$type": "shadow", "$value": { "color": "#0F172A1A", "offsetX": "0px", "offsetY": "8px", "blur": "16px", "spread": "-2px" } },
-    "xl": { "$type": "shadow", "$value": { "color": "#0F172A1F", "offsetX": "0px", "offsetY": "12px", "blur": "24px", "spread": "-4px" } },
-    "card": { "$type": "shadow", "$value": { "color": "#0F172A0D", "offsetX": "0px", "offsetY": "2px", "blur": "8px", "spread": "0px" } },
-    "floating": { "$type": "shadow", "$value": { "color": "#0F172A1F", "offsetX": "0px", "offsetY": "6px", "blur": "16px", "spread": "0px" } },
-    "overlay": { "$type": "shadow", "$value": { "color": "#0F172A29", "offsetX": "0px", "offsetY": "16px", "blur": "32px", "spread": "-4px" } }
+    "elev-1": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": "#0000000A",
+          "offsetX": "0px",
+          "offsetY": "1px",
+          "blur": "2px",
+          "spread": "0px"
+        },
+        {
+          "color": "#0000000A",
+          "offsetX": "0px",
+          "offsetY": "2px",
+          "blur": "8px",
+          "spread": "0px"
+        }
+      ],
+      "$description": "Canvas üzerindeki beyaz kartlar, segmented seçili öğe"
+    },
+    "elev-2": {
+      "$type": "shadow",
+      "$value": {
+        "color": "#00000014",
+        "offsetX": "0px",
+        "offsetY": "8px",
+        "blur": "24px",
+        "spread": "0px"
+      },
+      "$description": "Tab bar, FAB, alt aksiyon barı, popover, toast"
+    },
+    "elev-3": {
+      "$type": "shadow",
+      "$value": {
+        "color": "#0000001F",
+        "offsetX": "0px",
+        "offsetY": "16px",
+        "blur": "40px",
+        "spread": "0px"
+      },
+      "$description": "Modal, drawer, bottom sheet"
+    }
   }
 }

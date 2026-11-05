@@ -125,8 +125,8 @@ export function Drawer({ closeHref, closeLabel, labelledBy, size, docked, childr
           size === "modal" ? "animate-pop-enter" : "animate-drawer-enter",
           docked && "detail:animate-fade-in",
           size === "modal"
-            ? "tablet:m-auto tablet:h-fit tablet:max-h-[calc(100dvh-48px)] tablet:w-[calc(100%-48px)] tablet:max-w-(--layout-modal-max-width) tablet:rounded-2xl tablet:border tablet:border-border-default tablet:shadow-overlay"
-            : "tablet:start-auto tablet:max-w-full tablet:border-s tablet:border-border-default tablet:shadow-overlay",
+            ? "tablet:m-auto tablet:h-fit tablet:max-h-[calc(100dvh-48px)] tablet:w-[calc(100%-48px)] tablet:max-w-(--layout-modal-max-width) tablet:rounded-xl tablet:shadow-elev-3"
+            : "tablet:start-auto tablet:max-w-full tablet:border-s tablet:border-border-subtle tablet:shadow-elev-3",
           size === "detail" && "tablet:w-(--layout-drawer-width-detail)",
           size === "form" && "tablet:w-(--layout-drawer-width-form)",
           docked && "detail:shadow-none",

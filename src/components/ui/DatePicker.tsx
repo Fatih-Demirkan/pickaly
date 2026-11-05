@@ -12,9 +12,9 @@ import { PickerPanel } from "./PickerPanel";
 
 // Özel tarih seçici (RESPONSIVE §4.5.1 [Karar #6]): tarayıcının native seçicisi kullanılmaz.
 // Görsel dil Pages → Takvim "Monthly Calendar Matrix":
-//   kart padding 8 · gün başlıkları 12 SemiBold text-secondary · hücre 44 px yükseklik, radius-md (12), aralık 4
-//   gün Body/Default text-primary · hafta sonu text-secondary · ay dışı günler 12 px text-tertiary (Neutral/400)
-//   bugün: Brand/Primary Subtle zemin + Brand/Primary çerçeve ve metin · seçili: Brand/Primary zemin + beyaz metin
+//   kart padding 8 · gün başlıkları caption-strong text-secondary · hücre 44 px, tam yuvarlak, aralık 4
+//   gün Body/Default text-primary · hafta sonu text-secondary · ay dışı günler 12 px text-secondary (tertiary yalnızca büyük metin, DESIGN_SYSTEM_PICKALY §2.4)
+//   bugün: blue.100 zemin + blue.600 metin · seçili: siyah zemin + beyaz metin (DESIGN_SYSTEM_PICKALY §5.10)
 // Klavye: ← → ±1 gün, ↑ ↓ ±1 hafta, Home/End hafta başı/sonu, PageUp/PageDown ±1 ay, Enter seç.
 // [Varsayım] Hafta pazartesi başlar (TR); EN'de de aynı tutuldu.
 
@@ -140,7 +140,7 @@ export function DatePicker({ id, name, value, onChange, labelledBy, title, inval
             <button type="button" aria-label={t("previousMonth")} className={arrowClass} onClick={() => moveFocus(`${shiftMonth(month, -1)}-01`)}>
               <Icon icon="previous" size="sm" />
             </button>
-            <p aria-live="polite" className="text-body-lg text-text-primary">
+            <p aria-live="polite" className="text-body text-text-primary">
               {formatMonthLabel(month, locale)}
             </p>
             <button type="button" aria-label={t("nextMonth")} className={arrowClass} onClick={() => moveFocus(`${shiftMonth(month, 1)}-01`)}>
@@ -151,7 +151,7 @@ export function DatePicker({ id, name, value, onChange, labelledBy, title, inval
             <thead>
               <tr>
                 {weekdays.map((weekday) => (
-                  <th key={weekday} scope="col" className="pb-4 text-label-sm text-text-secondary">
+                  <th key={weekday} scope="col" className="pb-4 text-caption-strong text-text-secondary">
                     {weekday}
                   </th>
                 ))}
@@ -175,13 +175,13 @@ export function DatePicker({ id, name, value, onChange, labelledBy, title, inval
                           aria-label={formatDateLong(day, locale)}
                           onClick={() => select(day)}
                           className={cn(
-                            "flex h-44 w-full items-center justify-center rounded-md border transition-colors",
+                            "flex h-44 w-full items-center justify-center rounded-full transition-colors",
                             selected
-                              ? "border-brand-primary bg-brand-primary text-body-md text-text-inverse"
+                              ? "bg-surface-selected-strong text-body-strong text-text-inverse"
                               : isToday
-                                ? "border-brand-primary bg-brand-primary-subtle text-body-md text-text-brand"
-                                : "border-transparent hover:bg-surface-page",
-                            !selected && !isToday && (inMonth ? cn("text-body-md", weekend ? "text-text-secondary" : "text-text-primary") : "text-body-sm text-text-tertiary"),
+                                ? "bg-brand-primary-subtle text-body-strong text-text-brand"
+                                : "hover:bg-surface-page",
+                            !selected && !isToday && (inMonth ? cn("text-body", weekend ? "text-text-secondary" : "text-text-primary") : "text-caption text-text-secondary"),
                           )}
                         >
                           {Number(day.slice(8))}

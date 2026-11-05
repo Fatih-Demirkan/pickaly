@@ -4,13 +4,14 @@ import { useActionState, useLayoutEffect, useRef, useState, type ChangeEvent, ty
 import { useLocale, useTranslations } from "next-intl";
 import { ActionFooter } from "@/components/layout/ActionFooter";
 import { Button, ButtonLink } from "@/components/ui/Button";
-import { ChipSelect } from "@/components/ui/ChipSelect";
+import { ChipSelect, chipSelectClasses } from "@/components/ui/ChipSelect";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { Icon } from "@/components/ui/Icon";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { SelectPicker } from "@/components/ui/SelectPicker";
 import { Switch } from "@/components/ui/Switch";
 import { TimePicker } from "@/components/ui/TimePicker";
+import { amountBoxClass, amountCardClass, amountChipClass, amountInputClass, inputClass, textareaClass } from "@/components/ui/field";
 import type { Category } from "@/features/categories";
 import { isLocale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
@@ -33,8 +34,8 @@ import { AccountPicker, type AccountOption } from "@/features/accounts/component
 //   İşlem Türü: segmented Gelir / Gider / Abonelik  ·  Tutar kartı  ·  Başlık*  ·  Kategori Seçimi
 //   İşlem Yapılan Hesap  ·  İşlem Zamanı ve Tekrarı (Tarih / Saat + Tekrar Eden İşlem kartı)  ·  Not (x/200)
 //   alt bar İptal (Tertiary) + Kaydet (Primary)
-// Tutar kartı: padding 16, aralık 12, radius-2xl, gradyan beyaz → Category/Green (gider: Category/Red), shadow-floating;
-//   "Gelir Girişi" chip'i, tutar pill'i (padding 4/16, tam yuvarlak, beyaz, border-default, shadow-floating, Data/Large),
+// Tutar kartı: padding 16, aralık 12, radius-2xl, gradyan beyaz → Category/Green (gider: Category/Red), shadow-elev-2;
+//   "Gelir Girişi" chip'i, tutar pill'i (padding 4/16, tam yuvarlak, beyaz, border-default, shadow-elev-2, Data/Large),
 //   ayırıcı çizgi ve hızlı tutar çipleri (32 px, padding 4/8, tam yuvarlak, beyaz + border-default, Label/Small, aralık 6).
 // Abonelik tutar kartı: gradyan beyaz → Category/Blue (yukarıdan aşağı), "Abonelik / Tekrarlayan İşlem" chip'i (Category/Blue,
 //   nokta Chart/Balance), işaretsiz tutar (text-primary), altında "Fatura, Ödeme veya Abonelik ekleyin"; hızlı tutar yok.
@@ -76,14 +77,12 @@ type TransactionFormProps = {
 
 const QUICK_AMOUNTS = [500, 1000, 2500].map(majorToMinor); // Pages: "+ 500 ₺", "+ 1.000 ₺", "+ 2.500 ₺"
 
-const inputClass =
-  "h-46 w-full rounded-md border bg-surface-card px-16 text-body-md text-text-primary placeholder:text-text-tertiary transition-colors hover:border-border-strong aria-invalid:border-border-error";
 
 function FieldLabel({ htmlFor, id, required, children }: { htmlFor?: string; id?: string; required?: boolean; children: ReactNode }) {
   const t = useTranslations("transactions.form");
   const Tag = htmlFor ? "label" : "p";
   return (
-    <Tag htmlFor={htmlFor} id={id} className="text-label-md text-text-primary">
+    <Tag htmlFor={htmlFor} id={id} className="text-body-strong text-text-primary">
       {children}
       {required && (
         <>
@@ -100,7 +99,7 @@ function FieldLabel({ htmlFor, id, required, children }: { htmlFor?: string; id?
 function FieldError({ id, message }: { id: string; message?: string }) {
   if (!message) return null;
   return (
-    <p id={id} className="text-body-sm text-text-danger">
+    <p id={id} className="text-caption text-text-danger">
       {message}
     </p>
   );
@@ -195,7 +194,7 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
       <input type="hidden" name="repeat" value={String(create && values.repeat)} />
 
       {state.formError && (
-        <p role="alert" className="rounded-md bg-status-danger-subtle p-12 text-body-md text-text-danger">
+        <p role="alert" className="rounded-lg bg-status-danger-subtle p-16 text-body text-text-on-danger">
           {t(`errors.${state.formError}`)}
         </p>
       )}
@@ -220,18 +219,15 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
 
       {/* Tutar kartı */}
       <div
-        className={cn(
-          "flex flex-col items-center gap-12 rounded-2xl border border-border-default from-surface-card p-16 shadow-floating",
-          subscription ? "bg-linear-to-b to-category-blue" : cn("bg-linear-to-r", income ? "to-category-green" : "to-category-red"),
-        )}
+        className={amountCardClass}
       >
         <span
           className={cn(
-            "inline-flex h-24 items-center gap-4 rounded-full px-8 text-label-sm",
-            subscription ? "bg-category-blue text-text-on-task" : income ? "bg-category-green text-text-success" : "bg-category-red text-text-danger",
+            amountChipClass,
+            subscription ? "bg-category-blue text-category-fg-blue" : income ? "bg-category-green text-category-fg-green" : "bg-category-red text-category-fg-red",
           )}
         >
-          <span aria-hidden className={cn("size-6 rounded-full", subscription ? "bg-chart-balance" : income ? "bg-status-success" : "bg-status-danger")} />
+          <span aria-hidden className={cn("size-6 rounded-full", subscription ? "bg-category-fg-blue" : income ? "bg-status-success" : "bg-status-danger")} />
           {subscription ? t("subscriptionEntry") : income ? t("incomeEntry") : t("expenseEntry")}
         </span>
         <label htmlFor="amount" className="sr-only">
@@ -241,9 +237,8 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
         <label
           htmlFor="amount"
           className={cn(
-            "flex h-54 max-w-full min-w-222 cursor-text items-center justify-center gap-4 rounded-full border border-border-default bg-surface-card px-16 py-4 text-data-lg shadow-floating focus-within:outline-2 focus-within:outline-border-focus",
+            amountBoxClass(Boolean(invalid("amount"))),
             subscription ? "text-text-primary" : income ? "text-text-success" : "text-text-danger",
-            invalid("amount") && "border-border-error",
           )}
         >
           {!subscription && <span aria-hidden>{income ? "+" : "−"}</span>}
@@ -259,16 +254,16 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
             onBlur={completeAmount}
             aria-invalid={invalid("amount")}
             aria-describedby={describedBy("amount")}
-            className="min-w-[4ch] bg-transparent text-center outline-none field-sizing-content placeholder:text-text-tertiary"
+            className={amountInputClass}
           />
           <span aria-hidden>₺</span>
         </label>
         <FieldError id="amount-error" message={errorText("amount")} />
         {subscription ? (
-          <p className="text-label-sm text-text-secondary">{t("subscriptionHint")}</p>
+          <p className="text-caption text-text-secondary">{t("subscriptionHint")}</p>
         ) : (
           <>
-            <div className="w-full border-t border-border-default" />
+            <div className="w-full border-t border-border-subtle" />
             <div role="group" aria-label={t("quickAmounts")} className="flex flex-wrap justify-center gap-6">
               {QUICK_AMOUNTS.map((minor) => (
                 <button
@@ -276,7 +271,7 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
                   type="button"
                   onClick={() => addQuickAmount(minor)}
                   aria-label={t("addAmount", { amount: formatMoneyShort(minor, locale) })}
-                  className="touch-target inline-flex h-32 items-center rounded-full border border-border-default bg-surface-card px-8 py-4 text-label-sm text-text-secondary transition-colors hover:border-border-strong"
+                  className={chipSelectClasses(false)}
                 >
                   {income ? "+" : "−"} {formatMoneyShort(minor, locale)}
                 </button>
@@ -299,7 +294,7 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
           onChange={(event) => set("title", event.target.value)}
           aria-invalid={invalid("title")}
           aria-describedby={describedBy("title")}
-          className={cn(inputClass, "border-border-default")}
+          className={inputClass}
         />
         <FieldError id="title-error" message={errorText("title")} />
       </div>
@@ -336,10 +331,10 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
       </div>
 
       <fieldset className="flex flex-col gap-8">
-        <legend className="mb-8 text-label-md text-text-primary">{create ? t("whenRepeat") : t("when")}</legend>
+        <legend className="mb-8 text-body-strong text-text-primary">{create ? t("whenRepeat") : t("when")}</legend>
         <div className="grid grid-cols-2 gap-12">
           <div className="flex flex-col gap-4">
-            <p id="date-label" className="text-body-sm text-text-secondary">
+            <p id="date-label" className="text-caption text-text-secondary">
               {t("date")}
             </p>
             <DatePicker
@@ -355,7 +350,7 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
             <FieldError id="date-error" message={errorText("date")} />
           </div>
           <div className="flex flex-col gap-4">
-            <p id="time-label" className="text-body-sm text-text-secondary">
+            <p id="time-label" className="text-caption text-text-secondary">
               {t("time")}
             </p>
             <TimePicker
@@ -373,17 +368,17 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
         </div>
 
         {create && (
-          <div className="flex flex-col gap-12 rounded-lg border border-border-default bg-surface-card p-12">
+          <div className="flex flex-col gap-12 rounded-lg bg-surface-card shadow-elev-1 p-12">
             <div className="flex items-center justify-between gap-12">
               <div className="flex min-w-0 items-center gap-12">
-                <span aria-hidden className="inline-flex size-40 shrink-0 items-center justify-center rounded-md bg-category-slate text-text-secondary">
+                <span aria-hidden className="inline-flex size-40 shrink-0 items-center justify-center rounded-md bg-category-slate text-category-fg-slate">
                   <Icon icon="repeat" />
                 </span>
                 <div className="flex min-w-0 flex-col gap-2">
-                  <p id="repeat-label" className="text-label-md text-text-primary">
+                  <p id="repeat-label" className="text-body-strong text-text-primary">
                     {t("repeatTitle")}
                   </p>
-                  <p id="repeat-hint" className="text-body-sm text-text-secondary">
+                  <p id="repeat-hint" className="text-caption text-text-secondary">
                     {income ? t("repeatHintIncome") : t("repeatHintExpense")}
                   </p>
                 </div>
@@ -395,7 +390,7 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
                 <div className="border-t border-border-default" />
                 <div className="grid grid-cols-2 gap-8">
                   <div className="flex min-w-0 flex-col gap-4">
-                    <p id="frequency-label" className="text-label-sm text-text-secondary">
+                    <p id="frequency-label" className="text-caption-strong text-text-secondary">
                       {t("frequency")}
                     </p>
                     <SelectPicker
@@ -413,7 +408,7 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
                     <FieldError id="frequency-error" message={errorText("frequency")} />
                   </div>
                   <div className="flex min-w-0 flex-col gap-4">
-                    <p id="reminder-label" className="text-label-sm text-text-secondary">
+                    <p id="reminder-label" className="text-caption-strong text-text-secondary">
                       {t("reminder")}
                     </p>
                     <SelectPicker
@@ -437,7 +432,7 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
                 {/* Kapalıyken de değerler gönderilir (doğrulama şeması her zaman bekler); kayıtta kullanılmaz. */}
                 <input type="hidden" name="frequency" value={values.frequency} />
                 <input type="hidden" name="reminder" value={values.reminder} />
-                {subscription && <p className="text-body-sm text-text-secondary">{t("oneTimeHint")}</p>}
+                {subscription && <p className="text-caption text-text-secondary">{t("oneTimeHint")}</p>}
               </>
             )}
           </div>
@@ -453,7 +448,7 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
       <div className="flex flex-col gap-8">
         <div className="flex items-baseline justify-between gap-8">
           <FieldLabel htmlFor="note">{t("note")}</FieldLabel>
-          <span className="text-body-sm text-text-secondary" aria-live="polite">
+          <span className="text-caption text-text-secondary" aria-live="polite">
             {t("noteCount", { count: values.note.length, max: NOTE_MAX_LENGTH })}
           </span>
         </div>
@@ -467,7 +462,7 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
           onChange={(event) => set("note", event.target.value)}
           aria-invalid={invalid("note")}
           aria-describedby={describedBy("note")}
-          className={cn(inputClass, "h-auto resize-y border-border-default py-12")}
+          className={textareaClass}
         />
         <FieldError id="note-error" message={errorText("note")} />
       </div>

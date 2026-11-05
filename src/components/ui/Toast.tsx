@@ -50,9 +50,9 @@ export function ToastProvider({ dismissLabel, children }: { dismissLabel: string
         {toast && (
           <div
             key={toast.key}
-            className="pointer-events-auto flex w-full max-w-[480px] animate-toast-enter items-center gap-12 rounded-md bg-surface-inverse py-12 ps-16 pe-8 text-body-md text-text-inverse shadow-floating tablet:w-auto tablet:min-w-[320px]"
+            className="pointer-events-auto flex w-full max-w-[480px] animate-toast-enter items-center gap-12 rounded-xl bg-surface-inverse py-12 ps-16 pe-8 text-body text-text-inverse shadow-elev-2 tablet:w-auto tablet:min-w-[320px]"
           >
-            <span aria-hidden className={toast.tone === "error" ? "text-status-danger" : "text-chart-income"}>
+            <span aria-hidden className={toast.tone === "error" ? "text-status-danger" : "text-brand-accent"}>
               <Icon icon={toast.tone === "error" ? "info" : "paid"} size="sm" />
             </span>
             <p className="min-w-0 flex-1">{toast.message}</p>
@@ -63,7 +63,7 @@ export function ToastProvider({ dismissLabel, children }: { dismissLabel: string
                   toast.action?.onAction();
                   setToast(null);
                 }}
-                className="touch-target h-32 shrink-0 rounded-sm px-8 text-label-md text-brand-accent hover:underline"
+                className="touch-target h-32 shrink-0 rounded-full px-8 text-body-strong text-brand-accent hover:underline"
               >
                 {toast.action.label}
               </button>
@@ -72,7 +72,7 @@ export function ToastProvider({ dismissLabel, children }: { dismissLabel: string
               type="button"
               aria-label={dismissLabel}
               onClick={() => setToast(null)}
-              className="touch-target inline-flex size-32 shrink-0 items-center justify-center rounded-sm text-text-inverse-secondary hover:text-text-inverse"
+              className="touch-target inline-flex size-32 shrink-0 items-center justify-center rounded-full text-text-inverse-secondary hover:text-text-inverse"
             >
               <Icon icon="close" size="sm" />
             </button>

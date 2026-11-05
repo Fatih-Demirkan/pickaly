@@ -6,6 +6,7 @@ import { ActionFooter } from "@/components/layout/ActionFooter";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { amountBoxClass, amountCardClass, amountChipClass, amountInputClass, fieldBoxClass } from "@/components/ui/field";
 import { AccountPicker, type AccountOption } from "@/features/accounts/components/AccountPicker";
 import { isLocale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
@@ -71,13 +72,13 @@ export function MovementForm({ accountId, unit, balanceLabel, initialDirection, 
       <input type="hidden" name="direction" value={direction} />
 
       {state.formError && (
-        <p role="alert" className="rounded-md bg-status-danger-subtle p-12 text-body-md text-text-danger">
+        <p role="alert" className="rounded-lg bg-status-danger-subtle p-16 text-body text-text-on-danger">
           {t(`errors.${state.formError}`)}
         </p>
       )}
 
       <div className="flex flex-col gap-8">
-        <p className="text-label-md text-text-primary">{t("direction")}</p>
+        <p className="text-body-strong text-text-primary">{t("direction")}</p>
         <SegmentedControl
           label={t("direction")}
           fullWidth
@@ -91,12 +92,9 @@ export function MovementForm({ accountId, unit, balanceLabel, initialDirection, 
       </div>
 
       <div
-        className={cn(
-          "flex flex-col items-center gap-12 rounded-2xl border border-border-default bg-linear-to-b from-surface-card p-16 shadow-floating",
-          direction === "in" ? "to-category-green" : "to-category-red",
-        )}
+        className={amountCardClass}
       >
-        <span className={cn("inline-flex h-24 items-center gap-4 rounded-full px-8 text-label-sm", direction === "in" ? "bg-category-green text-text-success" : "bg-category-red text-text-danger")}>
+        <span className={cn(amountChipClass, direction === "in" ? "bg-category-green text-category-fg-green" : "bg-category-red text-category-fg-red")}>
           <span aria-hidden className={cn("size-6 rounded-full", direction === "in" ? "bg-status-success" : "bg-status-danger")} />
           {direction === "in" ? t("inChip") : t("outChip")}
         </span>
@@ -106,9 +104,8 @@ export function MovementForm({ accountId, unit, balanceLabel, initialDirection, 
         <label
           htmlFor="amount"
           className={cn(
-            "flex h-54 max-w-full min-w-222 cursor-text items-center justify-center gap-4 rounded-full border bg-surface-card px-16 py-4 text-data-lg shadow-floating focus-within:outline-2 focus-within:outline-border-focus",
+            amountBoxClass(Boolean(errors.amount)),
             direction === "in" ? "text-text-success" : "text-text-danger",
-            errors.amount ? "border-border-error" : "border-border-default",
           )}
         >
           <span aria-hidden>{direction === "in" ? "+" : "−"}</span>
@@ -129,15 +126,15 @@ export function MovementForm({ accountId, unit, balanceLabel, initialDirection, 
             }}
             aria-invalid={errors.amount ? true : undefined}
             aria-describedby={errors.amount ? "amount-error" : "amount-balance"}
-            className="min-w-[4ch] bg-transparent text-center outline-none field-sizing-content placeholder:text-text-tertiary"
+            className={amountInputClass}
           />
           <span aria-hidden>{money ? "₺" : tUnit(unit)}</span>
         </label>
-        <p id="amount-balance" className="text-label-sm text-text-secondary">
+        <p id="amount-balance" className="text-caption-strong text-text-secondary">
           {t("balance", { amount: balanceLabel })}
         </p>
         {errors.amount && (
-          <p id="amount-error" className="text-body-sm text-text-danger">
+          <p id="amount-error" className="text-caption text-text-danger">
             {errorText("amount")}
           </p>
         )}
@@ -145,15 +142,12 @@ export function MovementForm({ accountId, unit, balanceLabel, initialDirection, 
 
       {!money && (
         <div className="flex flex-col gap-8">
-          <label htmlFor="transfer" className="text-label-md text-text-primary">
+          <label htmlFor="transfer" className="text-body-strong text-text-primary">
             {t("transfer")}
           </label>
           <label
             htmlFor="transfer"
-            className={cn(
-              "flex h-46 cursor-text items-center gap-8 rounded-md border bg-surface-card px-16 text-body-md text-text-primary focus-within:outline-2 focus-within:outline-border-focus",
-              errors.transfer ? "border-border-error" : "border-border-default",
-            )}
+            className={fieldBoxClass(Boolean(errors.transfer))}
           >
             <input
               id="transfer"
@@ -168,17 +162,17 @@ export function MovementForm({ accountId, unit, balanceLabel, initialDirection, 
               }}
               aria-invalid={errors.transfer ? true : undefined}
               aria-describedby={errors.transfer ? "transfer-error" : "transfer-hint"}
-              className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-tertiary"
+              className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-secondary"
             />
             <span aria-hidden className="text-text-secondary">
               ₺
             </span>
           </label>
-          <p id="transfer-hint" className="text-body-sm text-text-secondary">
+          <p id="transfer-hint" className="text-caption text-text-secondary">
             {t("transferHint")}
           </p>
           {errors.transfer && (
-            <p id="transfer-error" className="text-body-sm text-text-danger">
+            <p id="transfer-error" className="text-caption text-text-danger">
               {errorText("transfer")}
             </p>
           )}
@@ -186,7 +180,7 @@ export function MovementForm({ accountId, unit, balanceLabel, initialDirection, 
       )}
 
       <div className="flex flex-col gap-8">
-        <p id="bankAccountId-label" className="text-label-md text-text-primary">
+        <p id="bankAccountId-label" className="text-body-strong text-text-primary">
           {direction === "in" ? t("sourceAccount") : t("targetAccount")}
         </p>
         <AccountPicker
@@ -203,19 +197,19 @@ export function MovementForm({ accountId, unit, balanceLabel, initialDirection, 
           describedBy={errors.bankAccountId ? "bankAccountId-error" : negative ? "negative-warning" : undefined}
         />
         {negative && (
-          <p id="negative-warning" role="status" className="text-body-sm text-text-warning">
+          <p id="negative-warning" role="status" className="text-caption text-text-warning">
             {t("negativeWarning")}
           </p>
         )}
         {errors.bankAccountId && (
-          <p id="bankAccountId-error" className="text-body-sm text-text-danger">
+          <p id="bankAccountId-error" className="text-caption text-text-danger">
             {errorText("bankAccountId")}
           </p>
         )}
       </div>
 
       <div className="flex flex-col gap-4">
-        <p id="date-label" className="text-label-md text-text-primary">
+        <p id="date-label" className="text-body-strong text-text-primary">
           {t("date")}
         </p>
         <DatePicker id="date" name="date" value={date} onChange={setDate} labelledBy="date-label" title={t("chooseDate")} invalid={errors.date ? true : undefined} />

@@ -20,7 +20,7 @@ export default async function ResetPasswordPage({ searchParams }: PageProps<"/si
   return (
     <>
       <div className="flex flex-col gap-8">
-        <p className="text-label-sm text-text-secondary">{t("step", { step, total: 3 })}</p>
+        <p className="text-caption-strong text-text-secondary">{t("step", { step, total: 3 })}</p>
         <AuthHeading
           title={step === 3 ? t("newTitle") : t("title")}
           subtitle={

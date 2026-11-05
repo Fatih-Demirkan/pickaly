@@ -8,7 +8,7 @@ import { IconButton } from "./IconButton";
 
 // Seçici kabuğu (RESPONSIVE §4.5.1 [Karar #6]):
 //   < 768 : bottom sheet — altta, üst köşeler radius-2xl, karartmalı, başlık Heading/H4, alt güvenli alan payı.
-//   ≥ 768 : alanın altına bağlı popover (yer yoksa üstüne açılır) — radius-lg, border-default, shadow-overlay.
+//   ≥ 768 : alanın altına bağlı popover (yer yoksa üstüne açılır) — radius-lg, border-default, shadow-elev-3.
 // Kapatma: Esc, dışarı tıklama, karartma, seçim. Kapanınca odak tetikleyiciye döner.
 // [Eksik] Açık hâller Pages'ta tasarlanmadı; ölçüler RESPONSIVE §4.5.1 ve DESIGN token'larından.
 
@@ -82,10 +82,10 @@ export function PickerPanel({ open, onClose, title, titleId, containerRef, trigg
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
-          className="absolute inset-x-0 bottom-0 flex max-h-[85dvh] animate-sheet-enter flex-col rounded-t-2xl bg-surface-card pb-[calc(16px+env(safe-area-inset-bottom))] shadow-overlay"
+          className="absolute inset-x-0 bottom-0 flex max-h-[85dvh] animate-sheet-enter flex-col rounded-t-xl bg-surface-card pb-[calc(16px+env(safe-area-inset-bottom))] shadow-elev-3"
         >
-          <div className="flex h-56 shrink-0 items-center justify-between gap-8 border-b border-border-default ps-16 pe-8">
-            <h2 id={titleId} className="text-heading-h4 text-text-primary">
+          <div className="flex h-56 shrink-0 items-center justify-between gap-8 border-b border-border-subtle ps-16 pe-8">
+            <h2 id={titleId} className="text-title-sm text-text-primary">
               {title}
             </h2>
             <IconButton icon="close" label={t("close")} onClick={close} />
@@ -104,7 +104,7 @@ export function PickerPanel({ open, onClose, title, titleId, containerRef, trigg
       onKeyDown={onKeyDown}
       onBlur={onBlur}
       className={cn(
-        "absolute z-(--z-modal) animate-pop-enter rounded-lg border border-border-default bg-surface-card p-8 shadow-overlay",
+        "absolute z-(--z-modal) animate-pop-enter rounded-lg bg-surface-card shadow-elev-1 p-8 shadow-elev-3",
         placement === "below" ? "top-full mt-8" : "bottom-full mb-8",
         align === "stretch" && "inset-x-0",
         align === "start" && "start-0",

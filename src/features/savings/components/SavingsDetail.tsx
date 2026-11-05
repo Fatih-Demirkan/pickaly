@@ -23,7 +23,7 @@ import { kindChip, ProgressBar } from "./savingsStyle";
 // Pages → Birikim Hesabı Detayı (129:6652, PRD FR-SAV-004/008/009/011), RESPONSIVE §3.4.3.
 //   Durum kartı: tür çipi • "Aktif Birikim" (Yeşil); ad Label/Small + bakiye Data/Large; ayırıcı;
 //     "Hedef: …" Label/Small + "(Kalan: …)"; ilerleme çubuğu; "Tamamlanma Oranı" + "%75 Tamamlandı" Brand/Primary
-//   Bilgi notu: Category/Blue zemin, radius-md, padding 12, info ikonu, Body/Default
+//   Bilgi notu: inline alert (DESIGN_SYSTEM_PICKALY §5.9) — blue.100 zemin, radius-lg, padding 16, blue.600 info ikonu, body
 //   Hesap Parametreleri: liste kartı (satır padding 16, çizgi); Saklama Kurumu · Açılış Tarihi ("(4 ay önce)") ·
 //     Son İşlem Tarihi (+ tutar) · Aylık Hedef Katkı ("5.000,00 ₺ / Ay") · Kullanıcı Notu (Neutral/50 kutu)
 //   Geçmiş Hareketler: liste kartı; 32 px Category/Green kutuda arrow-down, başlık + tarih, sağda "+5.000,00 ₺"
@@ -37,8 +37,8 @@ const HISTORY_LIMIT = 5;
 
 function ParamRow({ label, children, stacked }: { label: string; children: ReactNode; stacked?: boolean }) {
   return (
-    <div className={cn("flex gap-16 border-b border-border-default p-16 last:border-b-0", stacked ? "flex-col gap-6" : "items-center justify-between")}>
-      <dt className="text-body-md text-text-secondary">{label}</dt>
+    <div className={cn("flex gap-16 border-b border-border-subtle p-16 last:border-b-0", stacked ? "flex-col gap-6" : "items-center justify-between")}>
+      <dt className="text-body text-text-secondary">{label}</dt>
       <dd className={cn("min-w-0", !stacked && "text-end")}>{children}</dd>
     </div>
   );
@@ -63,28 +63,28 @@ export async function SavingsDetail({ id }: { id: string }) {
   const closeTransfer = account.unit === "TRY" && account.balance > BigInt(0);
 
   const hero = (
-    <section className="order-1 flex flex-col gap-12 rounded-2xl border border-border-default bg-linear-to-b from-surface-card to-surface-muted p-16 shadow-floating laptop:order-none">
+    <section className="order-1 flex flex-col gap-12 rounded-lg bg-surface-card p-16 shadow-elev-1 laptop:order-none">
       <div className="flex flex-wrap items-center gap-4">
         <Chip variant={kindChip[account.kind]}>{t(`kindShort.${account.kind}`)}</Chip>
-        <span aria-hidden className="w-8 text-center text-body-sm text-text-secondary">
+        <span aria-hidden className="w-8 text-center text-caption text-text-secondary">
           •
         </span>
         <Chip variant="success">{completed ? t("detail.completed") : t("detail.active")}</Chip>
       </div>
       <div className="flex flex-col">
-        <h2 className="text-label-sm text-text-secondary">{account.name}</h2>
-        <p className="text-data-lg text-text-primary">{amount(account.balance)}</p>
+        <h2 className="text-caption-strong text-text-secondary">{account.name}</h2>
+        <p className="text-display-balance text-text-primary">{amount(account.balance)}</p>
       </div>
       {account.target !== null && percent !== null && (
         <>
-          <hr className="border-border-default" />
+          <hr className="border-border-subtle" />
           <div className="flex flex-col gap-8">
-            <p className="flex items-center justify-between gap-8 text-label-sm">
+            <p className="flex items-center justify-between gap-8 text-caption-strong">
               <span className="text-text-primary">{t("detail.target", { amount: amount(account.target) })}</span>
               {!completed && <span className="text-text-secondary">{t("detail.remaining", { amount: amount(account.target - account.balance) })}</span>}
             </p>
             <ProgressBar percent={percent} label={t("detail.progressLabel")} />
-            <p className="flex items-center justify-between gap-8 text-label-sm">
+            <p className="flex items-center justify-between gap-8 text-caption-strong">
               <span className="text-text-secondary">{t("detail.progress")}</span>
               <span className="text-text-brand">{t("detail.progressValue", { percent })}</span>
             </p>
@@ -95,8 +95,8 @@ export async function SavingsDetail({ id }: { id: string }) {
   );
 
   const info = (
-    <p className="order-2 flex gap-8 rounded-md bg-category-blue p-12 text-body-md text-text-primary laptop:order-none">
-      <span className="mt-2 shrink-0 text-text-on-task">
+    <p className="order-2 flex gap-8 rounded-lg bg-status-info-subtle p-16 text-body text-text-primary laptop:order-none">
+      <span className="mt-2 shrink-0 text-text-info">
         <Icon icon="info" />
       </span>
       {t("detail.info")}
@@ -105,36 +105,36 @@ export async function SavingsDetail({ id }: { id: string }) {
 
   const parameters = (
     <section aria-labelledby="savings-parameters" className="order-3 flex flex-col gap-12 laptop:order-none">
-      <h3 id="savings-parameters" className="text-heading-h4 text-text-primary">
+      <h3 id="savings-parameters" className="text-title-sm text-text-primary">
         {t("detail.parameters")}
       </h3>
-      <dl className="overflow-hidden rounded-lg border border-border-default bg-surface-card">
+      <dl className="overflow-hidden rounded-md bg-surface-card shadow-elev-1">
         {account.institution && (
           <ParamRow label={t("detail.institution")}>
-            <p className="text-label-md text-text-primary">{account.institution}</p>
+            <p className="text-body-strong text-text-primary">{account.institution}</p>
           </ParamRow>
         )}
         <ParamRow label={t("detail.openedAt")}>
-          <p className="text-label-md text-text-primary">{formatDateLong(account.openedAt, locale)}</p>
-          <p className="text-body-sm text-text-secondary">{openedAgo}</p>
+          <p className="text-body-strong text-text-primary">{formatDateLong(account.openedAt, locale)}</p>
+          <p className="text-caption text-text-secondary">{openedAgo}</p>
         </ParamRow>
         {account.lastMovement && (
           <ParamRow label={t("detail.lastMovement")}>
-            <p className="text-label-md text-text-primary">{formatDateLong(toDateKey(new Date(account.lastMovement.occurredAt)), locale)}</p>
-            <p className="text-body-sm text-text-secondary">{amount(signedMovement(account.lastMovement), "always")}</p>
+            <p className="text-body-strong text-text-primary">{formatDateLong(toDateKey(new Date(account.lastMovement.occurredAt)), locale)}</p>
+            <p className="text-caption text-text-secondary">{amount(signedMovement(account.lastMovement), "always")}</p>
           </ParamRow>
         )}
         {account.contribution && (
           <ParamRow label={t("detail.contribution")}>
-            <p className="text-label-md text-text-primary">
+            <p className="text-body-strong text-text-primary">
               {t("detail.contributionValue", { amount: amount(account.contribution.amount), frequency: t(`frequencyUnit.${account.contribution.frequency}`) })}
             </p>
-            <p className="text-body-sm text-text-secondary">{tRecurrence(`frequency.${account.contribution.frequency}`)}</p>
+            <p className="text-caption text-text-secondary">{tRecurrence(`frequency.${account.contribution.frequency}`)}</p>
           </ParamRow>
         )}
         {account.note && (
           <ParamRow label={t("detail.note")} stacked>
-            <p className="rounded-sm bg-surface-page p-8 text-body-md text-text-primary">{account.note}</p>
+            <p className="rounded-sm bg-surface-page p-12 text-body text-text-primary">{account.note}</p>
           </ParamRow>
         )}
       </dl>
@@ -143,31 +143,31 @@ export async function SavingsDetail({ id }: { id: string }) {
 
   const history = (
     <section aria-labelledby="savings-history" className="order-4 flex flex-col gap-12 laptop:order-none">
-      <h3 id="savings-history" className="text-heading-h4 text-text-primary">
+      <h3 id="savings-history" className="text-title-sm text-text-primary">
         {t("detail.history")}
       </h3>
       {movements.length === 0 ? (
-        <p className="text-body-md text-text-secondary">{t("detail.historyEmpty")}</p>
+        <p className="text-body text-text-secondary">{t("detail.historyEmpty")}</p>
       ) : (
-        <ul className="overflow-hidden rounded-lg border border-border-default bg-surface-card">
+        <ul className="overflow-hidden rounded-md bg-surface-card shadow-elev-1">
           {movements.slice(0, HISTORY_LIMIT).map((movement) => (
-            <li key={movement.id} className="flex items-center justify-between gap-12 p-16">
-              <span className="flex min-w-0 items-center gap-8">
+            <li key={movement.id} className="flex min-h-64 items-center justify-between gap-12 border-b border-border-subtle px-16 py-12 last:border-b-0">
+              <span className="flex min-w-0 items-center gap-12">
                 <span
                   aria-hidden
                   className={cn(
-                    "inline-flex size-32 shrink-0 items-center justify-center rounded-sm",
-                    movement.direction === "in" ? "bg-category-green text-status-success" : "bg-category-red text-status-danger",
+                    "inline-flex size-36 shrink-0 items-center justify-center rounded-sm",
+                    movement.direction === "in" ? "bg-category-green text-category-fg-green" : "bg-category-red text-category-fg-red",
                   )}
                 >
                   <Icon icon={movement.direction === "in" ? "trendDown" : "trendUp"} size="sm" />
                 </span>
                 <span className="flex min-w-0 flex-col gap-2">
-                  <span className="truncate text-label-md text-text-primary">{movementTitle(movement)}</span>
-                  <span className="text-body-sm text-text-secondary">{formatDateLong(toDateKey(new Date(movement.occurredAt)), locale)}</span>
+                  <span className="truncate text-body-strong text-text-primary">{movementTitle(movement)}</span>
+                  <span className="text-caption text-text-secondary">{formatDateLong(toDateKey(new Date(movement.occurredAt)), locale)}</span>
                 </span>
               </span>
-              <span className="shrink-0 text-label-md text-text-primary">{amount(signedMovement(movement), "always")}</span>
+              <span className="shrink-0 text-body-strong text-text-primary">{amount(signedMovement(movement), "always")}</span>
             </li>
           ))}
         </ul>
@@ -206,11 +206,11 @@ export async function SavingsDetail({ id }: { id: string }) {
             <Link
               href="/birikimler"
               aria-label={t("detail.back")}
-              className="touch-target -ms-8 inline-flex size-40 shrink-0 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-action-tertiary-hover"
+              className="touch-target inline-flex size-36 shrink-0 items-center justify-center rounded-full border border-border-subtle bg-surface-card text-text-primary transition-colors hover:border-border-strong hover:bg-action-tertiary-hover"
             >
               <Icon icon="back" />
             </Link>
-            <h1 className="truncate text-heading-h2 text-text-primary">{t("detail.title")}</h1>
+            <h1 className="truncate text-title-md text-text-primary">{t("detail.title")}</h1>
           </div>
           <div className="hidden gap-8 laptop:flex">
             <ButtonLink href={editHref} scroll={false} variant="secondary" leadingIcon="edit">
