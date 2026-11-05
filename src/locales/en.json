@@ -296,6 +296,13 @@
       "task": "Task",
       "payment": "Payment"
     },
+    "transactions": {
+      "title": "Transactions",
+      "all": "All",
+      "empty": "No transactions yet.",
+      "income": "Income",
+      "expense": "Expense"
+    },
     "agenda": {
       "title": "Today's Flow",
       "all": "All ({count})",

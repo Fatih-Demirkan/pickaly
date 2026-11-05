@@ -296,6 +296,13 @@
       "task": "Görev",
       "payment": "Ödeme"
     },
+    "transactions": {
+      "title": "İşlemler",
+      "all": "Tümü",
+      "empty": "Henüz işlem yok.",
+      "income": "Gelir",
+      "expense": "Gider"
+    },
     "agenda": {
       "title": "Bugünün Akışı",
       "all": "Tümü ({count})",
