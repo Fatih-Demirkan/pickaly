@@ -6,7 +6,7 @@ import { FocusHeader } from "@/components/layout/FocusHeader";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Drawer } from "@/components/ui/Drawer";
 import { Icon } from "@/components/ui/Icon";
-import { transactionRepository } from "@/features/transactions/server";
+import { getAccountBalances, transactionRepository } from "@/features/transactions/server";
 import { isLocale } from "@/i18n/config";
 import { formatMoneyInput } from "@/lib/money";
 import { removeAccountAction } from "../actions";
@@ -24,16 +24,18 @@ export async function AccountFormDrawer(props: AccountFormDrawerProps) {
   const [t, rawLocale] = await Promise.all([getTranslations("accounts"), getLocale()]);
   const locale = isLocale(rawLocale) ? rawLocale : "tr";
 
-  let initialValues: AccountFormValues = { name: "", detail: "", openingBalance: "" };
+  let initialValues: AccountFormValues = { name: "", detail: "", balance: "" };
   let removal: { inUse: boolean; name: string } | null = null;
   let isDefault = false;
   if (props.mode === "edit") {
     const account = await getAccount(props.id);
     if (!account || account.archived) notFound();
+    // Alan hesabın şu anki bakiyesiyle (açılış + tüm hareketler) dolu gelir.
+    const current = (await getAccountBalances()).get(account.id) ?? account.openingBalanceMinor;
     initialValues = {
       name: account.name,
       detail: account.detail ?? "",
-      openingBalance: account.openingBalanceMinor > BigInt(0) ? formatMoneyInput(account.openingBalanceMinor, locale) : "",
+      balance: `${current < BigInt(0) ? "-" : ""}${formatMoneyInput(current, locale)}`,
     };
     isDefault = account.isDefault;
     if (!account.isDefault) {

@@ -1021,8 +1021,9 @@
       "namePlaceholder": "e.g. Main Bank",
       "detail": "Description (Optional)",
       "detailPlaceholder": "e.g. Debit Card (••4821)",
-      "openingBalance": "Opening Balance",
-      "openingBalanceHint": "The account's current balance. Leave empty for ₺0.",
+      "balance": "Current Balance",
+      "balanceHint": "The account's balance today. Leave empty for ₺0.",
+      "balanceEditHint": "The account's balance right now. Changing it doesn't affect your income and expense records. Type \"-\" first for a negative balance.",
       "remove": "Delete account",
       "defaultNote": "Main Account is the default account; it can't be deleted or archived.",
       "errors": {
@@ -1030,7 +1031,7 @@
         "nameLength": "Account name can be at most {max} characters.",
         "duplicate": "An account with this name already exists.",
         "detailLength": "Description can be at most {max} characters.",
-        "openingBalance": "Enter a valid amount.",
+        "balance": "Enter a valid amount.",
         "summary": "Couldn't save. Check the highlighted fields.",
         "notFound": "This account no longer exists."
       }

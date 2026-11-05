@@ -48,8 +48,8 @@ export async function Dashboard() {
   const previousMonth = summarize(previousTransactions);
   const totalMinor = [...balances.values()].reduce((sum, balance) => sum + balance, BigInt(0));
   const steps = {
-    // Hesap adımı: ikinci bir hesap eklendi ya da bir hesabın açılış bakiyesi girildi.
-    account: accounts.length > 1 || accounts.some((account) => account.openingBalanceMinor > BigInt(0)),
+    // Hesap adımı: ikinci bir hesap eklendi ya da bir hesabın bakiyesi girildi.
+    account: accounts.length > 1 || accounts.some((account) => account.openingBalanceMinor !== BigInt(0)),
     transaction: allTransactions.length > 0,
     task: allItems.length > 0,
     savings: savings.length > 0,

@@ -1021,8 +1021,9 @@
       "namePlaceholder": "Örn. İş Bankası",
       "detail": "Açıklama (İsteğe Bağlı)",
       "detailPlaceholder": "Örn. Banka Kartı (••4821)",
-      "openingBalance": "Açılış Bakiyesi",
-      "openingBalanceHint": "Hesabın bugünkü bakiyesi. Boş bırakılırsa 0 ₺.",
+      "balance": "Güncel Bakiye",
+      "balanceHint": "Hesabın bugünkü bakiyesi. Boş bırakılırsa 0 ₺.",
+      "balanceEditHint": "Hesabın şu anki bakiyesi. Değiştirirsen gelir ve gider kayıtların etkilenmez. Eksi bakiye için başına \"-\" yaz.",
       "remove": "Hesabı sil",
       "defaultNote": "Ana Hesap varsayılan hesaptır; silinemez veya arşivlenemez.",
       "errors": {
@@ -1030,7 +1031,7 @@
         "nameLength": "Hesap adı en fazla {max} karakter olabilir.",
         "duplicate": "Bu adda bir hesap zaten var.",
         "detailLength": "Açıklama en fazla {max} karakter olabilir.",
-        "openingBalance": "Geçerli bir tutar girin.",
+        "balance": "Geçerli bir tutar girin.",
         "summary": "Kaydedilemedi. İşaretli alanları kontrol edin.",
         "notFound": "Bu hesap artık mevcut değil."
       }

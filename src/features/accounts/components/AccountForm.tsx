@@ -12,9 +12,17 @@ import { ACCOUNT_DETAIL_MAX_LENGTH, ACCOUNT_NAME_MAX_LENGTH } from "../domain/ty
 import type { AccountFormField, AccountFormState } from "../schemas";
 
 // Hesap Ekle / Düzenle (ürün sahibi isteği 2026-11-05): Ad (zorunlu) · Açıklama (isteğe bağlı, ör. "Banka Kartı ••4821") ·
-// Açılış Bakiyesi (boş = 0 ₺). Form alanları DESIGN_SYSTEM_PICKALY §5.7 (field.ts).
+// Güncel Bakiye (boş = 0 ₺; başında "-" ile eksi bakiye). Düzenlemede hesabın şu anki bakiyesiyle dolu gelir; kullanıcı
+// doğrudan düzeltir, fark açılış bakiyesine yansır (gelir / gider kayıtları değişmez). Form alanları DESIGN_SYSTEM_PICKALY §5.7.
 
-export type AccountFormValues = { name: string; detail: string; openingBalance: string };
+export type AccountFormValues = { name: string; detail: string; balance: string };
+
+/** Tutar yazımı; başta "-" varsa korunur (eksi bakiye). */
+function formatSignedTyping(raw: string, locale: "tr" | "en") {
+  const negative = raw.trim().startsWith("-");
+  const formatted = formatMoneyTyping(raw.replace(/-/g, ""), locale);
+  return negative ? `-${formatted}` : formatted;
+}
 
 type AccountFormProps = { accountId?: string; initialValues: AccountFormValues; cancelHref: string };
 
@@ -97,36 +105,37 @@ export function AccountForm({ accountId, initialValues, cancelHref }: AccountFor
       </div>
 
       <div className="flex flex-col gap-8">
-        <label htmlFor="openingBalance" className="text-body-strong text-text-primary">
-          {t("openingBalance")}
+        <label htmlFor="balance" className="text-body-strong text-text-primary">
+          {t("balance")}
         </label>
-        <label htmlFor="openingBalance" className={fieldBoxClass(Boolean(errors.openingBalance))}>
+        <label htmlFor="balance" className={fieldBoxClass(Boolean(errors.balance))}>
           <input
-            id="openingBalance"
-            name="openingBalance"
+            id="balance"
+            name="balance"
             inputMode="decimal"
             autoComplete="off"
             placeholder="0"
-            value={values.openingBalance}
-            onChange={(event) => set("openingBalance", formatMoneyTyping(event.target.value, locale))}
+            value={values.balance}
+            onChange={(event) => set("balance", formatSignedTyping(event.target.value, locale))}
             onBlur={() => {
-              const minor = parseMoneyInput(values.openingBalance, locale);
-              if (minor !== null) set("openingBalance", formatMoneyInput(minor, locale));
+              const negative = values.balance.trim().startsWith("-");
+              const minor = parseMoneyInput(values.balance.replace(/-/g, ""), locale);
+              if (minor !== null) set("balance", `${negative ? "-" : ""}${formatMoneyInput(minor, locale)}`);
             }}
-            aria-invalid={errors.openingBalance ? true : undefined}
-            aria-describedby={describedBy("openingBalance", "openingBalance-hint")}
+            aria-invalid={errors.balance ? true : undefined}
+            aria-describedby={describedBy("balance", "balance-hint")}
             className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-secondary"
           />
           <span aria-hidden className="text-text-secondary">
             ₺
           </span>
         </label>
-        <p id="openingBalance-hint" className="text-caption text-text-secondary">
-          {t("openingBalanceHint")}
+        <p id="balance-hint" className="text-caption text-text-secondary">
+          {t(accountId ? "balanceEditHint" : "balanceHint")}
         </p>
-        {errors.openingBalance && (
-          <p id="openingBalance-error" className="text-caption text-text-danger">
-            {errorText("openingBalance")}
+        {errors.balance && (
+          <p id="balance-error" className="text-caption text-text-danger">
+            {errorText("balance")}
           </p>
         )}
       </div>

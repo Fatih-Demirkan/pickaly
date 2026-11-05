@@ -3,7 +3,7 @@
 import { getLocale } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { transactionRepository } from "@/features/transactions/server";
+import { getAccountBalances, transactionRepository } from "@/features/transactions/server";
 import { intlLocale, isLocale } from "@/i18n/config";
 import { localDateTimeToIso } from "@/lib/dates";
 import { setFlash } from "@/lib/flash";
@@ -42,7 +42,7 @@ export async function saveAccount(id: string | null, _previous: AccountFormState
   const parsed = accountFormSchema.safeParse({
     name: formData.get("name") ?? "",
     detail: formData.get("detail") ?? "",
-    openingBalance: formData.get("openingBalance") ?? "",
+    balance: formData.get("balance") ?? "",
   });
   const errors: Partial<Record<AccountFormField, AccountFormErrorKey>> = {};
   if (!parsed.success) {
@@ -51,14 +51,26 @@ export async function saveAccount(id: string | null, _previous: AccountFormState
   }
   const data = parsed.data;
   const locale = await currentLocale();
-  // Açılış bakiyesi boş veya 0 olabilir; aksi hâlde pozitif tutar.
-  const opening = data.openingBalance === "" || /^0+([.,]0+)?$/.test(data.openingBalance.replace(/[\s₺]/g, "")) ? ZERO : parseMoneyInput(data.openingBalance, locale);
-  if (opening === null) errors.openingBalance = "openingBalance";
+  // Güncel bakiye: boş veya 0 olabilir; başta "-" varsa eksi bakiye.
+  const raw = data.balance.replace(/[\s₺]/g, "");
+  const negative = raw.startsWith("-");
+  const digits = negative ? raw.slice(1) : raw;
+  const magnitude = digits === "" || /^0+([.,]0+)?$/.test(digits) ? ZERO : parseMoneyInput(digits, locale);
+  if (magnitude === null) errors.balance = "balance";
+  const desired = magnitude === null ? null : negative ? -magnitude : magnitude;
   // Ad, aktif hesaplar arasında benzersiz (büyük / küçük harf duyarsız).
   const tag = intlLocale[locale];
   const duplicate = (await listAccounts()).some((account) => account.id !== id && account.name.toLocaleLowerCase(tag) === data.name.toLocaleLowerCase(tag));
   if (duplicate) errors.name = "duplicate";
-  if (Object.keys(errors).length > 0 || opening === null) return { errors, formError: "summary" };
+  if (Object.keys(errors).length > 0 || desired === null) return { errors, formError: "summary" };
+
+  // Kullanıcı hesabın şu anki bakiyesini girer. Kayıtlı hareketlerin (gelir / gider, aktarımlar, birikim) etkisi
+  // korunur; fark açılış bakiyesine yazılır. Böylece raporlar ve geçmiş kayıtlar değişmez.
+  let opening = desired;
+  if (existing) {
+    const current = (await getAccountBalances()).get(existing.id) ?? existing.openingBalanceMinor;
+    opening = desired - (current - existing.openingBalanceMinor);
+  }
 
   const input = { name: data.name, detail: data.detail || null, openingBalanceMinor: opening };
   if (id) {

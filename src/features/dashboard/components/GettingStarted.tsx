@@ -15,7 +15,7 @@ export type GettingStartedSteps = { account: boolean; transaction: boolean; task
 type Step = { key: keyof GettingStartedSteps; icon: AppIconName; href: string };
 
 const STEPS: Step[] = [
-  { key: "account", icon: "paymentMethod", href: "/profil/hesaplar/yeni" },
+  { key: "account", icon: "paymentMethod", href: "/profil/hesaplar" },
   { key: "transaction", icon: "add", href: "/islemler/yeni?tur=gelir" },
   { key: "task", icon: "task", href: "/takvim/yeni?tur=gorev" },
   { key: "savings", icon: "savings", href: "/birikimler/yeni" },
