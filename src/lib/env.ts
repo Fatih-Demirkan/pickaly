@@ -9,10 +9,22 @@
 export const appEnvironments = ["local", "staging", "production"] as const;
 export type AppEnvironment = (typeof appEnvironments)[number];
 
-/** Uygulamanın çalıştığı ortam. Tanımlı değilse "local" kabul edilir. */
+/**
+ * Uygulama Vercel'de mi çalışıyor? Vercel her derleme ve çalışma anında VERCEL=1 verir (sunucu tarafı, gizli değil).
+ * Tek ortam kararı (ürün sahibi, 2026-11-05): yayındaki site yalnızca tek Supabase projesine bağlı çalışır;
+ * yerel örnek veri modu yalnızca bilgisayarda (next dev) kullanılır.
+ */
+export function isDeployed(): boolean {
+  return process.env.VERCEL === "1";
+}
+
+/**
+ * Uygulamanın çalıştığı ortam. NEXT_PUBLIC_APP_ENV tanımlıysa o; değilse Vercel'de "production", bilgisayarda "local".
+ */
 export function getAppEnvironment(): AppEnvironment {
   const value = process.env.NEXT_PUBLIC_APP_ENV;
-  return (appEnvironments as readonly string[]).includes(value ?? "") ? (value as AppEnvironment) : "local";
+  if ((appEnvironments as readonly string[]).includes(value ?? "")) return value as AppEnvironment;
+  return isDeployed() ? "production" : "local";
 }
 
 export type SupabasePublicEnv = {
@@ -30,8 +42,9 @@ export function isDemoDataEnabled(): boolean {
 }
 
 /**
- * Supabase bağlantı değerleri tanımlı mı? Tanımlı değilse uygulama yerel örnek veriyle, oturumsuz çalışır
+ * Supabase bağlantı değerleri tanımlı mı? Tanımlı değilse uygulama bilgisayarda yerel örnek veriyle, oturumsuz çalışır
  * (giriş zorunlu değildir, giriş ekranları kurulum notu gösterir). Değerler girildiğinde oturum zorunlu olur.
+ * Yayında (isDeployed) değerler eksikse örnek veriye düşülmez: proxy bakım sayfası döner (src/proxy.ts).
  */
 export function isSupabaseConfigured(): boolean {
   return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
