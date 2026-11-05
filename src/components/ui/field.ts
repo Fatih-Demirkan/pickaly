@@ -42,9 +42,10 @@ export function amountBoxClass(invalid: boolean) {
 export const amountInputClass = "min-w-[4ch] bg-transparent text-center outline-none focus-visible:outline-none field-sizing-content placeholder:text-text-tertiary";
 
 /** Kategori çipleri (Yeni İşlem, Görev): mobilde tek satır, yatay kaydırma (sayfa kenarına kadar taşar);
- *  tablet+ alt alta sarar (ürün sahibi kararı 2026-11-05). Dikey pay, odak halkası kırpılmasın diye. */
+ *  tablet+ alt alta sarar (ürün sahibi kararı 2026-11-05). Yalnızca yatay kayar: dikey taşma gizlenir (32 px çip +
+ *  6 + 6 pay = 44 px dokunma alanı ve odak halkası sığar), dikey kaydırma hareketi sayfaya geçer. */
 export const chipRowClass =
-  "-mx-16 -my-4 flex gap-8 overflow-x-auto overscroll-x-contain scrollbar-none px-16 py-4 *:shrink-0 tablet:mx-0 tablet:flex-wrap tablet:overflow-visible tablet:px-0";
+  "-mx-16 -my-6 flex touch-pan-x touch-pan-y gap-8 overflow-x-auto overflow-y-hidden overscroll-x-contain scrollbar-none px-16 py-6 *:shrink-0 tablet:mx-0 tablet:flex-wrap tablet:overflow-visible tablet:px-0";
 
 /** Tutar kartındaki tür çipi ("Gider Çıkışı" vb.): durum chip ölçüsü. */
 export const amountChipClass = "inline-flex h-24 items-center gap-4 rounded-full px-8 text-caption-strong";
