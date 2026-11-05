@@ -735,7 +735,7 @@ iOS ve Android uygulamaları **çok ileri bir aşamada Expo (React Native)** ile
 | K-5 | **Supabase production planı (Pro)** | Ücretli abonelik. Yedekleme ve duraklatmama için gerekli (D-23) | Geliştirme sırasında **yükseltilmez.** Yayın engelleri kapanmaya yaklaşınca ayrıca onay istenir |
 | K-6 | **Vercel planı** | Ücretsiz plan (Hobby) kişisel / ticari olmayan kullanım içindir. Ticari yayın ve ekip kullanımı için **ücretli plan (Pro)** gerekir (D-23) | Geliştirme ve preview için mevcut hesap. Ticari yayından önce Pro için ayrıca onay istenir |
 | K-7 | **E-posta gönderimi (SMTP)** | Supabase'in yerleşik e-posta servisi düşük gönderim limitli ve geliştirme amaçlıdır. Production'da OTP e-postaları (D-1) için harici bir e-posta servisi gerekir. Servis seçimine göre **ücretli** olabilir | Staging'de yerleşik servis. Production için servis seçimi ve maliyeti ayrıca onaya sunulur |
-| K-8 | **Alan adı (domain)** | Ücretli. Kayıt sonrası iadesi zor | Şimdilik `*.vercel.app` adresi. Alan adı ayrıca onaya sunulur |
+| K-8 | **Alan adı (domain)** | Ücretli. Kayıt sonrası iadesi zor | ✅ 2026-11-05: ürün sahibinin mevcut alan adı **`fatihdemirkan.com`** (GoDaddy) Vercel Production'a bağlandı; `www` → kök 308. DNS: A `@` 216.198.79.1, CNAME `www` Vercel. Supabase Site URL `https://fatihdemirkan.com`, yönlendirme listesine `/auth/callback` eklendi. `pickaly.vercel.app` çalışmaya devam eder (bazı ağlar `*.vercel.app`'i engelliyor) |
 | K-9 | **Sentry** (D-9) | Ücretsiz plan geliştirme için yeterli. Kullanım artınca ücretli olabilir | Ücretsiz plan. Yükseltme gerekirse onay istenir |
 
 > Fiyatlar ve plan limitleri sağlayıcılar tarafından değiştirilebilir. Her ücretli adımda o günkü koşullar kontrol edilip onaya sunulur.
