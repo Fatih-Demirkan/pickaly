@@ -110,6 +110,8 @@
   --color-border-strong: var(--pk-neutral-200);
   --color-border-control: var(--pk-neutral-500);
   --color-border-control-hover: var(--pk-black);
+  --color-border-input: var(--pk-neutral-100);
+  --color-border-input-hover: var(--pk-neutral-200);
   --color-border-focus: var(--pk-blue-600);
   --color-border-error: var(--pk-red-600);
   --color-border-success: var(--pk-green-700);

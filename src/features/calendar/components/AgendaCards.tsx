@@ -55,16 +55,17 @@ export async function AgendaItemCard({ item, category, href }: ItemCardProps) {
   const done = item.status === "done";
   const progress = subtaskProgress(item.subtasks);
   const sub = done ? t("card.finished") : item.durationMinutes ? t("card.minutes", { count: item.durationMinutes }) : item.time ? "" : t("card.allDay");
-  const metaText = item.locationName ?? item.description;
-  const metaIcon: AppIconName | ReturnType<typeof resolveCategoryIcon> = item.locationName ? "location" : category?.icon ? resolveCategoryIcon(category) : "description";
+  // Açıklama ve öncelik arayüzde yok (ürün sahibi kararı 2026-11-05). Alt satır: konum; konum yoksa kategori adı
+  // (eskiden açıklamanın gösterildiği yer, kategori ikonuyla) [Varsayım].
+  const metaText = item.locationName ?? category?.name;
+  const metaIcon: AppIconName | ReturnType<typeof resolveCategoryIcon> = item.locationName ? "location" : category?.icon ? resolveCategoryIcon(category) : "categories";
 
   return (
     <CardShell done={done} time={item.time ?? t("card.allDay")} sub={item.time ? sub : ""} subTone={done ? "text-text-success" : "text-text-secondary"}>
       <span className="flex items-center justify-between gap-8">
-        <Chip variant={kindChip[item.kind]}>{t(`kind.${item.kind}`)}</Chip>
+        <Chip variant={kindChip.task}>{t("kind.task")}</Chip>
         {/* Kartı kaplayan başlık bağlantısı DOM'da sonra geldiği için buton z-1 ile üstte tutulur. */}
         <span className="relative z-1 flex items-center gap-8">
-          {item.priority === "high" && !done && <span className="text-caption-strong text-text-danger">{t("card.highPriority")}</span>}
           <CompleteToggle id={item.id} title={item.title} done={done} />
         </span>
       </span>

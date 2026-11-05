@@ -207,7 +207,17 @@
       "control-hover": {
         "$type": "color",
         "$value": "{primitive.black}",
-        "$description": "Form kontrolü hover çerçevesi (DESIGN_SYSTEM_PICKALY §5.7)"
+        "$description": "Checkbox / radio / durum düğmesi hover çerçevesi (DESIGN_SYSTEM_PICKALY §5.7)"
+      },
+      "input": {
+        "$type": "color",
+        "$value": "{primitive.neutral.100}",
+        "$description": "Input, select tetikleyici, textarea, OTP çerçevesi: zemine yakın, hafif koyu (ürün sahibi kararı 2026-11-05; DS border-subtle). 3:1 değil, odak halkası ve hata çerçevesi belirgin kalır"
+      },
+      "input-hover": {
+        "$type": "color",
+        "$value": "{primitive.neutral.200}",
+        "$description": "Input hover çerçevesi (border.strong ile aynı ton)"
       },
       "focus": {
         "$type": "color",

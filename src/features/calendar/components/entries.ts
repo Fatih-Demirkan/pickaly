@@ -12,7 +12,7 @@ export type AgendaEntry =
 
 export function buildEntries(items: readonly CalendarItem[], payments: readonly { payment: Payment; series: RecurringPayment }[]): AgendaEntry[] {
   const entries: AgendaEntry[] = [
-    ...items.map((item) => ({ type: "item" as const, key: item.id, kind: item.kind, date: item.date, time: item.time, done: item.status === "done", title: item.title, item })),
+    ...items.map((item) => ({ type: "item" as const, key: item.id, kind: "task" as const, date: item.date, time: item.time, done: item.status === "done", title: item.title, item })),
     ...payments.map(({ payment, series }) => ({
       type: "payment" as const,
       key: payment.id,
@@ -36,7 +36,7 @@ export function groupByDate(entries: readonly AgendaEntry[]): Map<DateKey, Agend
 }
 
 export function countByKind(entries: readonly AgendaEntry[]): Record<AgendaKind, number> {
-  const counts: Record<AgendaKind, number> = { task: 0, appointment: 0, payment: 0 };
+  const counts: Record<AgendaKind, number> = { task: 0, payment: 0 };
   for (const entry of entries) counts[entry.kind] += 1;
   return counts;
 }

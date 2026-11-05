@@ -69,6 +69,8 @@
   html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    /* Çift dokunmayla yakınlaştırma kapalı (uygulama hissi, ürün sahibi isteği 2026-11-05). */
+    touch-action: manipulation;
     /* Kaydırma çubuğu için yer her zaman ayrılır: içerik uzayıp kısaldığında ya da drawer arka planı
        kilitlediğinde (overflow: hidden) sayfa yana kaymaz. Kaplamalı çubuklu sistemlerde etkisi yoktur. */
     scrollbar-gutter: stable;
@@ -123,6 +125,14 @@
     bottom: min(0px, calc((100% - var(--layout-touch-min)) / 2));
     left: min(0px, calc((100% - var(--layout-touch-min)) / 2));
     right: min(0px, calc((100% - var(--layout-touch-min)) / 2));
+  }
+}
+
+/* Yatay kaydırılan satırlar (ör. kategori çipleri): kaydırma çubuğu gizlenir, içerik parmakla/tekerle kayar. */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 

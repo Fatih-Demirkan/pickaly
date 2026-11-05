@@ -9,15 +9,12 @@ import { subtaskProgress } from "@/features/calendar/domain/types";
 import { cn } from "@/lib/cn";
 
 // Pages → Ana Sayfa "Bugünün Akışı" görev / randevu satırı (6:1082, 6:1126):
-//   DESIGN_SYSTEM_PICKALY §5.3: beyaz, radius-md, padding 12, elev-1; 36 px ikon karosu + body-strong başlık + tür çipi (Randevu yeşil /
-//   Görev mor), alt satır saat caption-strong • kategori caption text-secondary; sağda ✓.
+//   DESIGN_SYSTEM_PICKALY §5.3: beyaz, radius-md, padding 12, elev-1; 36 px ikon karosu + body-strong başlık + Görev çipi (mor), alt satır saat caption-strong • kategori caption text-secondary; sağda ✓.
 // Tamamlanan kayıt akışta soluk ve üstü çizili kalır (PRD BR-TSK-001, Q-19). Kartın tamamı Kayıt Detayı'nı açar.
-// Kategorisiz kayıtta ikon karosu Görev / Randevu çipinin rengiyle (violet / green) gösterilir.
+// Kategorisiz kayıtta ikon karosu Görev çipinin rengiyle (violet) gösterilir.
 
-const fallbackCategory = {
-  task: { icon: null, color: "violet", type: "calendar" },
-  appointment: { icon: null, color: "green", type: "calendar" },
-} as const;
+// [Karar ürün sahibi 2026-11-05] Görev / Randevu ayrımı arayüzde yok: her kayıt Görev çipi ve violet karo.
+const fallbackCategory = { icon: null, color: "violet", type: "calendar" } as const;
 
 export async function AgendaTaskCard({ item, category }: { item: CalendarItem; category: Category | undefined }) {
   const t = await getTranslations("calendar");
@@ -26,7 +23,7 @@ export async function AgendaTaskCard({ item, category }: { item: CalendarItem; c
 
   return (
     <li className={cn("relative flex items-center gap-12 rounded-md bg-surface-card p-12 shadow-elev-1 transition-colors hover:bg-action-tertiary-hover", done && "opacity-60")}>
-      <CategoryIcon category={category ?? fallbackCategory[item.kind]} />
+      <CategoryIcon category={category ?? fallbackCategory} />
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <span className="flex min-w-0 items-center gap-8">
           <Link
@@ -35,7 +32,7 @@ export async function AgendaTaskCard({ item, category }: { item: CalendarItem; c
           >
             {item.title}
           </Link>
-          <Chip variant={item.kind === "appointment" ? "success" : "task"}>{t(`kind.${item.kind}`)}</Chip>
+          <Chip variant="task">{t("kind.task")}</Chip>
         </span>
         <p className="flex min-w-0 items-center gap-8 text-caption">
           <span className="shrink-0 text-caption-strong text-text-primary">{item.time ?? t("card.allDay")}</span>

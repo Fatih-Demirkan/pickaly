@@ -7,11 +7,10 @@ import { Button, ButtonLink } from "@/components/ui/Button";
 import { useSheetReturnTo } from "@/components/ui/Sheet";
 import { ChipSelect } from "@/components/ui/ChipSelect";
 import { DatePicker } from "@/components/ui/DatePicker";
-import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { SelectPicker } from "@/components/ui/SelectPicker";
 import { Switch } from "@/components/ui/Switch";
 import { TimePicker } from "@/components/ui/TimePicker";
-import { fieldBoxClass, inputClass, textareaClass } from "@/components/ui/field";
+import { chipRowClass, fieldBoxClass, inputClass, textareaClass } from "@/components/ui/field";
 import type { Category } from "@/features/categories";
 import { isLocale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
@@ -26,10 +25,11 @@ import type { CalendarItemFormField, CalendarItemFormState } from "../schemas";
 
 // Görev Ekle / Düzenle [Karar #2, RESPONSIVE §8.2.1] · [Eksik] Pages'ta form tasarlanmadı; tamamı varsayımdır.
 // Yeni İşlem formunun tasarım dili ve bileşenleri kullanılır (RESPONSIVE §8.5: yeni görsel öğe eklenmez):
-//   Tür (Görev / Randevu, D-14) ve Öncelik (Düşük / Normal / Yüksek, varsayılan Normal, D-15) segmented control ·
-//   Başlık* · Açıklama · Kategori Seçimi çipleri (Görev / Takvim kategorileri, isteğe bağlı; seçili çipe tekrar dokununca
+//   Başlık* · Kategori Seçimi çipleri (Görev / Takvim kategorileri, isteğe bağlı; seçili çipe tekrar dokununca
 //   kaldırılır) · Tarih* / Saat + "Tüm gün" anahtarı (Tekrar Eden İşlem kartı kalıbı) · Süre / Hatırlatma seçicileri ·
 //   Konum adı + adres · Not (x/200) · İlişkili harcama (bilgi amaçlı, BR-TSK-003) · alt bar İptal (Tertiary) + Kaydet.
+// [Karar ürün sahibi 2026-11-05] Tür (Görev / Randevu, D-14), Öncelik (D-15) ve Açıklama alanları kaldırıldı;
+//   tüm kayıtlar arayüzde "Görev" olarak gösterilir. Veritabanı alanları (kind, priority, description) korunur.
 // [Ertelendi] Tekrar (FR-CAL-012) ve kaydedilmemiş değişiklik onayı (D-19).
 
 export type ItemFormValues = {
@@ -147,7 +147,10 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref, 
       <input type="hidden" name="kind" value={values.kind} />
       {/* Alt görevler JSON olarak gönderilir; "Çoklu seçim" kapalıysa veya randevuysa boş liste. */}
       <input type="hidden" name="subtasks" value={JSON.stringify(values.kind === "task" && values.multi ? values.subtasks : [])} />
+      {/* Tür, öncelik ve açıklama formda yok (ürün sahibi kararı 2026-11-05): yeni kayıt Görev, Normal öncelik, açıklamasız.
+          Düzenlemede eski kaydın değerleri korunur (görünmez, değiştirilmez). */}
       <input type="hidden" name="priority" value={values.priority} />
+      <input type="hidden" name="description" value={values.description} />
       <input type="hidden" name="categoryId" value={values.categoryId} />
       <input type="hidden" name="allDay" value={String(values.allDay)} />
       {values.allDay && (
@@ -164,22 +167,6 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref, 
       )}
 
       {leading}
-
-      <div className="flex flex-col gap-8">
-        <Label id="kind-label" required>
-          {t("form.kind")}
-        </Label>
-        <SegmentedControl
-          label={t("form.kind")}
-          fullWidth
-          value={values.kind}
-          onChange={(next) => set("kind", next)}
-          options={[
-            { value: "task", label: t("kind.task") },
-            { value: "appointment", label: t("kind.appointment") },
-          ]}
-        />
-      </div>
 
       <div className="flex flex-col gap-8">
         <Label htmlFor="title" required>
@@ -199,37 +186,10 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref, 
         <ErrorText id="title-error" message={errorText("title")} />
       </div>
 
-      <div className="flex flex-col gap-8">
-        <Label htmlFor="description">{t("form.description")}</Label>
-        <input
-          id="description"
-          name="description"
-          maxLength={DESCRIPTION_MAX_LENGTH}
-          placeholder={t("form.descriptionPlaceholder")}
-          value={values.description}
-          onChange={(event) => set("description", event.target.value)}
-          aria-invalid={invalid("description")}
-          aria-describedby={describedBy("description")}
-          className={inputClass}
-        />
-        <ErrorText id="description-error" message={errorText("description")} />
-      </div>
-
-      <div className="flex flex-col gap-8">
-        <Label id="priority-label">{t("form.priority")}</Label>
-        <SegmentedControl
-          label={t("form.priority")}
-          fullWidth
-          value={values.priority}
-          onChange={(next) => set("priority", next)}
-          options={(["low", "normal", "high"] as const).map((value) => ({ value, label: t(`form.priorities.${value}`) }))}
-        />
-      </div>
-
       {categories.length > 0 && (
         <div className="flex flex-col gap-8">
           <Label id="category-label">{t("form.category")}</Label>
-          <div role="group" aria-labelledby="category-label" aria-describedby={describedBy("categoryId")} className="flex flex-wrap gap-8">
+          <div role="group" aria-labelledby="category-label" aria-describedby={describedBy("categoryId")} className={chipRowClass}>
             {categories.map((category) => {
               const selected = values.categoryId === category.id;
               return (

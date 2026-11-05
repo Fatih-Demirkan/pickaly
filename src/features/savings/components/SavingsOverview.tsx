@@ -13,7 +13,8 @@ import { progressPercent } from "../domain/types";
 import { formatPercent, formatSavingsAmount, formatSavingsShort } from "../format";
 import { savingsHref } from "../routes";
 import { getSavingsOverview } from "../server";
-import { kindChip, ProgressBar, SavingsIcon } from "./savingsStyle";
+import { kindChip, SavingsIcon } from "./savingsStyle";
+import { ProgressMeter } from "@/components/ui/ProgressMeter";
 
 // Pages → Birikimler - Ana Sayfa (129:5453) ve - Boş (136:8952), PRD FR-SAV-002/003/004, RESPONSIVE §3.4.1–3.4.2.
 //   Görünüm DESIGN_SYSTEM_PICKALY §5.2: özet standart beyaz kart; caption "Toplam Birikim Varlığı", title-lg tutar
@@ -143,7 +144,7 @@ export async function SavingsOverview() {
                           )}
                         </span>
                       </p>
-                      {percent !== null && <ProgressBar percent={percent} label={t("detail.progressLabel")} />}
+                      {percent !== null && <ProgressMeter percent={percent} label={t("detail.progressLabel")} />}
                     </div>
                   </li>
                 );

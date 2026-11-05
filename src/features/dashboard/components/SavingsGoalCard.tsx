@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { formatSavingsAmount, progressPercent, savingsHref, type SavingsAccountView } from "@/features/savings";
 import type { Locale } from "@/i18n/config";
-import { cn } from "@/lib/cn";
+import { ProgressMeter } from "@/components/ui/ProgressMeter";
 
 // Ana Sayfa Birikim Hedefi (PRD FR-DSH-008). DESIGN_SYSTEM.md §A8 Progress meter + DESIGN_SYSTEM_PICKALY.md §5.2.
 // Teal gradyanlı kart kaldırıldı; standart beyaz kart (radius-lg, padding 16, elev-1).
@@ -11,12 +11,9 @@ import { cn } from "@/lib/cn";
 //   Alt satır: "mevcut / hedef" | "%n". Yüzde her zaman metin olarak da yazılır (renk tek başına anlam taşımaz).
 // Kart, hedefin Birikim Hesabı Detayı'nı açar. Mobilde en altta, laptop+ bakiye bloğunun yanında (RESPONSIVE §5.1).
 
-const DOTS = 28;
-
 export async function SavingsGoalCard({ goal, locale }: { goal: SavingsAccountView; locale: Locale }) {
   const t = await getTranslations("dashboard.savings");
   const percent = Math.min(progressPercent(goal) ?? 0, 100);
-  const filled = Math.round((percent / 100) * DOTS);
   const amount = formatSavingsAmount(goal.balance, goal.unit, locale);
   const target = goal.target !== null ? formatSavingsAmount(goal.target, goal.unit, locale) : null;
 
@@ -38,29 +35,7 @@ export async function SavingsGoalCard({ goal, locale }: { goal: SavingsAccountVi
         <span className="shrink-0 text-caption-strong text-text-secondary">{t("completed", { percent })}</span>
       </span>
 
-      <span
-        role="progressbar"
-        aria-label={t("progress")}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={percent}
-        className="flex h-16 items-center justify-between"
-      >
-        {Array.from({ length: DOTS }, (_, index) => {
-          const knob = filled > 0 && index === filled - 1;
-          return (
-            <span
-              key={index}
-              aria-hidden
-              className={cn(
-                "shrink-0 rounded-full",
-                knob ? "size-12 bg-progress-fill shadow-[0_0_0_4px_var(--color-progress-halo)]" : "size-6",
-                !knob && (index < filled ? "bg-progress-fill" : "bg-progress-track/40"),
-              )}
-            />
-          );
-        })}
-      </span>
+      <ProgressMeter percent={percent} label={t("progress")} />
 
       <span className="flex items-baseline justify-between gap-12 text-caption text-text-secondary">
         <span className="min-w-0 truncate">

@@ -31,7 +31,8 @@ export async function ItemFormDrawer(props: ItemFormDrawerProps) {
     if (!item) notFound();
     cancelHref = itemHref(item.id, { day: item.date });
     initialValues = {
-      kind: item.kind,
+      // Görev / Randevu ayrımı kaldırıldı (ürün sahibi kararı 2026-11-05): kaydedilince Görev olur.
+      kind: "task",
       title: item.title,
       description: item.description ?? "",
       priority: item.priority,
@@ -50,7 +51,7 @@ export async function ItemFormDrawer(props: ItemFormDrawerProps) {
       plannedExpense: item.plannedExpenseMinor !== null ? formatMoneyInput(item.plannedExpenseMinor, locale) : "",
     };
   } else {
-    initialValues = newItemFormValues({ kind: props.kind, date: props.date });
+    initialValues = newItemFormValues({ date: props.date });
     cancelHref = calendarHref({ day: initialValues.date as DateKey });
   }
 

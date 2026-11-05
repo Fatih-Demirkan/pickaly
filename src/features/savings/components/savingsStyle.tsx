@@ -7,7 +7,7 @@ import type { SavingsAccount, SavingsIconName, SavingsKind } from "../domain/typ
 // Pages → Birikimler kart görselleri:
 //   ikon karosu 36 px, radius-sm (Acil Durum Fonu: Category/Red + octagon-alert · Ev Peşinatı: Category/Green + birdhouse)
 //   tür çipi: "Vadeli" Görev (Category/Blue) · "Altın" Turuncu (Category/Orange)
-//   ilerleme çubuğu: 8 px, tam yuvarlak, iz blue.100 + dolgu blue.500 (DESIGN_SYSTEM_PICKALY §5.9)
+//   ilerleme: noktalı Progress meter (src/components/ui/ProgressMeter.tsx; ürün sahibi kararı 2026-11-05)
 // [Varsayım] Yatırım Fonu / Döviz / Nakit türlerinin çipi çizilmedi: Genel. Yeni hesabın ikonu Birikimler nav ikonu.
 
 const iconOf: Record<SavingsIconName, AppIconName> = { emergency: "emergency", home: "savingsHome", savings: "savings" };
@@ -26,22 +26,6 @@ export function SavingsIcon({ account }: { account: Pick<SavingsAccount, "icon" 
   return (
     <span aria-hidden className={cn("inline-flex size-36 shrink-0 items-center justify-center rounded-sm", toneOf[account.color])}>
       <Icon icon={iconOf[account.icon]} />
-    </span>
-  );
-}
-
-export function ProgressBar({ percent, label }: { percent: number; label: string }) {
-  const value = Math.max(0, Math.min(100, percent));
-  return (
-    <span
-      role="progressbar"
-      aria-label={label}
-      aria-valuemin={0}
-      aria-valuemax={100}
-      aria-valuenow={value}
-      className="block h-8 w-full overflow-hidden rounded-full bg-progress-track-bar"
-    >
-      <span className="block h-full rounded-full bg-progress-fill" style={{ width: `${value}%` }} />
     </span>
   );
 }

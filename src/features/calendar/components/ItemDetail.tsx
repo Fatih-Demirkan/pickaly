@@ -73,13 +73,11 @@ export async function ItemDetail({ item, category, locale, editHref }: ItemDetai
     <article className="flex flex-1 flex-col gap-(--layout-section-gap)">
       <section className="flex flex-col gap-12 rounded-lg bg-surface-card p-16 shadow-elev-1">
         <div className="flex flex-wrap items-center gap-4">
-          {item.priority === "high" && <Chip variant="payment">{t("detail.highPriority")}</Chip>}
           {category && <span className={cn("inline-flex h-24 items-center rounded-full px-8 text-caption-strong", categoryChipClass(category.color))}>{category.name}</span>}
           {done && <Chip variant="success">{t("agenda.done")}</Chip>}
         </div>
         <div className="flex flex-col">
           <h2 className={cn("text-title-md", done ? "text-text-secondary line-through" : "text-text-primary")}>{item.title}</h2>
-          {item.description && <p className="text-caption text-text-secondary">{item.description}</p>}
         </div>
         <hr className="border-border-subtle" />
         <section aria-labelledby={`time-${item.id}`} className="flex flex-col gap-8">

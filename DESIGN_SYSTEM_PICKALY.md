@@ -148,7 +148,8 @@ Token **adları** TECH_STACK §8.2 yapısında kalır (bileşenler yalnızca sem
 | `color.border.default` | neutral.200 | `neutral.100` [DS `border-subtle`] |
 | `color.border.subtle` | neutral.100 | `neutral.100` |
 | `color.border.strong` | neutral.300 | `#DCDDE0` [Türetme: hover çerçevesi] |
-| `color.border.control` | – | `neutral.500` [Yeni: input, checkbox, radio; 3:1] |
+| `color.border.control` | – | `neutral.500` [Yeni: checkbox, radio, durum düğmesi; 3:1] |
+| `color.border.input` / `input-hover` | – | `neutral.100` / `neutral.200` [Karar ürün sahibi 2026-11-05: input, select tetikleyici, textarea, OTP; zemine yakın, hafif koyu] |
 | `color.border.focus` | teal.700 | `blue.600` |
 | `color.border.error` | red.600 | `red.600` |
 | `color.border.success` | green.700 | `green.700` |
@@ -175,7 +176,8 @@ Token **adları** TECH_STACK §8.2 yapısında kalır (bileşenler yalnızca sem
 | `green.500` / beyaz | 2,28 ✖ | Durum metni ve ikonu `green.700` |
 | `red.500` + beyaz metin | 3,57 ✖ | Delta rozeti ve destructive zemin `red.600` (4,89 ✔) |
 | `amber.500` / beyaz | 2,04 ✖ | Uyarı metni/ikonu `amber.700`; `amber.500` yalnızca siyah metinli zemin |
-| `border.subtle` (`#ECEDEF`) / beyaz | 1,17 | Kart ayrımında yeterli (dekoratif). **Form kontrolü sınırı** `border.control` (3,25 ✔ 3:1, WCAG 1.4.11) |
+| `border.subtle` (`#ECEDEF`) / beyaz | 1,17 | Kart ayrımında yeterli (dekoratif). Checkbox / radio sınırı `border.control` (3,25 ✔ 3:1, WCAG 1.4.11) |
+| `border.input` (`#ECEDEF`) / beyaz | 1,17 ✖ 3:1 | [Karar ürün sahibi 2026-11-05] Input çerçevesi bilinçli olarak soluk (göz yormasın). Alan beyaz zemini (canvas üzerinde), görünür etiketi, odak halkası (`blue.600`, 5,60) ve hata çerçevesiyle (`red.600`) ayırt edilir. WCAG 1.4.11 açısından risk kabul edildi |
 | odak halkası | – | `blue.600` (beyazda 5,60, canvas'ta 5,18 ✔) |
 
 Disabled öğeler kontrast şartından muaftır (WCAG 1.4.3 istisnası) ama "disabled" bilgisi yalnızca renkle verilmez (`aria-disabled`).
@@ -348,7 +350,7 @@ Mobil ve tablette en az **44×44** (eski kural, korunur). Görsel olarak daha k�
   - Renkler: Gelir `category.green` · Gider `category.red` · Ödeme `category.pink` · Görev `category.violet`.
 - **Ajanda kartı (Takvim)** → standart kart; solda saat kutusu `neutral.50` zemin, `radius.sm`, `body-strong` saat.
 - **Durum & Başlık kartı (detay ekranları)** → standart kart, `radius.lg`; tutar `title-lg`, durum chip'i (§5.4).
-- **Birikim hesabı kartı** → standart kart + basit ilerleme çubuğu (§5.9).
+- **Birikim hesabı kartı** ve **hesap detayı** → standart kart + Birikim Hedefi'ndeki noktalı Progress meter [Karar ürün sahibi 2026-11-05; eski: basit ilerleme çubuğu §5.9].
 - **Paylaşım kartı (rapor)** → 358 px sabit genişlik korunur [Karar: RESPONSIVE]. `white` zemin, `radius.xl`, padding 24, `elev-2`; üstte 28 px `blue.500` logo karosu + "Pickaly"; içerik Balance header ve stat kartı düzeniyle.
 
 ### 5.3 Liste satırı (işlem, ödeme, ayar) [DS]
@@ -372,6 +374,7 @@ Mobil ve tablette en az **44×44** (eski kural, korunur). Görsel olarak daha k�
 
 - Yükseklik **32** [Uyarlama: DS ≈28; Pickaly Ç-9 kararı ve dokunma alanı], padding 12 yatay, `caption-strong`, `radius.full`, gap 8.
 - Seçili durumda check ikonu kullanılmaz; siyah dolgu yeterli. [DS]
+- **Kategori seçimi (Yeni İşlem, Görev):** mobilde çipler tek satırda, yatay kaydırılır (kaydırma çubuğu gizli, sayfa kenarına kadar taşar); tablet+ alt satıra sarar [Karar ürün sahibi 2026-11-05].
 - `role="radio"` veya `aria-pressed` (eski kural).
 
 **Durum chip'i (salt okunur)** [Türetme: kategori zemin/ön plan çiftleri]
@@ -436,20 +439,21 @@ Part A'da form tasarımı yok; DS'nin composer'ı (pill input) ve kart diliyle t
 | Eleman | Ölçü ve stil |
 |---|---|
 | Etiket | `caption-strong` `text.primary`, alanın 6 px üstünde; zorunlu alanda " *" |
-| Input / Select tetikleyici | 48 yükseklik, `radius.md`, `white` zemin, `border.control` 1 px, padding 0/16, metin `type.body`, placeholder `text.secondary` |
-| — hover / focus | çerçeve `black` / 2 px `blue.600` (çerçeve + halka tek görünür sınır) |
+| Input / Select tetikleyici | 48 yükseklik, `radius.md`, `white` zemin, `border.input` (`neutral.100`) 1 px [Karar ürün sahibi 2026-11-05], padding 0/16, metin `type.body`, placeholder `text.secondary` |
+| — hover / focus | çerçeve `neutral.200` / 2 px `blue.600` (çerçeve + halka tek görünür sınır) |
 | — hata | çerçeve `red.600`; altında 4 px boşlukla `caption` `red.600` mesaj, öncü `octagon-alert` 16 px |
 | — disabled | `neutral.150` zemin, `neutral.400` metin, çerçeve `border.subtle` |
 | Textarea | Input stili, en az 96 yükseklik, padding 12/16; sağ altta sayaç `caption` `text.secondary` ("54/200") |
-| Tutar alanı (Yeni İşlem) | Çerçevesiz, ortalı `display-balance` (44/48, 500), ₺ öneki `text.secondary`; altında `caption` "Tutar" etiketi [DS Balance header tipografisi] |
+| Tutar alanı (Yeni İşlem) | Çerçevesiz, ortalı `display-balance` (44/48, 500), ₺ öneki `text.secondary`; altında `caption` "Tutar" etiketi [DS Balance header tipografisi]. **Odakta da çerçeve/halka yok**; odak imleçle belli olur [Karar ürün sahibi 2026-11-05] |
 | Hesap seçici kartı | Standart kart, ikon karosu + "Ana Hesap" `body-strong` + bakiye `caption`, sağda "Değiştir" Text buton |
 | Switch | 44×24 iz `radius.full`; kapalı iz `neutral.500`, açık iz `blue.600`; 20 px beyaz düğme, `elev-1` |
 | Checkbox / Radio | 20 px, `border.control` 1,5 px; seçili `blue.600` dolgu + beyaz işaret; radius 6 / daire |
-| OTP kutusu | 48×56, `radius.md`, `border.control`; odakta `blue.600` 2 px; rakam `title-md` |
+| OTP kutusu | 48×56, `radius.md`, `border.input`; odakta `blue.600` 2 px; rakam `title-md` |
 | Arama alanı | 44 yükseklik **pill** (`radius.full`), `white`, `border.subtle`, öncü 20 px arama ikonu [DS composer] |
 
 - **Input yüksekliği 46 → 48** [Türetme: 44 dokunma alanı + DS seçici satır ritmi] [Karar K-7]. Eski Ç-2 kararının (46) yerine geçer.
-- `border.control` kontrast gereği DS'nin "çerçevesiz" görünümünden daha belirgindir [Uyarlama, WCAG 1.4.11].
+- Input çerçevesi `border.input` (soluk, §2.4); checkbox / radio `border.control` (3:1) kalır.
+- **Mobilde yakınlaştırma:** input'a odaklanınca ekran yakınlaşmaz (viewport `maximum-scale=1`), çift dokunma yakınlaştırması kapalı [Karar ürün sahibi 2026-11-05]. iOS iki parmakla yakınlaştırmaya erişilebilirlik gereği yine izin verir.
 - Doğrulama zamanlaması ve metin kuralları DESIGN.md §9.4'ten aynen geçerli.
 
 ### 5.8 Overlay'ler [Türetme]
@@ -459,7 +463,7 @@ Part A'da form tasarımı yok; DS'nin composer'ı (pill input) ve kart diliyle t
 | Arka plan (backdrop) | `black` %40 |
 | Modal / onay diyaloğu | `white`, `radius.xl`, padding 24, `elev-3`; başlık `title-md`, metin `body` `text.secondary`; butonlar sağa hizalı (mobilde alt alta, tam genişlik) |
 | Bottom sheet (mobil) | `white`, üst köşeler `radius.xl`, `elev-3`; 36×4 tutamak `neutral.100`; başlık `title-sm` |
-| Yeni İşlem sheet'i [ürün sahibi isteği 2026-11-05] | Bottom sheet stili, her boyutta; **zemin `neutral.50`** (canvas; içindeki beyaz kart ve alanlar ekranlardaki gibi ayrışır) [Karar ürün sahibi 2026-11-05]; alttan header'ın altına (64) kadar, tablet+ ortada 560 genişlik [Varsayım: ölçü]. Üstte tür seçimi Ana Sayfa Hızlı Aksiyonlar ile aynı sırada: Gelir · Gider · Ödeme · Görev; Görev seçilince Görev Ekle formu açılır. Bulunulan ekranın üstünde açılır; İptal, tutamak/başlık sürükleme, karartma ve Esc kapatır |
+| Yeni İşlem sheet'i [ürün sahibi isteği 2026-11-05] | Bottom sheet stili, her boyutta; **zemin `neutral.50`** (canvas; içindeki beyaz kart ve alanlar ekranlardaki gibi ayrışır) [Karar ürün sahibi 2026-11-05]; alttan header'ın altına (64) kadar, tablet+ ortada 560 genişlik [Varsayım: ölçü]. Üstte tür seçimi Ana Sayfa Hızlı Aksiyonlar ile aynı sırada: Gelir · Gider · Ödeme · Görev; Görev seçilince Görev Ekle formu açılır (Başlık, Kategori, Zaman, Hatırlatma, Konum, Not, İlişkili harcama; Tür / Öncelik / Açıklama yok). Bulunulan ekranın üstünde açılır; İptal, tutamak/başlık sürükleme, karartma ve Esc kapatır |
 | Drawer (tablet+) | `white`, iç köşeler `radius.lg`, `elev-3`; genişlikler RESPONSIVE §6.2 |
 | Popover / menü | `white`, `radius.md`, padding 6, `elev-2`; satır 44 yükseklik, `radius.sm`, hover `neutral.50` |
 | Seçici satırı | 48 yükseklik, seçili satırda sağda check (`blue.600`) + `body-strong` |
@@ -469,8 +473,8 @@ Part A'da form tasarımı yok; DS'nin composer'ı (pill input) ve kart diliyle t
 - Silme onayı içeriği ve davranışı RESPONSIVE §4.5.2 ve PRD UX-010'dan.
 
 ### 5.9 Geri bildirim ve durum
-- **İlerleme çubuğu (basit)**: 8 yükseklik, `radius.full`, iz `blue.100`, dolgu `blue.500`; yüzde metni her zaman yazılır.
-- **Progress meter (noktalı)**: §5.2 Birikim Hedefi.
+- **İlerleme çubuğu (basit)**: 8 yükseklik, `radius.full`, iz `blue.100`, dolgu `blue.500`; yüzde metni her zaman yazılır. Kullanım: alt görev ilerlemesi.
+- **Progress meter (noktalı)**: §5.2 Birikim Hedefi; tüm birikim ilerlemeleri (Ana Sayfa, Birikimler listesi, hesap detayı) bunu kullanır.
 - **Spinner**: 16/20/24 px, `blue.600` (butonda metin rengi).
 - **Skeleton**: `neutral.100`, öğenin radius'u, 1,2 s nabız; `prefers-reduced-motion`'da sabit.
 - **Boş durum**: 48 px ikon karosu (`blue.100` zemin, `blue.600` ikon, `radius.lg`) → `title-sm` başlık → `body` `text.secondary` açıklama → Primary LG buton. Ortalı, en fazla 320 px genişlik.
@@ -509,12 +513,12 @@ Part A hareket tanımı vermiyor; Part B kullanılmadığı için sade bir set:
 - DS'nin `tailwind.config.js` örneği Tailwind v3 içindir; projede Tailwind v4 `@theme` kullanılır.
 - Primitive değerler `tokens/color.primitives.json`, semantic eşleme `tokens/color.semantic.light.json` dosyalarına §2.3'e göre işlenir; `tokens.css` üretilir, elle düzenlenmez.
 - Kategori anahtarları (§2.2) veritabanında değişmez; yalnızca token değerleri değişir.
-- PWA tema rengi (`manifest.ts`, `theme-color`): `#F5F6F7` zemin; ikon karosu `blue.500`, `radius.2xl` maske.
+- PWA tema rengi (`manifest.ts`, `theme-color`): `#F5F6F7` zemin; ikon karosu `blue.500`, `radius.2xl` maske. İkonlar `scripts/build-app-icons.mjs` ile üretilir (192, 512, maskable 512, favicon 64, apple-touch 180). [Geçici] Logo yok: ikon düz `blue.500` karo.
 - Eski tasarımın Figma ile eşleşen değerleri (teal, Manrope, gradyanlar) artık geçerli değil; Figma Pages yalnızca ekran içeriği ve akış referansıdır.
 
 ---
 
-## 8. Kararlar [ürün sahibi onayı, 2026-11-04]
+## 8. Kararlar [ürün sahibi onayı, 2026-11-04; K-8 ve sonrası 2026-11-05]
 
 | # | Konu | Karar |
 |---|---|---|
@@ -527,6 +531,14 @@ Part A hareket tanımı vermiyor; Part B kullanılmadığı için sade bir set:
 | K-7 | Input yüksekliği (§5.7) | 48 px |
 | K-8 | Mobil tab bar rengi (§5.6) — 2026-11-05 | Beyaz bar + `elev-2`, aktif öğe siyah daire |
 | K-9 | Mobil FAB metni (§5.6) — 2026-11-05 | "Yeni" (erişilebilir ad "Yeni işlem") |
+| K-10 | Bölüm aralığı (§4.1) — 2026-11-05 | 32 (önce 40'a çıkarıldı, sonra 32'ye indirildi) |
+| K-11 | Yeni İşlem sunumu (§5.8) — 2026-11-05 | Bottom sheet, canvas zemin; sekmeler Gelir · Gider · Ödeme · Görev (Hızlı Aksiyonlarla aynı sıra) |
+| K-12 | Input çerçevesi (§2.4, §5.7) — 2026-11-05 | `border.input` = `neutral.100`, hover `neutral.200`; 3:1 riski kabul edildi |
+| K-13 | Tutar alanı odak görünümü (§5.7) — 2026-11-05 | Çerçeve/halka yok |
+| K-14 | Kategori çipleri (§5.4) — 2026-11-05 | Mobilde yatay kaydırma, tablet+ sarma |
+| K-15 | Birikim ilerlemesi (§5.2, §5.9) — 2026-11-05 | Her yerde noktalı Progress meter |
+| K-16 | Görev formu — 2026-11-05 | Tür (Görev/Randevu), Öncelik, Açıklama kaldırıldı; arayüzde tek tür "Görev" (PRD FR-CAL-006 iptal) |
+| K-17 | Mobil yakınlaştırma (§5.7) — 2026-11-05 | Odakta ve çift dokunmada yakınlaştırma yok |
 
 ---
 

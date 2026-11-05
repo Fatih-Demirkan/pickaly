@@ -5,7 +5,7 @@ import type { AppIconName } from "@/config/icons";
 import { cn } from "@/lib/cn";
 import { Icon } from "./Icon";
 
-// Select tetikleyici (Tarih, Saat): input ile aynı kutu (DESIGN_SYSTEM_PICKALY §5.7, 48 px, border-control);
+// Select tetikleyici (Tarih, Saat): input ile aynı kutu (DESIGN_SYSTEM_PICKALY §5.7, 48 px, border-input);
 // sol ikon + değer (body) + sağda chevron-down. Seçiciyi açan buton olarak çalışır.
 // Tekrarlama Sıklığı ve Hatırlatma Bildirimi alanlarında Pages ikon göstermez (icon verilmez).
 
@@ -23,7 +23,7 @@ export function PickerField({ icon, value, open, invalid, className, type = "but
       aria-expanded={open}
       data-invalid={invalid || undefined}
       className={cn(
-        "flex h-48 w-full items-center gap-8 rounded-md border border-border-control bg-surface-card px-16 text-start text-body text-text-primary transition-colors hover:border-border-control-hover",
+        "flex h-48 w-full items-center gap-8 rounded-md border border-border-input bg-surface-card px-16 text-start text-body text-text-primary transition-colors hover:border-border-input-hover",
         open && "border-border-focus",
         // Hata metni aria-describedby ile okunur; aria-invalid buton rolünde geçerli değildir.
         "data-invalid:border-border-error",

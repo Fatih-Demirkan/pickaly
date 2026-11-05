@@ -149,7 +149,7 @@ V1 yayınından sonra izlenir. Hedef değerleri ilk kullanım verisine göre bel
 | A-1 | İlk kullanım | Kayıt → e-posta doğrulama (6 haneli kod) → Ana Sayfa (varsayılan "Ana Hesap" ve kategoriler hazır) | ❌ auth ekranları |
 | A-2 | Günü planlama | Ana Sayfa → Bugünün Akışı → kaydı tamamla (✓) veya Takvim'e geç → güne kayıt ekle | ✅ / ❌ Görev Ekle |
 | A-3 | Harcama girme | Hızlı Aksiyon "Gider" veya "Yeni işlem" → tutar, başlık, kategori, hesap → Kaydet → toast → liste ve bakiye güncellenir | ✅ |
-| A-4 | Fatura/abonelik takibi | Hızlı Aksiyon "Ödeme" → Yeni İşlem (Abonelik sekmesi) → tekrar sıklığı + hatırlatma → vadesi gelince Yaklaşan Ödemeler'de görünür → "Ödendi olarak işaretle" → gider işlemi oluşur | ✅ (form, detay) / ◐ (yaklaşan) |
+| A-4 | Fatura/abonelik takibi | Hızlı Aksiyon "Ödeme" → Yeni İşlem (Ödeme sekmesi) → tekrar sıklığı + hatırlatma → vadesi gelince Yaklaşan Ödemeler'de görünür → "Ödendi olarak işaretle" → gider işlemi oluşur | ✅ (form, detay) / ◐ (yaklaşan) |
 | A-5 | Birikime para ekleme | Birikimler → hesap detayı → "Para ekle / Çek" → tutar + kaynak hesap → kaynak hesap azalır, birikim artar | ◐ (buton var, akış yok) |
 | A-6 | Ay sonu değerlendirme | Ana Sayfa "Aylık Rapor" → Aylık Finans Raporu → ay değiştir → "Paylaş" → görsel | ✅ |
 | A-7 | Kayıt düzeltme / silme | Detay → "Düzenle" (form dolu açılır) veya "Sil" → onay → toast | ✅ detay / ❌ onay |
@@ -203,7 +203,7 @@ V1 yayınından sonra izlenir. Hedef değerleri ilk kullanım verisine göre bel
 |---|---|---|---|
 | FR-DSH-001 | **Günlük özet:** "Bugün: n Görev, n Ödeme bekliyor" satırı. Sayılar bugün tarihli ve **tamamlanmamış** görevleri ve **bekleyen** ödemeleri gösterir (BR-TSK-002) | M | ✅ |
 | FR-DSH-002 | **Toplam Bakiye kartı:** Toplam bakiye (BR-BAL-003), bu ayın toplam geliri ve gideri, "Aylık Rapor" bağlantısı | M | ✅ |
-| FR-DSH-003 | **Hızlı Aksiyonlar:** Gelir, Gider, Görev, Ödeme. Her biri ilgili formu ilgili tür seçili açar [Karar: RESPONSIVE §3.1] | M | ✅ (Görev formu ❌) |
+| FR-DSH-003 | **Hızlı Aksiyonlar:** Gelir, Gider, Ödeme, Görev. Her biri Yeni İşlem sheet'ini ilgili sekme seçili açar; sheet'teki sekmeler aynı sırada [Karar: ürün sahibi 2026-11-05] | M | ✅ |
 | FR-DSH-004 | **Bugünün Akışı:** Bugünün görevleri, randevuları ve vadesi gelen ödemeleri saat sırasıyla. Her satırda tür chip'i, saat, kategori. Görev için tamamla (✓), ödeme için "Ödendi olarak işaretle" [Karar: D-5] | M | ✅ |
 | FR-DSH-005 | "Bugünün Akışı → Tümü (n)" Takvim'i bugün seçili açar [Karar: RESPONSIVE #9] | M | ✅ |
 | FR-DSH-006 | **Yaklaşan Ödemeler:** Bekleyen ödemeler, vade sırasıyla. Tutar, vade tarihi, "n gün kaldı". "Tümü (n)" İşlemler'e gider [Karar: RESPONSIVE #9, D-26] | M | ✅ |
@@ -251,13 +251,13 @@ Görev ve randevu Takvim içinde yönetilir. Ayrı Görevler ekranı **yoktur** 
 
 | ID | Gereksinim | Öncelik | Tasarım |
 |---|---|---|---|
-| FR-CAL-001 | **Aylık görünüm:** Ay matrisi. Gün hücresinde kayıt türü göstergeleri (Görev/Randevu/Ödeme renkleri ve lejant). Seçili günün ajandası. "Bugün" butonu, ay ileri/geri | M | ✅ |
+| FR-CAL-001 | **Aylık görünüm:** Ay matrisi. Gün hücresinde kayıt türü göstergeleri (Görev/Ödeme renkleri ve lejant; Randevu ayrımı kaldırıldı [Karar: ürün sahibi 2026-11-05]). Seçili günün ajandası. "Bugün" butonu, ay ileri/geri | M | ✅ |
 | FR-CAL-002 | **Haftalık görünüm:** 7 günlük şerit ve seçili günün saat çizelgesi | M | ✅ |
 | FR-CAL-003 | **Günlük görünüm:** Tek gün, saat bazlı detaylı çizelge [Karar: RESPONSIVE #4] | S | ❌ |
-| FR-CAL-004 | **Ajanda:** Seçili günün kayıtları "Yapılacaklar" ve "Tamamlandı" olarak ayrılır. Gün özeti ("2 Görev, 1 Randevu, 1 Ödeme") | M | ✅ |
+| FR-CAL-004 | **Ajanda:** Seçili günün kayıtları "Yapılacaklar" ve "Tamamlandı" olarak ayrılır. Gün özeti ("2 Görev, 1 Ödeme") | M | ✅ |
 | FR-CAL-005 | **Görev oluşturma:** Bkz. §5.2 alanlar | M | ❌ |
-| FR-CAL-006 | **Randevu oluşturma:** Aynı formda "Görev / Randevu" tür seçimi [Karar: D-14] | M | ❌ |
-| FR-CAL-007 | **Görev/randevu detayı:** Durum ve başlık kartı (öncelik, kategori, başlık, açıklama), Zaman & Hatırlatma, Konum & Notlar ("Haritada aç"), Planlanan Finansal Harcama | M | ✅ |
+| FR-CAL-006 | ~~**Randevu oluşturma:** Aynı formda "Görev / Randevu" tür seçimi [D-14]~~ **İptal** [Karar: ürün sahibi 2026-11-05]: tür seçimi yok, tüm kayıtlar Görev. Eski randevu kayıtları Görev olarak gösterilir | – | – |
+| FR-CAL-007 | **Görev detayı:** Durum ve başlık kartı (kategori, başlık; öncelik ve açıklama gösterilmez [Karar: ürün sahibi 2026-11-05]), Zaman & Hatırlatma, Konum & Notlar ("Haritada aç"), Planlanan Finansal Harcama | M | ✅ |
 | FR-CAL-008 | **Düzenleme:** Detaydaki "Düzenle" formu dolu açar | M | ✅ buton / ❌ form |
 | FR-CAL-009 | **Tamamlama:** Detayda "Görevi tamamla", listede ✓. Tamamlanan kayıt yeniden açılabilir | M | ✅ |
 | FR-CAL-010 | **Silme:** "Kaydı kalıcı olarak sil" → onay → kalıcı silme [Karar: #7, D-10] | M | ✅ buton / ❌ onay |
@@ -274,10 +274,10 @@ Görev ve randevu Takvim içinde yönetilir. Ayrı Görevler ekranı **yoktur** 
 
 | Alan | Zorunlu | Kural | Kaynak |
 |---|---|---|---|
-| Tür | ✔ | Görev / Randevu. Varsayılan Görev | D-14 |
+| ~~Tür~~ | – | **Formda yok** [Karar: ürün sahibi 2026-11-05]. Her kayıt Görev (`kind = task`) | ~~D-14~~ |
 | Başlık | ✔ | 1–80 karakter [Öneri] | Görev Detayı |
-| Açıklama | – | ≤ 200 karakter [Öneri] | Görev Detayı |
-| Öncelik | – | Düşük / Normal / Yüksek. Varsayılan Normal. Arayüzde yalnızca Yüksek etiketlenir | D-15 |
+| ~~Açıklama~~ | – | **Formda yok** [Karar: ürün sahibi 2026-11-05]. Eski kayıtlardaki değer korunur, gösterilmez | |
+| ~~Öncelik~~ | – | **Formda yok** [Karar: ürün sahibi 2026-11-05]. Yeni kayıt Normal; arayüzde etiket yok | ~~D-15~~ |
 | Kategori | – | Kullanıcının "Görev / Takvim" kategorilerinden biri | Kategori Yönetimi |
 | Tarih | ✔ | Geçerli tarih. Geçmiş tarih **izinli** (geriye dönük kayıt) [Öneri] | |
 | Saat / tüm gün | – | Saat boşsa "tüm gün" kaydı [Öneri] | |
@@ -743,7 +743,7 @@ Uygulama yöntemi: TECH_STACK.md §6.
 | NFR-ARCH-001 | İş kuralları (bakiye, ödendi işaretleme, birikim aktarımı, tekrar üretimi, rapor hesapları) istemciden bağımsız olarak backend'de tanımlanır. Gelecekteki mobil istemci aynı kuralları yeniden yazmadan kullanabilir [Karar: TECH_STACK §4.1, §10] | M |
 | NFR-ARCH-002 | Veri modeli değişiklikleri geriye uyumlu yapılır | M |
 | NFR-PERF-001 | Kritik ekranlar mobil, yavaş 4G koşulunda 2 sn'nin altında kullanılabilir olur. Ölçüm ve doğrulama: AC-07 (§1.6) | M |
-| NFR-PWA-001 | Uygulama ana ekrana eklenebilir. Tema rengi `#0F766E`, arka plan `#F8FAFC` [Karar: #14] | M |
+| NFR-PWA-001 | Uygulama ana ekrana eklenebilir. Tema rengi ve arka plan `#F5F6F7` (DESIGN_SYSTEM_PICKALY §7; eski `#0F766E` / `#F8FAFC` geçersiz) | M |
 | NFR-I18N-001 | Tüm arayüz metinleri çeviri anahtarlarıyla yönetilir. TR ve EN eksiksiz olmadan yayın yapılmaz | M |
 
 ---

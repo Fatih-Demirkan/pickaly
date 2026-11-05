@@ -31,6 +31,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  // Telefonda input'a odaklanınca ekran yakınlaşmasın (iOS 16 px altı metinde yakınlaştırır), sayfa küçülüp kaymasın
+  // (ürün sahibi isteği 2026-11-05). iOS erişilebilirlik gereği iki parmakla yakınlaştırmaya yine izin verir.
+  maximumScale: 1,
   viewportFit: "cover",
   // Tarayıcı çubuğu uygulama zeminiyle aynı renk (DESIGN_SYSTEM_PICKALY §7).
   themeColor: semanticColors["surface-page"],

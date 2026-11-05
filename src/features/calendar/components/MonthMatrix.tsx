@@ -12,14 +12,13 @@ import { AGENDA_KINDS, kindDot, type AgendaKind } from "./kindStyle";
 //   kart beyaz, radius-lg, padding 8, elev-1 · gün başlıkları caption-strong text-secondary
 //   hücre 44 px, mobil/tablet tam yuvarlak (laptop+ içerikli hücre radius-md), aralık 4 · gün body text-primary
 //   hafta sonu ve ay dışı günler text-secondary · bugün: blue.100 zemin + blue.600 body-strong
-//   seçili: siyah zemin + beyaz body-strong (seçim = siyah) · altında 6 px tür noktaları · lejant: Görev · Randevu · Ödeme
+//   seçili: siyah zemin + beyaz body-strong (seçim = siyah) · altında 6 px tür noktaları · lejant: Görev · Ödeme
 // Responsive (RESPONSIVE §3.2.1):
 //   mobil: noktalar · tablet: tür başına adet rozeti (nokta + sayı) · laptop+: ilk 2 kaydın başlığı küçük çip, fazlası "+n"
 // [Varsayım] Adet rozeti ve hücre çipi görünümü çizilmedi; lejant renkleri ve Chip-Kategori'nin küçük hali kullanıldı.
 
 const cellChip: Record<AgendaKind, string> = {
   task: "bg-category-violet text-category-fg-violet",
-  appointment: "bg-category-green text-category-fg-green",
   payment: "bg-category-pink text-category-fg-pink",
 };
 

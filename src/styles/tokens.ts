@@ -49,6 +49,8 @@ export const semanticColors = {
   "border-strong": "#DCDDE0",
   "border-control": "#8B8F96",
   "border-control-hover": "#000000",
+  "border-input": "#ECEDEF",
+  "border-input-hover": "#DCDDE0",
   "border-focus": "#0267C5",
   "border-error": "#E0151C",
   "border-success": "#0E8138",

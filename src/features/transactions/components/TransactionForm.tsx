@@ -12,7 +12,7 @@ import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { SelectPicker } from "@/components/ui/SelectPicker";
 import { Switch } from "@/components/ui/Switch";
 import { TimePicker } from "@/components/ui/TimePicker";
-import { amountBoxClass, amountCardClass, amountChipClass, amountInputClass, inputClass, textareaClass } from "@/components/ui/field";
+import { amountBoxClass, amountCardClass, amountChipClass, amountInputClass, chipRowClass, inputClass, textareaClass } from "@/components/ui/field";
 import type { Category } from "@/features/categories";
 import { isLocale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
@@ -33,21 +33,21 @@ import { EntryTypeField } from "./EntryTypeField";
 import { AccountPicker, type AccountOption } from "@/features/accounts/components/AccountPicker";
 
 // Pages → Yeni İşlem / Gelir (121:3180), / Gider (121:3549) ve / Abonelik (121:3649), RESPONSIVE §3.3.3, DESIGN §8.2.
-//   İşlem Türü: segmented Gelir / Gider / Abonelik  ·  Tutar kartı  ·  Başlık*  ·  Kategori Seçimi
+//   İşlem Türü: segmented Gelir / Gider / Ödeme (= Abonelik) / Görev (Yeni İşlem sheet'i, EntryTypeField; Düzenle'de
+//   Gelir / Gider / Abonelik)  ·  Tutar kartı  ·  Başlık*  ·  Kategori Seçimi (mobilde yatay kayan çipler)
 //   İşlem Yapılan Hesap  ·  İşlem Zamanı ve Tekrarı (Tarih / Saat + Tekrar Eden İşlem kartı)  ·  Not (x/200)
 //   alt bar İptal (Tertiary) + Kaydet (Primary)
-// Tutar kartı: padding 16, aralık 12, radius-2xl, gradyan beyaz → Category/Green (gider: Category/Red), shadow-elev-2;
-//   "Gelir Girişi" chip'i, tutar pill'i (padding 4/16, tam yuvarlak, beyaz, border-default, shadow-elev-2, Data/Large),
-//   ayırıcı çizgi ve hızlı tutar çipleri (32 px, padding 4/8, tam yuvarlak, beyaz + border-default, Label/Small, aralık 6).
-// Abonelik tutar kartı: gradyan beyaz → Category/Blue (yukarıdan aşağı), "Abonelik / Tekrarlayan İşlem" chip'i (Category/Blue,
-//   nokta Chart/Balance), işaretsiz tutar (text-primary), altında "Fatura, Ödeme veya Abonelik ekleyin"; hızlı tutar yok.
+// Tutar kartı (DESIGN_SYSTEM_PICKALY §5.7, field.ts): standart beyaz kart, ortalı çerçevesiz display-balance tutar
+//   (odakta da çerçeve yok), tür çipi ("Gelir Girişi" vb.), ayırıcı ve hızlı tutar çipleri.
+// Abonelik (Ödeme) tutar kartı: "Abonelik / Tekrarlayan İşlem" chip'i (Category/Blue), işaretsiz tutar (text-primary),
+//   altında "Fatura, Ödeme veya Abonelik ekleyin"; hızlı tutar yok.
 // Tekrar Eden İşlem kartı: radius-lg, border-default, padding 12, aralık 12; 40 px Category/Slate kutuda repeat ikonu,
 //   Label/Default başlık + Body/Small açıklama, sağda switch; açıkken ayırıcı + Tekrarlama Sıklığı / Hatırlatma Bildirimi.
 //   Gelir/Gider'de varsayılan kapalı, Abonelik'te açık (Pages).
 // [Varsayım] Abonelik'te anahtar kapalıyken kayıt tek seferlik ödemedir (PRD Q-8 "Tekrarlama yok" bu şekilde karşılanır).
 // [Varsayım] Varsayılan sıklık Aylık, varsayılan hatırlatma "1 saat önce" (Pages'ta görünen değer).
 // [Ertelendi] Düzenlemede tekrar kartı gösterilmez: kural düzenleme ("Yalnızca bu / Bu ve sonrakiler", Q-7) sonraki dilim.
-// Input 46 px, padding 12/16, radius-md, surface-card, border-default, Body/Default [Ç-2].
+// Input 48 px, radius-md, beyaz, border-input (field.ts, DESIGN_SYSTEM_PICKALY §5.7, K-7 / K-12).
 // Hesap, tarih ve saat özel seçicilerle seçilir (RESPONSIVE §4.5.1); tarayıcının native seçicileri kullanılmaz.
 // [Varsayım] Hızlı tutar çipleri mevcut tutarın üstüne ekler.
 // Tutar yazılırken binlik ayırıcıyla biçimlenir ("1.234.567,89"); alandan çıkınca kuruş iki haneye tamamlanır.
@@ -314,7 +314,7 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
         <FieldLabel id="category-label" required>
           {t("category")}
         </FieldLabel>
-        <div role="group" aria-labelledby="category-label" aria-describedby={describedBy("categoryId")} className="flex flex-wrap gap-8">
+        <div role="group" aria-labelledby="category-label" aria-describedby={describedBy("categoryId")} className={chipRowClass}>
           {typeCategories.map((category) => (
             <ChipSelect key={category.id} selected={values.categoryId === category.id} onClick={() => set("categoryId", category.id)}>
               {category.name}

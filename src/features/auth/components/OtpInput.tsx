@@ -5,7 +5,7 @@ import { fieldFocusClass } from "@/components/ui/field";
 import { cn } from "@/lib/cn";
 import { OTP_LENGTH } from "../schemas";
 
-// 6 haneli e-posta kodu (RESPONSIVE §8.2.8): 6 ayrı 48×56 kutu, radius-md, border-control; rakam title-md (DESIGN_SYSTEM_PICKALY §5.7).
+// 6 haneli e-posta kodu (RESPONSIVE §8.2.8): 6 ayrı 48×56 kutu, radius-md, border-input; rakam title-md (DESIGN_SYSTEM_PICKALY §5.7).
 // Yapıştırma, geri silme ve ok tuşlarıyla gezinme desteklenir; değer tek bir gizli alanla (name) gönderilir.
 // Ekran okuyucu için kutular tek bir grup olarak adlandırılır; her kutu "n. hane" etiketlidir.
 
@@ -76,7 +76,7 @@ export function OtpInput({ name, label, digitLabel, invalid, describedBy }: OtpI
           className={cn(
             "h-56 w-48 min-w-0 rounded-md border bg-surface-card text-center text-title-md text-text-primary transition-colors",
             fieldFocusClass,
-            invalid ? "border-border-error" : "border-border-control hover:border-border-control-hover",
+            invalid ? "border-border-error" : "border-border-input hover:border-border-input-hover",
           )}
         />
       ))}

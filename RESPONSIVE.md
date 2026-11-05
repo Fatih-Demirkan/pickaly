@@ -189,7 +189,7 @@ Gösterim: `[n/12]` = 12 sütunluk grid'de kapladığı sütun, tablette `[n/8]`
 
 **Mobil içerik sırası [Figma]:**
 1. Toplam Bakiye kartı
-2. Hızlı Aksiyonlar (Gelir · Gider · Görev · Ödeme)
+2. Hızlı Aksiyonlar (Gelir · Gider · Ödeme · Görev) [sıra: ürün sahibi kararı 2026-11-05]
 3. Bugünün Akışı
 4. Yaklaşan Ödemeler
 5. Birikim Hedefi
@@ -576,8 +576,7 @@ Pages'ta başarı bildirimi ve form doğrulama hatası **tasarlanmamış** (§3.
 
 ### 5.3 PWA [Karar #14]
 - **Manifest değerleri:**
-  - `theme_color` / `<meta name="theme-color">`: **`#0F766E`** (`Brand/Primary`)
-  - `background_color`: **`#F8FAFC`** (`Neutral/50 - BG`)
+  - `theme_color` / `<meta name="theme-color">` ve `background_color`: **`#F5F6F7`** (DESIGN_SYSTEM_PICKALY §7). Eski `#0F766E` / `#F8FAFC` geçersiz.
   - Not: PWA notundaki `#4f46e5` değeri geçersizdir.
 - **Güvenli alan:** Mobil tasarımdaki 40 px üst alan `safe-area-inset-top` ile karşılanır. Alt pill nav ve Detay-Nav Bar, `safe-area-inset-bottom` kadar yukarı itilir.
 - **Standalone mod:** Tablet ve masaüstü kuralları aynen geçerli.

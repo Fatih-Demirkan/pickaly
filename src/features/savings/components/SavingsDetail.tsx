@@ -18,7 +18,8 @@ import { formatSavingsAmount } from "../format";
 import { movementHref } from "../routes";
 import { getSavingsDetail } from "../server";
 import { CloseAccountDialog } from "./CloseAccountDialog";
-import { kindChip, ProgressBar } from "./savingsStyle";
+import { kindChip } from "./savingsStyle";
+import { ProgressMeter } from "@/components/ui/ProgressMeter";
 
 // Pages → Birikim Hesabı Detayı (129:6652, PRD FR-SAV-004/008/009/011), RESPONSIVE §3.4.3.
 //   Durum kartı: tür çipi • "Aktif Birikim" (Yeşil); ad Label/Small + bakiye Data/Large; ayırıcı;
@@ -84,7 +85,7 @@ export async function SavingsDetail({ id }: { id: string }) {
               <span className="text-text-primary">{t("detail.target", { amount: amount(account.target) })}</span>
               {!completed && <span className="text-text-secondary">{t("detail.remaining", { amount: amount(account.target - account.balance) })}</span>}
             </p>
-            <ProgressBar percent={percent} label={t("detail.progressLabel")} />
+            <ProgressMeter percent={percent} label={t("detail.progressLabel")} />
             <p className="flex items-center justify-between gap-8 text-caption-strong">
               <span className="text-text-secondary">{t("detail.progress")}</span>
               <span className="text-text-brand">{t("detail.progressValue", { percent })}</span>

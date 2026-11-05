@@ -1,12 +1,12 @@
 import { DEFAULT_TIME, toDateKey, type DateKey } from "@/lib/dates";
 import { DEFAULT_REMINDER } from "@/lib/recurrence";
-import type { CalendarItemKind } from "../domain/types";
 import type { ItemFormValues } from "./ItemForm";
 
 /** Yeni görev / randevu formunun başlangıç değerleri (Takvim "Görev Ekle" ve Yeni İşlem sheet'i → Görev). */
-export function newItemFormValues({ kind, date }: { kind?: CalendarItemKind; date?: DateKey } = {}): ItemFormValues {
+export function newItemFormValues({ date }: { date?: DateKey } = {}): ItemFormValues {
   return {
-    kind: kind ?? "task",
+    // Görev / Randevu ayrımı yok (ürün sahibi kararı 2026-11-05): her yeni kayıt Görev, Normal öncelik.
+    kind: "task",
     title: "",
     description: "",
     priority: "normal",
