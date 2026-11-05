@@ -21,11 +21,11 @@ import { MonthMatrix } from "./MonthMatrix";
 import { WeekStrip } from "./WeekStrip";
 
 // Pages → Takvim - Aylık Görünüm ve Ajanda (6:5987) · Takvim - Haftalık Çizelge Görünümü (6:9589), PRD §5, RESPONSIVE §3.2.
-//   Başlık "Takvim" + alt başlık, sağda "Bugün" (Tertiary SM, calendar ikonu) · Aylık / Haftalık / Günlük segmented
+//   Başlık "Takvim" + alt başlık, sağda "Bugün" (Tertiary SM, calendar ikonu) · Aylık / Haftalık segmented
 //   ay seçici (İşlemler ile aynı kalıp) · aylık: ay matrisi + seçili gün özeti + ajanda · haftalık: 7 günlük şerit +
 //   seçili gün özeti + saat çizelgesi.
 // Laptop+ (aylık): matris [8/12] | seçili gün ajandası [4/12], sticky (RESPONSIVE §3.2.1).
-// [Eksik] "Günlük" görünüm tasarlanmadı (RESPONSIVE #4): seçenek görünür ama devre dışı.
+// "Günlük" seçeneği kaldırıldı (ürün sahibi isteği 2026-11-05); yalnızca Aylık ve Haftalık.
 // Haftalık görünümde ileri/geri bir hafta kaydırır; başlıkta seçili günün ayı yazar (Pages: "Mayıs 2026").
 
 const arrowClass =
@@ -65,7 +65,6 @@ export async function CalendarScreen({ query }: { query: CalendarQuery }) {
         options={[
           { value: "month", label: t("views.month"), href: calendarHref({ day }) },
           { value: "week", label: t("views.week"), href: calendarHref({ view: "week", day }) },
-          { value: "day" as CalendarView, label: t("views.day"), href: "", disabled: true },
         ]}
       />
       {/* Dönem seçici: MonthSwitcher ile aynı görünüm (44 px beyaz pill, elev-1). */}

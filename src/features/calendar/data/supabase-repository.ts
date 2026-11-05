@@ -20,13 +20,14 @@ type ItemRow = {
   location_name: string | null;
   location_address: string | null;
   note: string | null;
+  subtasks: CalendarItem["subtasks"] | null;
   planned_expense_minor: number | null;
   status: CalendarItem["status"];
   completed_at: string | null;
 };
 
 const COLUMNS =
-  "id, kind, title, description, priority, category_id, date, time, duration_minutes, reminder, location_name, location_address, note, planned_expense_minor, status, completed_at";
+  "id, kind, title, description, priority, category_id, date, time, duration_minutes, reminder, location_name, location_address, note, planned_expense_minor, subtasks, status, completed_at";
 
 function toItem(row: ItemRow): CalendarItem {
   return {
@@ -44,6 +45,7 @@ function toItem(row: ItemRow): CalendarItem {
     locationAddress: row.location_address,
     note: row.note,
     plannedExpenseMinor: toBigIntOrNull(row.planned_expense_minor),
+    subtasks: Array.isArray(row.subtasks) ? row.subtasks : [],
     status: row.status,
     completedAt: row.completed_at ? new Date(row.completed_at).toISOString() : null,
   };
@@ -64,6 +66,7 @@ function inputRow(input: CalendarItemInput) {
     location_address: input.locationAddress,
     note: input.note,
     planned_expense_minor: fromBigInt(input.plannedExpenseMinor),
+    subtasks: input.subtasks,
   };
 }
 
@@ -90,6 +93,10 @@ export const supabaseCalendarRepository: CalendarRepository = {
   },
   async setStatus(id, status, completedAt) {
     const row = unwrap(await (await db()).from("calendar_items").update({ status, completed_at: completedAt }).eq("id", id).select(COLUMNS).maybeSingle());
+    return row ? toItem(row as ItemRow) : null;
+  },
+  async setSubtasks(id, subtasks) {
+    const row = unwrap(await (await db()).from("calendar_items").update({ subtasks }).eq("id", id).select(COLUMNS).maybeSingle());
     return row ? toItem(row as ItemRow) : null;
   },
   async remove(id) {

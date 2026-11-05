@@ -15,7 +15,10 @@
    Sayfa geçişi yalnızca opaklık kullanır: transform, içindeki fixed drawer'ların konumunu bozar. */
 @theme {
   --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
-  --animate-page-enter: page-enter 200ms ease-out;
+  /* Uygulama hissi (ürün sahibi isteği 2026-11-05): sayfa geçişi tamamen saydamdan değil, hafif bir soluklaşmadan
+     kısa sürede gelir; içerik "yükleniyor" gibi kaybolup yeniden belirmez. */
+  --animate-page-enter: page-enter 140ms ease-out;
+  --animate-skeleton: skeleton 1.2s ease-in-out infinite;
   --animate-fade-in: fade-in 200ms ease-out;
   --animate-drawer-enter: drawer-enter 280ms var(--ease-enter);
   --animate-sheet-enter: sheet-enter 280ms var(--ease-enter);
@@ -24,7 +27,12 @@
 
   @keyframes page-enter {
     from {
-      opacity: 0;
+      opacity: 0.6;
+    }
+  }
+  @keyframes skeleton {
+    50% {
+      opacity: 0.5;
     }
   }
   @keyframes fade-in {

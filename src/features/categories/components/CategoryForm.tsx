@@ -130,6 +130,7 @@ export function CategoryForm({ categoryId, initialValues, cancelHref }: Category
           label={t("form.type")}
           value={values.type}
           disabled={edit}
+          fullWidth
           onChange={(next) => set("type", next)}
           options={FINANCE_OPTIONS.map((value) => ({ value, label: t(`type.${value}`) }))}
         />
@@ -222,7 +223,7 @@ export function CategoryForm({ categoryId, initialValues, cancelHref }: Category
               name="budget"
               inputMode="decimal"
               autoComplete="off"
-              placeholder={locale === "tr" ? "0,00" : "0.00"}
+              placeholder="0"
               value={values.budget}
               onChange={(event) => set("budget", formatMoneyTyping(event.target.value, locale))}
               onBlur={completeBudget}

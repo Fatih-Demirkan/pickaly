@@ -29,12 +29,27 @@ export type CalendarItem = {
   note: string | null;
   /** Bilgi amaçlı planlanan harcama, kuruş. Bakiyeyi etkilemez, işlem oluşturmaz (BR-TSK-003). */
   plannedExpenseMinor: bigint | null;
+  /** Alt görevler ("Çoklu seçim", 2026-11-05). Boş = alt görev listesi yok. İlerleme barı bunlardan hesaplanır. */
+  subtasks: Subtask[];
   status: CalendarItemStatus;
   /** ISO anlık zaman. */
   completedAt: string | null;
 };
 
 export type CalendarItemInput = Omit<CalendarItem, "id" | "status" | "completedAt">;
+
+/** Alt görev (alışveriş listesi gibi işaretlenebilir satır). */
+export type Subtask = { id: string; title: string; done: boolean };
+
+export const SUBTASK_MAX_COUNT = 30;
+export const SUBTASK_TITLE_MAX_LENGTH = 80;
+
+/** Tamamlanan / toplam alt görev; liste yoksa null. */
+export function subtaskProgress(subtasks: readonly Subtask[]): { done: number; total: number; percent: number } | null {
+  if (subtasks.length === 0) return null;
+  const done = subtasks.filter((subtask) => subtask.done).length;
+  return { done, total: subtasks.length, percent: Math.round((done / subtasks.length) * 100) };
+}
 
 export const PRIORITIES: readonly Priority[] = ["low", "normal", "high"];
 export const CALENDAR_ITEM_KINDS: readonly CalendarItemKind[] = ["task", "appointment"];

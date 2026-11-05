@@ -21,7 +21,7 @@ type AccountRow = {
   name: string;
   kind: SavingsAccount["kind"];
   unit: SavingsAccount["unit"];
-  institution: string | null;
+  account_id: string | null;
   target: number | null;
   opened_at: string;
   note: string | null;
@@ -30,7 +30,7 @@ type AccountRow = {
   color: SavingsAccount["color"];
 };
 
-const ACCOUNT_COLUMNS = "id, name, kind, unit, institution, target, opened_at, note, contribution, icon, color";
+const ACCOUNT_COLUMNS = "id, name, kind, unit, account_id, target, opened_at, note, contribution, icon, color";
 
 function toContribution(json: ContributionJson | null): SavingsContribution | null {
   return json ? { ...json, amount: toBigInt(json.amount) } : null;
@@ -46,7 +46,7 @@ function toAccount(row: AccountRow): SavingsAccount {
     name: row.name,
     kind: row.kind,
     unit: row.unit,
-    institution: row.institution,
+    accountId: row.account_id,
     target: toBigIntOrNull(row.target),
     openedAt: row.opened_at,
     note: row.note,
@@ -61,7 +61,7 @@ function accountPatch(patch: Partial<Omit<SavingsAccount, "id">>) {
   if (patch.name !== undefined) row.name = patch.name;
   if (patch.kind !== undefined) row.kind = patch.kind;
   if (patch.unit !== undefined) row.unit = patch.unit;
-  if (patch.institution !== undefined) row.institution = patch.institution;
+  if (patch.accountId !== undefined) row.account_id = patch.accountId;
   if (patch.target !== undefined) row.target = fromBigInt(patch.target);
   if (patch.openedAt !== undefined) row.opened_at = patch.openedAt;
   if (patch.note !== undefined) row.note = patch.note;

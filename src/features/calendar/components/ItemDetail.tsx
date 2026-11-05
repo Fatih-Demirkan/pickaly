@@ -15,6 +15,7 @@ import { deleteCalendarItemAction } from "../actions";
 import { endTime } from "../domain/agenda";
 import type { CalendarItem } from "../domain/types";
 import { CompleteToggle } from "./CompleteToggle";
+import { SubtaskChecklist } from "./SubtaskChecklist";
 
 // Pages → Görev Detayı ve Durum Yönetimi / "Kayıt Detayı" (6:8233, PRD FR-CAL-007…010).
 //   Durum kartı: radius-2xl, padding 16, aralık 12, gradyan beyaz → Neutral/100, border, shadow-elev-2;
@@ -136,6 +137,15 @@ export async function ItemDetail({ item, category, locale, editHref }: ItemDetai
               </InfoCard>
             )}
           </div>
+        </section>
+      )}
+
+      {item.subtasks.length > 0 && (
+        <section aria-labelledby={`subtasks-${item.id}`} className="flex flex-col gap-12">
+          <h3 id={`subtasks-${item.id}`} className="text-title-sm text-text-primary">
+            {t("subtasks.title")}
+          </h3>
+          <SubtaskChecklist itemId={item.id} subtasks={item.subtasks} />
         </section>
       )}
 

@@ -3,9 +3,9 @@
 import { getLocale } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { setFlash } from "@/lib/flash";
 import { getAccountMap } from "@/features/accounts/server";
 import { getCategoryMap } from "@/features/categories/server";
-import { paymentHref } from "@/features/payments";
 import { createRecurringPayment, revertPaymentForDeletedTransaction } from "@/features/payments/server";
 import { isLocale } from "@/i18n/config";
 import { localDateTimeToIso, toMonthKey, type DateKey } from "@/lib/dates";
@@ -104,8 +104,8 @@ export async function createTransaction(_previous: TransactionFormState, formDat
   const { values } = result;
 
   if (values.type === "subscription") {
-    // Abonelik: tekrarlayan (veya anahtar kapalıyken tek seferlik) ödeme; ilk vadenin Ödeme Detayı açılır.
-    const payment = await createRecurringPayment({
+    // Abonelik: tekrarlayan (veya anahtar kapalıyken tek seferlik) ödeme; kayıttan sonra toast + Ana Sayfa.
+    await createRecurringPayment({
       title: values.title,
       amountMinor: values.amountMinor,
       categoryId: values.categoryId,
@@ -117,7 +117,8 @@ export async function createTransaction(_previous: TransactionFormState, formDat
       note: values.note,
     });
     revalidatePath("/", "layout");
-    redirect(paymentHref(payment.id));
+    await setFlash("subscriptionCreated");
+    redirect("/");
   }
 
   const input = transactionInput({ ...values, type: values.type });
@@ -133,9 +134,10 @@ export async function createTransaction(_previous: TransactionFormState, formDat
         generatedThrough: values.date,
       })
     : null;
-  const created = await transactionRepository.create(input, rule ? { source: "recurring", recurringRuleId: rule.id } : undefined);
+  await transactionRepository.create(input, rule ? { source: "recurring", recurringRuleId: rule.id } : undefined);
   revalidatePath("/", "layout");
-  redirect(monthHref(created.occurredAt));
+  await setFlash("transactionCreated");
+  redirect("/");
 }
 
 export async function updateTransaction(id: string, _previous: TransactionFormState, formData: FormData): Promise<TransactionFormState> {
@@ -150,6 +152,7 @@ export async function updateTransaction(id: string, _previous: TransactionFormSt
   const updated = await transactionRepository.update(id, transactionInput({ ...values, type: values.type }));
   if (!updated) return { formError: "notFound" };
   revalidatePath("/", "layout");
+  await setFlash("transactionUpdated");
   redirect(`/islemler/${encodeURIComponent(id)}`);
 }
 
@@ -161,5 +164,6 @@ export async function deleteTransaction(id: string): Promise<void> {
     if (existing.paymentId) await revertPaymentForDeletedTransaction(existing.paymentId);
   }
   revalidatePath("/", "layout");
+  if (existing) await setFlash("transactionDeleted");
   redirect(existing ? monthHref(existing.occurredAt) : "/islemler");
 }

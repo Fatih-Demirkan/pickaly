@@ -8,7 +8,8 @@ import { PickerPanel } from "./PickerPanel";
 
 // Özel saat seçici (RESPONSIVE §4.5.1 [Karar #6]): saat ve dakika listesi, satırlar 48 px.
 // Saat seçilince panel açık kalır; dakika seçilince kapanır. Değer "HH:mm" (24 saat).
-// [Varsayım] Dakika adımı 1: kayıtlı saatler (ör. 15:42) aynen gösterilebilsin.
+// Dakika adımı 15 (ürün sahibi kararı 2026-11-05): 00 · 15 · 30 · 45. Eski bir kayıt bu adımların dışında bir dakika
+// taşıyorsa (ör. 15:42) o dakika listeye eklenir ki değer kaybolmasın ve seçili görünsün.
 
 type TimePickerProps = {
   id: string;
@@ -23,7 +24,13 @@ type TimePickerProps = {
 
 const pad = (value: number) => String(value).padStart(2, "0");
 const hours = Array.from({ length: 24 }, (_, hour) => ({ value: pad(hour), label: pad(hour) }));
-const minutes = Array.from({ length: 60 }, (_, minute) => ({ value: pad(minute), label: pad(minute) }));
+const MINUTE_STEP = 15;
+const stepMinutes = Array.from({ length: 60 / MINUTE_STEP }, (_, index) => pad(index * MINUTE_STEP));
+
+function minuteOptions(current: string) {
+  const values = stepMinutes.includes(current) || !/^\d{2}$/.test(current) ? stepMinutes : [...stepMinutes, current].sort();
+  return values.map((value) => ({ value, label: value }));
+}
 
 export function TimePicker({ id, name, value, onChange, labelledBy, title, invalid, describedBy }: TimePickerProps) {
   const t = useTranslations("picker");
@@ -77,7 +84,7 @@ export function TimePicker({ id, name, value, onChange, labelledBy, title, inval
               {t("minute")}
             </p>
             <OptionList
-              options={minutes}
+              options={minuteOptions(minute)}
               value={minute}
               labelledBy={minuteLabelId}
               onSelect={(next) => {

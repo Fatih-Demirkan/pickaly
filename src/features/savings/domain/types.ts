@@ -2,7 +2,7 @@ import type { DateKey } from "@/lib/dates";
 import type { Frequency, ReminderOffset } from "@/lib/recurrence";
 
 // Birikim hesabı (PRD §7, DM-008; TECH_STACK §5.2 savings). Pages'ta birikim "birikim hesabı" olarak modellenmiş:
-// kendi bakiyesi, türü, saklama kurumu ve hedefi vardır. Bir hesap = bir hedef [PRD Öneri].
+// kendi bakiyesi, türü, bağlı olduğu hesap ve hedefi vardır. Bir hesap = bir hedef [PRD Öneri].
 // Bakiye saklanmaz; hareketlerden hesaplanır. Para ekleme/çekme bir aktarımdır (BR-SAV-001/002): gelir/gider sayılmaz.
 
 /** Pages → Yeni Birikim Hesabı "Hesap Türü". */
@@ -35,8 +35,11 @@ export type SavingsAccount = {
   name: string;
   kind: SavingsKind;
   unit: SavingsUnit;
-  /** Pages → Hesap Parametreleri "Saklama Kurumu". */
-  institution: string | null;
+  /**
+   * Bağlı hesap (ürün sahibi kararı 2026-11-05; "Saklama Kurumu" metninin yerine). Başlangıç bakiyesi, para ekle / çek
+   * ve düzenli katkı bu hesaptan yapılır. null = eski kayıt, hesaplara yansımaz.
+   */
+  accountId: string | null;
   /** Birim cinsinden hedef, yüzde birlik; null = hedefsiz birikim, ilerleme gösterilmez (PRD §7.2). */
   target: bigint | null;
   openedAt: DateKey;

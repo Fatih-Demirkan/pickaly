@@ -1,16 +1,16 @@
 import { Suspense } from "react";
-import { ContentLoading } from "@/components/layout/ContentLoading";
 import { PageContainer } from "@/components/layout/PageContainer";
+import { DashboardSkeleton } from "@/components/layout/Skeleton";
 import { Dashboard } from "@/features/dashboard/components/Dashboard";
 
-// Ana Sayfa (Dashboard). Veriler istek anına bağlı olduğundan kendi Suspense sınırında çizilir;
-// navigasyon ve üst bar hemen görünür (cacheComponents).
+// Ana Sayfa (Dashboard). Veriler istek anına bağlı olduğundan kendi Suspense sınırında çizilir; navigasyon ve üst bar
+// hemen görünür, içerik beklenirken Ana Sayfa iskeleti gösterilir (cacheComponents, DESIGN_SYSTEM_PICKALY §5.9).
 export default function HomePage() {
   return (
-    <PageContainer>
-      <Suspense fallback={<ContentLoading />}>
+    <Suspense fallback={<DashboardSkeleton />}>
+      <PageContainer>
         <Dashboard />
-      </Suspense>
-    </PageContainer>
+      </PageContainer>
+    </Suspense>
   );
 }

@@ -59,11 +59,14 @@ function groupDigits(digits: string, group: string): string {
   return digits.replace(/\B(?=(\d{3})+(?!\d))/g, group);
 }
 
-/** Form alanının değeri, kuruş her zaman iki hane: TR "1.280,50" · EN "1,280.50". */
+/**
+ * Form alanının değeri. Kuruş sıfırsa gösterilmez (ürün sahibi isteği 2026-11-05): TR "120.000" · EN "120,000".
+ * Kuruş varsa iki hane: TR "1.280,50" · EN "1,280.50". Kullanıcı kuruşu yine yazabilir.
+ */
 export function formatMoneyInput(minor: bigint, locale: Locale): string {
   const [whole = "0", fraction = "00"] = toDecimalString(minor < BigInt(0) ? -minor : minor).split(".");
   const { group, decimal } = separators[locale];
-  return `${groupDigits(whole, group)}${decimal}${fraction}`;
+  return fraction === "00" ? groupDigits(whole, group) : `${groupDigits(whole, group)}${decimal}${fraction}`;
 }
 
 /** Tutar alanının tam sayı kısmında en fazla hane (MAX_AMOUNT_MINOR = 999.999.999,99). */

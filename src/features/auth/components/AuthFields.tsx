@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
 import type { AuthErrorKey, AuthFormError } from "../schemas";
 
 // Oturum formlarının ortak alanları. Form alanı kalıbı diğer formlarla aynı (src/components/ui/field.ts: 48 px,
-// radius-md, border-control; body-strong etiket, caption hata metni). Başlık display-hero (DESIGN_SYSTEM_PICKALY §3.2).
+// radius-md, border-control; body-strong etiket, caption hata metni). Kart başlığı title-md; sayfanın h1'i karşılama sloganıdır.
 
 
 type FieldProps = Omit<ComponentProps<"input">, "id" | "name"> & {
@@ -109,7 +109,7 @@ export function FormAlert({ error, tone = "error", children }: { error?: AuthFor
 export function AuthHeading({ title, subtitle }: { title: string; subtitle?: ReactNode }) {
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-display-hero text-text-primary">{title}</h1>
+      <h2 className="text-title-md text-text-primary">{title}</h2>
       {subtitle && <p className="text-body text-text-secondary">{subtitle}</p>}
     </div>
   );

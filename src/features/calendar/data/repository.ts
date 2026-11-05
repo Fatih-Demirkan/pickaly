@@ -11,5 +11,7 @@ export interface CalendarRepository {
   create(input: CalendarItemInput): Promise<CalendarItem>;
   update(id: string, input: CalendarItemInput): Promise<CalendarItem | null>;
   setStatus(id: string, status: CalendarItem["status"], completedAt: string | null): Promise<CalendarItem | null>;
+  /** Yalnızca alt görev listesini günceller (detayda / kartta işaretleme). */
+  setSubtasks(id: string, subtasks: CalendarItem["subtasks"]): Promise<CalendarItem | null>;
   remove(id: string): Promise<boolean>;
 }

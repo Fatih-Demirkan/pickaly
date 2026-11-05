@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, type ClipboardEvent, type KeyboardEvent } from "react";
+import { fieldFocusClass } from "@/components/ui/field";
 import { cn } from "@/lib/cn";
 import { OTP_LENGTH } from "../schemas";
 
@@ -73,7 +74,8 @@ export function OtpInput({ name, label, digitLabel, invalid, describedBy }: OtpI
           onPaste={(event) => onPaste(index, event)}
           onFocus={(event) => event.target.select()}
           className={cn(
-            "h-56 w-48 min-w-0 rounded-md border bg-surface-card text-center text-title-md text-text-primary transition-colors focus:border-border-focus",
+            "h-56 w-48 min-w-0 rounded-md border bg-surface-card text-center text-title-md text-text-primary transition-colors",
+            fieldFocusClass,
             invalid ? "border-border-error" : "border-border-control hover:border-border-control-hover",
           )}
         />

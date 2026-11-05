@@ -12,6 +12,8 @@ import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/money";
 import type { CalendarItem } from "../domain/types";
 import { CompleteToggle } from "./CompleteToggle";
+import { subtaskProgress } from "../domain/types";
+import { SubtaskProgress } from "./SubtaskProgress";
 import { kindChip } from "./kindStyle";
 
 // Takvim ajanda kartı (Pages "Article" yapısı) — görünüm DESIGN_SYSTEM_PICKALY §5.2: beyaz, radius-md, padding 12,
@@ -51,6 +53,7 @@ type ItemCardProps = { item: CalendarItem; category: Category | undefined; href:
 export async function AgendaItemCard({ item, category, href }: ItemCardProps) {
   const t = await getTranslations("calendar");
   const done = item.status === "done";
+  const progress = subtaskProgress(item.subtasks);
   const sub = done ? t("card.finished") : item.durationMinutes ? t("card.minutes", { count: item.durationMinutes }) : item.time ? "" : t("card.allDay");
   const metaText = item.locationName ?? item.description;
   const metaIcon: AppIconName | ReturnType<typeof resolveCategoryIcon> = item.locationName ? "location" : category?.icon ? resolveCategoryIcon(category) : "description";
@@ -76,6 +79,7 @@ export async function AgendaItemCard({ item, category, href }: ItemCardProps) {
           <span className="min-w-0">{metaText}</span>
         </span>
       )}
+      {progress && <SubtaskProgress done={progress.done} total={progress.total} label={t("subtasks.progress")} size="sm" className="pt-4" />}
     </CardShell>
   );
 }

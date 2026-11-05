@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { getAccountMap } from "@/features/accounts/server";
 import { isLocale } from "@/i18n/config";
 import { toDateKey } from "@/lib/dates";
 import { formatMoney, splitMoneyDecimals } from "@/lib/money";
@@ -28,11 +29,12 @@ import { kindChip, ProgressBar, SavingsIcon } from "./savingsStyle";
 
 export async function SavingsOverview() {
   const today = toDateKey(new Date());
-  const [t, tPage, rawLocale, { accounts, summary }] = await Promise.all([
+  const [t, tPage, rawLocale, { accounts, summary }, bankAccounts] = await Promise.all([
     getTranslations("savings"),
     getTranslations("pages.savings"),
     getLocale(),
     getSavingsOverview(today),
+    getAccountMap(),
   ]);
   const locale = isLocale(rawLocale) ? rawLocale : "tr";
   const empty = accounts.length === 0;
@@ -119,7 +121,10 @@ export async function SavingsOverview() {
                           <Link href={savingsHref(account.id)} className="truncate text-body-strong text-text-primary after:absolute after:inset-0 after:rounded-lg">
                             {account.name}
                           </Link>
-                          {account.institution && <span className="truncate text-caption text-text-secondary">{account.institution}</span>}
+                          {/* Alt satır: bağlı hesap ("Saklama Kurumu" yerine, 2026-11-05). */}
+                          {account.accountId && bankAccounts.get(account.accountId) && (
+                            <span className="truncate text-caption text-text-secondary">{bankAccounts.get(account.accountId)?.name}</span>
+                          )}
                         </div>
                       </div>
                       {percent !== null && percent >= 100 ? <Chip variant="success">{t("list.completed")}</Chip> : <Chip variant={kindChip[account.kind]}>{t(`kindShort.${account.kind}`)}</Chip>}

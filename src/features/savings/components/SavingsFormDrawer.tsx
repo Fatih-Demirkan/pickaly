@@ -8,7 +8,7 @@ import { Icon } from "@/components/ui/Icon";
 import { listAccounts } from "@/features/accounts/server";
 import { getAccountBalances } from "@/features/transactions/server";
 import { isLocale } from "@/i18n/config";
-import { toDateKey, toTimeValue } from "@/lib/dates";
+import { DEFAULT_TIME, toDateKey, toTimeValue } from "@/lib/dates";
 import { formatMoney, formatMoneyInput } from "@/lib/money";
 import { DEFAULT_REMINDER } from "@/lib/recurrence";
 import { savingsHref } from "../routes";
@@ -38,8 +38,7 @@ export async function SavingsFormDrawer(props: SavingsFormDrawerProps) {
       unit: account.unit,
       amount: rule ? formatMoneyInput(rule.amount, locale) : "",
       target: account.target !== null ? formatMoneyInput(account.target, locale) : "",
-      institution: account.institution ?? "",
-      sourceAccountId: rule?.sourceAccountId ?? accounts[0]?.id ?? "",
+      sourceAccountId: account.accountId ?? rule?.sourceAccountId ?? accounts[0]?.id ?? "",
       date: toDateKey(now),
       time: rule?.time ?? toTimeValue(now),
       repeat: rule !== null,
@@ -55,11 +54,10 @@ export async function SavingsFormDrawer(props: SavingsFormDrawerProps) {
       unit: "TRY",
       amount: "",
       target: "",
-      institution: "",
       // [Varsayım] Varsayılan kaynak hesap listedeki ilk hesap (Pages: "Ana Hesap").
       sourceAccountId: accounts[0]?.id ?? "",
       date: toDateKey(now),
-      time: toTimeValue(now),
+      time: DEFAULT_TIME, // Yeni kayıt: bugün 09:00 (ürün sahibi kararı 2026-11-05)
       // Pages: Yeni Birikim formunda Tekrar Eden İşlem açık, sıklık Aylık.
       repeat: true,
       frequency: "monthly",

@@ -308,6 +308,29 @@
       "target": "Hedef: {amount}",
       "progress": "İlerleme",
       "percent": "%{percent}"
+    },
+    "gettingStarted": {
+      "title": "Pickaly ile başlayalım",
+      "subtitle": "Birkaç adımda paranı ve planlarını tek yerde topla.",
+      "progress": "{done}/{total}",
+      "done": "tamamlandı",
+      "todo": "bekliyor",
+      "account": {
+        "title": "Hesaplarını ekle",
+        "hint": "Banka hesabını ekle ya da Ana Hesap bakiyeni gir"
+      },
+      "transaction": {
+        "title": "İlk işlemini ekle",
+        "hint": "Bir gelir veya gider kaydet"
+      },
+      "task": {
+        "title": "Bir görev planla",
+        "hint": "Takvime ilk görevini ya da randevunu ekle"
+      },
+      "savings": {
+        "title": "Birikim hedefi oluştur",
+        "hint": "Biriktirmek istediğin tutarı belirle"
+      }
     }
   },
   "calendar": {
@@ -355,7 +378,8 @@
       "finished": "Bitti",
       "highPriority": "Öncelikli",
       "complete": "“{title}” tamamlandı olarak işaretle",
-      "reopen": "“{title}” yeniden aç"
+      "reopen": "“{title}” yeniden aç",
+      "failed": "Kaydedilemedi. Lütfen tekrar deneyin."
     },
     "toast": {
       "completed": "Tamamlandı olarak işaretlendi.",
@@ -427,9 +451,8 @@
       "chooseReminder": "Hatırlatma seçin",
       "location": "Konum (İsteğe Bağlı)",
       "locationName": "Konum adı",
-      "locationNamePlaceholder": "Örn. Dt. Selin Yıldız Kliniği",
+      "locationNamePlaceholder": "Adres, sokak, cadde adı girin",
       "locationAddress": "Adres",
-      "locationAddressPlaceholder": "Cadde, mahalle, ilçe",
       "note": "Not (İsteğe Bağlı)",
       "notePlaceholder": "Kayıtla ilgili kısa bir not",
       "noteCount": "{count}/{max}",
@@ -449,7 +472,20 @@
         "plannedExpense": "Geçerli bir tutar girin.",
         "summary": "Kaydedilemedi. İşaretli alanları kontrol edin.",
         "notFound": "Bu kayıt artık mevcut değil."
-      }
+      },
+      "multi": "Çoklu seçim",
+      "multiHint": "Notların altına alışveriş listesi gibi alt görevler ekle"
+    },
+    "subtasks": {
+      "progress": "Alt görevler",
+      "toggle": "{title} tamamlandı olarak işaretle",
+      "item": "{index}. alt görev",
+      "placeholder": "Alt görev yazın",
+      "remove": "{index}. alt görevi sil",
+      "add": "Ekle",
+      "finish": "Tamamla",
+      "edit": "Listeyi düzenle",
+      "title": "Alt Görevler"
     }
   },
   "savings": {
@@ -505,7 +541,6 @@
       "progressLabel": "İlerleme",
       "info": "Bu hesapta tutulan bakiye, günlük harcanabilir cüzdan bakiyenizden ayrı tutulur ve yalnızca birikim toplamınıza dahil edilir.",
       "parameters": "Hesap Parametreleri",
-      "institution": "Saklama Kurumu",
       "openedAt": "Açılış Tarihi",
       "monthsAgo": "({count} ay önce)",
       "daysAgo": "({count} gün önce)",
@@ -525,7 +560,8 @@
       },
       "move": "Para ekle / Çek",
       "edit": "Hesabı düzenle",
-      "close": "Birikim hesabını kapat / Sil"
+      "close": "Birikim hesabını kapat / Sil",
+      "account": "İşlem Yapılan Hesap"
     },
     "frequencyUnit": {
       "daily": "Gün",
@@ -560,8 +596,6 @@
       "kind": "Hesap Türü",
       "target": "Hedef Tutar",
       "targetPlaceholder": "Boş bırakılırsa hedefsiz birikim",
-      "institution": "Saklama Kurumu (İsteğe Bağlı)",
-      "institutionPlaceholder": "Örn. İş Bankası (Vadeli TL)",
       "account": "İşlem Yapılan Hesap",
       "when": "İşlem Zamanı ve Tekrarı",
       "date": "Tarih",
@@ -583,7 +617,6 @@
         "amount": "Geçerli bir tutar girin.",
         "repeatAmount": "Düzenli katkı için bir tutar girin.",
         "target": "Geçerli bir hedef tutar girin.",
-        "institution": "Saklama kurumu en fazla {max} karakter olabilir.",
         "account": "Bir hesap seçin.",
         "date": "Geçerli bir tarih seçin.",
         "time": "Geçerli bir saat seçin.",
@@ -602,10 +635,8 @@
       "inChip": "Birikime Ekle",
       "outChip": "Birikimden Çek",
       "balance": "Birikim bakiyesi: {amount}",
-      "sourceAccount": "Kaynak Hesap",
-      "targetAccount": "Hedef Hesap",
-      "transfer": "TL Karşılığı (İsteğe Bağlı)",
-      "transferHint": "Girilirse seçili hesaba yansır; girilmezse hesaplara dokunulmaz.",
+      "sourceAccount": "Paranın Çekileceği Hesap",
+      "targetAccount": "Paranın Aktarılacağı Hesap",
       "date": "Tarih",
       "chooseDate": "Tarih seçin",
       "negativeWarning": "Bakiye eksiye düşecek.",
@@ -614,12 +645,15 @@
       "errors": {
         "amount": "Geçerli bir tutar girin.",
         "insufficient": "Çekilecek miktar birikim bakiyesinden büyük olamaz.",
-        "transfer": "Geçerli bir TL tutarı girin.",
-        "account": "Bir hesap seçin.",
         "date": "Geçerli bir tarih seçin.",
         "summary": "Kaydedilemedi. İşaretli alanları kontrol edin.",
         "notFound": "Bu birikim hesabı artık mevcut değil."
-      }
+      },
+      "accountBalance": "Bakiye {amount}",
+      "fromAccountHint": "Tutar {account} hesabınızdan birikime aktarılır.",
+      "toAccountHint": "Tutar birikimden {account} hesabınıza aktarılır.",
+      "noLinkedAccount": "Bu birikim bir hesaba bağlı değil; hareket hesap bakiyelerine yansımaz. Hesabı birikimi düzenleyerek seçebilirsiniz.",
+      "unitHint": "Adet / gram birimli birikimde hesap bakiyelerine dokunulmaz."
     }
   },
   "categories": {
@@ -851,6 +885,11 @@
     "logout": {
       "title": "Çıkış Yap",
       "hint": "Oturumu bu cihazda sonlandır"
+    },
+    "accounts": {
+      "title": "Hesaplarım",
+      "hint": "Banka hesapları ve hesaplar arası aktarım",
+      "count": "{count, plural, one {# hesap} other {# hesap}}"
     }
   },
   "auth": {
@@ -925,6 +964,111 @@
       "notConfigured": "Supabase bağlantısı yapılandırılmadığı için bu işlem yapılamıyor.",
       "unknown": "Bir sorun oluştu. Lütfen tekrar deneyin.",
       "linkInvalid": "Doğrulama bağlantısı açılamadı: süresi dolmuş ya da kayıt olduğunuz tarayıcıdan farklı bir tarayıcıda açılmış olabilir. E-postanız doğrulandıysa e-posta ve şifrenizle giriş yapabilirsiniz."
+    },
+    "welcome": {
+      "title": "Paranı ve zamanını tek yerde planla.",
+      "body": "Gelir, gider, görev ve birikimlerini tek uygulamada takip et; ay sonunu sürprizsiz kapat.",
+      "features": {
+        "money": "Gelir ve giderlerini anında kaydet",
+        "plan": "Görev ve ödemelerini takvimde gör",
+        "savings": "Birikim hedeflerine adım adım ulaş"
+      }
+    }
+  },
+  "flash": {
+    "transactionCreated": "İşlem başarıyla eklendi.",
+    "subscriptionCreated": "Abonelik başarıyla eklendi.",
+    "transactionUpdated": "İşlem güncellendi.",
+    "transactionDeleted": "İşlem silindi.",
+    "itemCreated": "Kayıt takvime eklendi.",
+    "itemUpdated": "Kayıt güncellendi.",
+    "itemDeleted": "Kayıt silindi.",
+    "savingsCreated": "Birikim hesabı oluşturuldu.",
+    "savingsUpdated": "Birikim hesabı güncellendi.",
+    "savingsMovedIn": "Para birikime eklendi.",
+    "savingsMovedOut": "Para birikimden çekildi.",
+    "savingsClosed": "Birikim hesabı kapatıldı.",
+    "accountCreated": "Hesap eklendi.",
+    "accountUpdated": "Hesap güncellendi.",
+    "accountArchived": "Hesap arşivlendi.",
+    "accountDeleted": "Hesap silindi.",
+    "transferCreated": "Para aktarımı tamamlandı."
+  },
+  "accounts": {
+    "title": "Hesaplarım",
+    "back": "Profil ve Ayarlar'a dön",
+    "add": "Hesap ekle",
+    "transferAction": "Para aktar",
+    "transferNeedsTwo": "Para aktarmak için en az iki hesap gerekir.",
+    "total": "Toplam bakiye",
+    "count": "{count, plural, one {# aktif hesap} other {# aktif hesap}}",
+    "listTitle": "Hesaplar",
+    "default": "Varsayılan",
+    "edit": "{name} hesabını düzenle",
+    "transfersTitle": "Son Aktarımlar",
+    "transfersEmpty": "Henüz hesaplar arası aktarım yok.",
+    "transferRoute": "{from} → {to}",
+    "archivedTitle": "Arşivlenen hesaplar ({count})",
+    "restore": "Geri al",
+    "restoreLabel": "{name} hesabını geri al",
+    "form": {
+      "newTitle": "Yeni Hesap",
+      "editTitle": "Hesabı Düzenle",
+      "cancel": "İptal",
+      "save": "Kaydet",
+      "required": "zorunlu",
+      "name": "Hesap Adı",
+      "namePlaceholder": "Örn. İş Bankası",
+      "detail": "Açıklama (İsteğe Bağlı)",
+      "detailPlaceholder": "Örn. Banka Kartı (••4821)",
+      "openingBalance": "Açılış Bakiyesi",
+      "openingBalanceHint": "Hesabın bugünkü bakiyesi. Boş bırakılırsa 0 ₺.",
+      "remove": "Hesabı sil",
+      "defaultNote": "Ana Hesap varsayılan hesaptır; silinemez veya arşivlenemez.",
+      "errors": {
+        "name": "Hesap adı girin.",
+        "nameLength": "Hesap adı en fazla {max} karakter olabilir.",
+        "duplicate": "Bu adda bir hesap zaten var.",
+        "detailLength": "Açıklama en fazla {max} karakter olabilir.",
+        "openingBalance": "Geçerli bir tutar girin.",
+        "summary": "Kaydedilemedi. İşaretli alanları kontrol edin.",
+        "notFound": "Bu hesap artık mevcut değil."
+      }
+    },
+    "removeDialog": {
+      "archiveTitle": "Hesap arşivlensin mi?",
+      "archiveBody": "{name} hesabında kayıtlar olduğu için silinemez. Arşivlenir: seçicilerde görünmez, geçmiş kayıtlar ve bakiye korunur. İstediğinizde geri alabilirsiniz.",
+      "archiveConfirm": "Arşivle",
+      "deleteTitle": "Hesap silinsin mi?",
+      "deleteBody": "{name} hesabı kalıcı olarak silinecek. Bu işlem geri alınamaz.",
+      "deleteConfirm": "Sil",
+      "cancel": "Vazgeç"
+    },
+    "transfer": {
+      "title": "Para Aktar",
+      "chip": "Hesaplar Arası Aktarım",
+      "amount": "Tutar",
+      "from": "Gönderen Hesap",
+      "to": "Alıcı Hesap",
+      "when": "Aktarım Zamanı",
+      "date": "Tarih",
+      "time": "Saat",
+      "chooseDate": "Tarih seçin",
+      "chooseTime": "Saat seçin",
+      "note": "Not (İsteğe Bağlı)",
+      "notePlaceholder": "Aktarımla ilgili kısa bir not",
+      "negativeWarning": "Gönderen hesabın bakiyesi eksiye düşecek.",
+      "cancel": "İptal",
+      "save": "Aktar",
+      "errors": {
+        "account": "Bir hesap seçin.",
+        "sameAccount": "Gönderen ve alıcı hesap farklı olmalı.",
+        "amount": "Geçerli bir tutar girin.",
+        "date": "Geçerli bir tarih seçin.",
+        "time": "Geçerli bir saat seçin.",
+        "note": "Not en fazla {max} karakter olabilir.",
+        "summary": "Aktarılamadı. İşaretli alanları kontrol edin."
+      }
     }
   }
 }

@@ -4,6 +4,8 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Chip } from "@/components/ui/Chip";
 import { getSessionUser } from "@/features/auth/server";
 import { listCategories } from "@/features/categories/server";
+import { ACCOUNTS_PATH } from "@/features/accounts/routes";
+import { listAccounts } from "@/features/accounts/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import packageJson from "../../../../package.json";
 import { getProfile, getSettings } from "../server";
@@ -41,7 +43,7 @@ function initials(name: string) {
 }
 
 export async function ProfileSettings() {
-  const [t, tPage, tHeader, mockProfile, sessionUser, settings, categories] = await Promise.all([
+  const [t, tPage, tHeader, mockProfile, sessionUser, settings, categories, accounts] = await Promise.all([
     getTranslations("settings"),
     getTranslations("pages.profile"),
     getTranslations("header"),
@@ -49,6 +51,7 @@ export async function ProfileSettings() {
     getSessionUser(),
     getSettings(),
     listCategories(),
+    listAccounts(),
   ]);
   const profile = sessionUser ? { name: sessionUser.name, email: sessionUser.email } : mockProfile;
   const authEnabled = isSupabaseConfigured();
@@ -82,6 +85,15 @@ export async function ProfileSettings() {
 
           <div className="flex flex-col gap-(--layout-section-gap) laptop:col-span-8 laptop:max-w-[720px]">
             <SettingsGroup id="settings-content" title={t("groups.content")}>
+              <li>
+                <SettingsLinkRow
+                  href={ACCOUNTS_PATH}
+                  icon="paymentMethod"
+                  title={t("accounts.title")}
+                  hint={t("accounts.hint")}
+                  trailing={<Chip>{t("accounts.count", { count: accounts.length })}</Chip>}
+                />
+              </li>
               <li>
                 <SettingsLinkRow
                   href="/profil/kategoriler"

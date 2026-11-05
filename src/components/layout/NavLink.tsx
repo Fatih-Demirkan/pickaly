@@ -12,6 +12,7 @@ import { Icon } from "@/components/ui/Icon";
 // "stacked" : tablet rail — ikon üstte, nav etiketi (10 px) altta; 64×56 pill.
 // "inline"  : laptop+ sidebar — ikon solda, body-strong etiket; 44 px pill.
 // Rail ve sidebar'da aktif: siyah zemin + beyaz ikon/metin; pasif: text-secondary, hover canvas zemin.
+// prefetch: ana sekmeler veriyle birlikte önceden yüklenir; dokununca sayfa beklemeden açılır (uygulama hissi).
 
 function isActive(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
@@ -32,6 +33,7 @@ export function NavLink({ item, label, layout, className }: NavLinkProps) {
     return (
       <Link
         href={item.href}
+        prefetch
         aria-current={active ? "page" : undefined}
         aria-label={label}
         title={label}
@@ -52,6 +54,7 @@ export function NavLink({ item, label, layout, className }: NavLinkProps) {
   return (
     <Link
       href={item.href}
+      prefetch
       aria-current={active ? "page" : undefined}
       className={cn(
         "touch-target flex items-center rounded-full transition-colors",

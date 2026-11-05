@@ -8,7 +8,7 @@ import { Icon } from "@/components/ui/Icon";
 import { listAccounts } from "@/features/accounts/server";
 import { listCategories } from "@/features/categories/server";
 import { isLocale } from "@/i18n/config";
-import { toDateKey, toTimeValue } from "@/lib/dates";
+import { DEFAULT_TIME, toDateKey, toTimeValue } from "@/lib/dates";
 import { formatMoney, formatMoneyInput } from "@/lib/money";
 import { DEFAULT_REMINDER } from "@/lib/recurrence";
 import type { TransactionFormType } from "../schemas";
@@ -62,7 +62,7 @@ export async function TransactionFormDrawer(props: TransactionFormDrawerProps) {
       // [Varsayım] Yeni kayıtta varsayılan hesap listedeki ilk hesaptır (Pages: "Ana Hesap").
       accountId: accounts[0]?.id ?? "",
       date: toDateKey(now),
-      time: toTimeValue(now),
+      time: DEFAULT_TIME, // Yeni kayıt: bugün 09:00 (ürün sahibi kararı 2026-11-05)
       note: "",
       // Pages: Abonelik'te Tekrar Eden İşlem açık gelir; Gelir/Gider'de kapalı.
       repeat: type === "subscription",

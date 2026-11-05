@@ -18,7 +18,7 @@ import { cn } from "@/lib/cn";
 import { formatMoneyInput, formatMoneyShort, formatMoneyTyping, majorToMinor, parseMoneyInput } from "@/lib/money";
 import { FREQUENCIES, REMINDER_OFFSETS, type Frequency, type ReminderOffset } from "@/lib/recurrence";
 import { createSavingsAccount, updateSavingsAccount } from "../actions";
-import { INSTITUTION_MAX_LENGTH, NAME_MAX_LENGTH, NOTE_MAX_LENGTH } from "../domain/limits";
+import { NAME_MAX_LENGTH, NOTE_MAX_LENGTH } from "../domain/limits";
 import { SAVINGS_KINDS, unitForKind, type SavingsKind, type SavingsUnit } from "../domain/types";
 import type { SavingsFormField, SavingsFormState } from "../schemas";
 
@@ -41,7 +41,6 @@ export type SavingsFormValues = {
   unit: SavingsUnit;
   amount: string;
   target: string;
-  institution: string;
   sourceAccountId: string;
   date: string;
   time: string;
@@ -89,7 +88,7 @@ function ErrorText({ id, message }: { id: string; message?: string }) {
   );
 }
 
-const limits: Partial<Record<SavingsFormField, number>> = { name: NAME_MAX_LENGTH, institution: INSTITUTION_MAX_LENGTH, note: NOTE_MAX_LENGTH };
+const limits: Partial<Record<SavingsFormField, number>> = { name: NAME_MAX_LENGTH, note: NOTE_MAX_LENGTH };
 
 export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHref }: SavingsFormProps) {
   const t = useTranslations("savings");
@@ -182,7 +181,7 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
             name="amount"
             inputMode="decimal"
             autoComplete="off"
-            placeholder={locale === "tr" ? "0,00" : "0.00"}
+            placeholder="0"
             value={values.amount}
             onChange={(event) => set("amount", formatMoneyTyping(event.target.value, locale))}
             onBlur={() => complete("amount")}
@@ -288,38 +287,21 @@ export function SavingsForm({ mode, accountId, initialValues, accounts, cancelHr
         <ErrorText id="target-error" message={errorText("target")} />
       </div>
 
+      {/* Bağlı hesap: "Saklama Kurumu" yerine; her türde zorunlu (ürün sahibi kararı 2026-11-05). */}
       <div className="flex flex-col gap-8">
-        <Label htmlFor="institution">{t("form.institution")}</Label>
-        <input
-          id="institution"
-          name="institution"
-          maxLength={INSTITUTION_MAX_LENGTH}
-          placeholder={t("form.institutionPlaceholder")}
-          value={values.institution}
-          onChange={(event) => set("institution", event.target.value)}
-          aria-invalid={invalid("institution")}
-          aria-describedby={describedBy("institution")}
-          className={inputClass}
+        <Label id="sourceAccountId-label">{t("form.account")}</Label>
+        <AccountPicker
+          id="sourceAccountId"
+          name="sourceAccountId"
+          accounts={accounts}
+          value={values.sourceAccountId}
+          onChange={(next) => set("sourceAccountId", next)}
+          labelledBy="sourceAccountId-label"
+          invalid={invalid("sourceAccountId")}
+          describedBy={describedBy("sourceAccountId")}
         />
-        <ErrorText id="institution-error" message={errorText("institution")} />
-      </div>
-
-      {money && (
-        <div className="flex flex-col gap-8">
-          <Label id="sourceAccountId-label">{t("form.account")}</Label>
-          <AccountPicker
-            id="sourceAccountId"
-            name="sourceAccountId"
-            accounts={accounts}
-            value={values.sourceAccountId}
-            onChange={(next) => set("sourceAccountId", next)}
-            labelledBy="sourceAccountId-label"
-            invalid={invalid("sourceAccountId")}
-            describedBy={describedBy("sourceAccountId")}
-          />
-          <ErrorText id="sourceAccountId-error" message={errorText("sourceAccountId")} />
+        <ErrorText id="sourceAccountId-error" message={errorText("sourceAccountId")} />
         </div>
-      )}
 
       <fieldset className="flex flex-col gap-8">
         <legend className="mb-8 text-body-strong text-text-primary">{t("form.when")}</legend>

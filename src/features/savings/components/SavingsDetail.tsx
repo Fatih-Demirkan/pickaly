@@ -50,6 +50,7 @@ export async function SavingsDetail({ id }: { id: string }) {
   const [t, tRecurrence, rawLocale, bankAccounts] = await Promise.all([getTranslations("savings"), getTranslations("recurrence"), getLocale(), listAccounts()]);
   const locale = isLocale(rawLocale) ? rawLocale : "tr";
   const { account, movements } = detail;
+  const linkedAccount = account.accountId ? bankAccounts.find((bank) => bank.id === account.accountId) : undefined;
   const percent = progressPercent(account);
   const completed = percent !== null && percent >= 100;
   const today = toDateKey(new Date());
@@ -109,9 +110,10 @@ export async function SavingsDetail({ id }: { id: string }) {
         {t("detail.parameters")}
       </h3>
       <dl className="overflow-hidden rounded-md bg-surface-card shadow-elev-1">
-        {account.institution && (
-          <ParamRow label={t("detail.institution")}>
-            <p className="text-body-strong text-text-primary">{account.institution}</p>
+        {linkedAccount && (
+          <ParamRow label={t("detail.account")}>
+            <p className="text-body-strong text-text-primary">{linkedAccount.name}</p>
+            {linkedAccount.detail && <p className="text-caption text-text-secondary">{linkedAccount.detail}</p>}
           </ParamRow>
         )}
         <ParamRow label={t("detail.openedAt")}>

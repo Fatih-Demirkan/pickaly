@@ -4,6 +4,8 @@ import { Chip } from "@/components/ui/Chip";
 import { CategoryIcon, type Category } from "@/features/categories";
 import { itemHref, type CalendarItem } from "@/features/calendar";
 import { CompleteToggle } from "@/features/calendar/components/CompleteToggle";
+import { SubtaskProgress } from "@/features/calendar/components/SubtaskProgress";
+import { subtaskProgress } from "@/features/calendar/domain/types";
 import { cn } from "@/lib/cn";
 
 // Pages → Ana Sayfa "Bugünün Akışı" görev / randevu satırı (6:1082, 6:1126):
@@ -20,6 +22,7 @@ const fallbackCategory = {
 export async function AgendaTaskCard({ item, category }: { item: CalendarItem; category: Category | undefined }) {
   const t = await getTranslations("calendar");
   const done = item.status === "done";
+  const progress = subtaskProgress(item.subtasks);
 
   return (
     <li className={cn("relative flex items-center gap-12 rounded-md bg-surface-card p-12 shadow-elev-1 transition-colors hover:bg-action-tertiary-hover", done && "opacity-60")}>
@@ -45,6 +48,7 @@ export async function AgendaTaskCard({ item, category }: { item: CalendarItem; c
             </>
           )}
         </p>
+        {progress && <SubtaskProgress done={progress.done} total={progress.total} label={t("subtasks.progress")} size="sm" className="pt-4" />}
       </div>
       <CompleteToggle id={item.id} title={item.title} done={done} />
     </li>

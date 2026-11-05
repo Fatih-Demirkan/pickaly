@@ -16,7 +16,9 @@ export type SegmentedOption<T extends string> = {
 };
 
 function groupClasses(fullWidth?: boolean, className?: string) {
-  return cn("inline-flex h-40 gap-4 rounded-full bg-surface-muted p-4", fullWidth && "flex w-full", className);
+  // Tam genişlik istenmediğinde kap içerik kadardır (w-fit): dikey flex içinde (ör. Birikim formu "Adet / Gram")
+  // kendiliğinden tüm satıra yayılmaz.
+  return cn("inline-flex h-40 gap-4 rounded-full bg-surface-muted p-4", fullWidth ? "flex w-full" : "w-fit", className);
 }
 
 function optionClasses(selected: boolean, fullWidth?: boolean) {

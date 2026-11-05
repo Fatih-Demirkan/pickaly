@@ -248,7 +248,7 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
             name="amount"
             inputMode="decimal"
             autoComplete="off"
-            placeholder={locale === "tr" ? "0,00" : "0.00"}
+            placeholder="0"
             value={values.amount}
             onChange={changeAmount}
             onBlur={completeAmount}

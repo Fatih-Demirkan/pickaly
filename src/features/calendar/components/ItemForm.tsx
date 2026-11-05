@@ -17,6 +17,8 @@ import { cn } from "@/lib/cn";
 import { formatMoneyInput, formatMoneyTyping, parseMoneyInput } from "@/lib/money";
 import { REMINDER_OFFSETS, type ReminderOffset } from "@/lib/recurrence";
 import { createCalendarItem, updateCalendarItem } from "../actions";
+import type { Subtask } from "../domain/types";
+import { SubtaskEditor } from "./SubtaskEditor";
 import { DESCRIPTION_MAX_LENGTH, LOCATION_MAX_LENGTH, NOTE_MAX_LENGTH, TITLE_MAX_LENGTH } from "../domain/limits";
 import { DURATION_OPTIONS, type CalendarItemKind, type Priority } from "../domain/types";
 import type { CalendarItemFormField, CalendarItemFormState } from "../schemas";
@@ -44,6 +46,9 @@ export type ItemFormValues = {
   locationAddress: string;
   note: string;
   plannedExpense: string;
+  /** "Çoklu seçim": alt görev listesi açık mı (yalnızca Görev). */
+  multi: boolean;
+  subtasks: Subtask[];
 };
 
 type ItemFormProps = {
@@ -134,6 +139,8 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
   return (
     <form action={formAction} noValidate className="flex flex-1 flex-col gap-(--layout-section-gap)">
       <input type="hidden" name="kind" value={values.kind} />
+      {/* Alt görevler JSON olarak gönderilir; "Çoklu seçim" kapalıysa veya randevuysa boş liste. */}
+      <input type="hidden" name="subtasks" value={JSON.stringify(values.kind === "task" && values.multi ? values.subtasks : [])} />
       <input type="hidden" name="priority" value={values.priority} />
       <input type="hidden" name="categoryId" value={values.categoryId} />
       <input type="hidden" name="allDay" value={String(values.allDay)} />
@@ -326,9 +333,10 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
       </fieldset>
 
       <fieldset className="flex flex-col gap-8">
+        {/* Tek konum alanı (ürün sahibi isteği 2026-11-05): ad ve adres ayrı sorulmaz; örnek metin kişi adı içermez. */}
         <legend className="mb-8 text-body-strong text-text-primary">{t("form.location")}</legend>
         <label htmlFor="locationName" className="sr-only">
-          {t("form.locationName")}
+          {t("form.location")}
         </label>
         <input
           id="locationName"
@@ -342,21 +350,6 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
           className={inputClass}
         />
         <ErrorText id="locationName-error" message={errorText("locationName")} />
-        <label htmlFor="locationAddress" className="sr-only">
-          {t("form.locationAddress")}
-        </label>
-        <input
-          id="locationAddress"
-          name="locationAddress"
-          maxLength={LOCATION_MAX_LENGTH}
-          placeholder={t("form.locationAddressPlaceholder")}
-          value={values.locationAddress}
-          onChange={(event) => set("locationAddress", event.target.value)}
-          aria-invalid={invalid("locationAddress")}
-          aria-describedby={describedBy("locationAddress")}
-          className={inputClass}
-        />
-        <ErrorText id="locationAddress-error" message={errorText("locationAddress")} />
       </fieldset>
 
       <div className="flex flex-col gap-8">
@@ -381,6 +374,28 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
         <ErrorText id="note-error" message={errorText("note")} />
       </div>
 
+      {values.kind === "task" && (
+        <div className="flex flex-col gap-12 rounded-lg bg-surface-card p-12 shadow-elev-1">
+          <div className="flex items-center justify-between gap-12">
+            <div className="flex min-w-0 flex-col gap-2">
+              <p id="multi-label" className="text-body-strong text-text-primary">
+                {t("form.multi")}
+              </p>
+              <p id="multi-hint" className="text-caption text-text-secondary">
+                {t("form.multiHint")}
+              </p>
+            </div>
+            <Switch id="multi" checked={values.multi} onChange={(next) => set("multi", next)} labelledBy="multi-label" describedBy="multi-hint" />
+          </div>
+          {values.multi && (
+            <>
+              <div className="border-t border-border-subtle" />
+              <SubtaskEditor value={values.subtasks} onChange={(next) => set("subtasks", next)} />
+            </>
+          )}
+        </div>
+      )}
+
       <div className="flex flex-col gap-8">
         <Label htmlFor="plannedExpense">{t("form.plannedExpense")}</Label>
         <label
@@ -392,7 +407,7 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
             name="plannedExpense"
             inputMode="decimal"
             autoComplete="off"
-            placeholder={locale === "tr" ? "0,00" : "0.00"}
+            placeholder="0"
             value={values.plannedExpense}
             onChange={(event) => set("plannedExpense", formatMoneyTyping(event.target.value, locale))}
             onBlur={completeExpense}

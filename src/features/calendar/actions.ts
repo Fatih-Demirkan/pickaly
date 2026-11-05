@@ -3,6 +3,8 @@
 import { getLocale } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { setFlash } from "@/lib/flash";
+import { SUBTASK_MAX_COUNT, SUBTASK_TITLE_MAX_LENGTH, type Subtask } from "./domain/types";
 import { getCategoryMap } from "@/features/categories/server";
 import { isLocale } from "@/i18n/config";
 import { isTimeValue } from "@/lib/dates";
@@ -83,8 +85,33 @@ async function parseForm(formData: FormData, keepCategoryId?: string | null): Pr
       locationAddress: data.locationAddress || null,
       note: data.note || null,
       plannedExpenseMinor,
+      // Alt görevler yalnızca Görev türünde ("Çoklu seçim"); randevuda saklanmaz.
+      subtasks: data.kind === "task" ? parseSubtasks(String(formData.get("subtasks") ?? "[]")) : [],
     },
   };
+}
+
+/**
+ * Formdan gelen alt görev listesi (JSON). Boş başlıklar atılır, en fazla SUBTASK_MAX_COUNT satır, başlık en fazla
+ * SUBTASK_TITLE_MAX_LENGTH karakter. Bozuk veri boş liste sayılır.
+ */
+function parseSubtasks(raw: string): Subtask[] {
+  let value: unknown;
+  try {
+    value = JSON.parse(raw);
+  } catch {
+    return [];
+  }
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((entry) => (entry && typeof entry === "object" ? (entry as Record<string, unknown>) : {}))
+    .map((entry) => ({
+      id: typeof entry.id === "string" && entry.id ? entry.id.slice(0, 40) : crypto.randomUUID(),
+      title: typeof entry.title === "string" ? entry.title.trim().slice(0, SUBTASK_TITLE_MAX_LENGTH) : "",
+      done: entry.done === true,
+    }))
+    .filter((subtask) => subtask.title.length > 0)
+    .slice(0, SUBTASK_MAX_COUNT);
 }
 
 function revalidateCalendar() {
@@ -95,10 +122,10 @@ function revalidateCalendar() {
 export async function createCalendarItem(_previous: CalendarItemFormState, formData: FormData): Promise<CalendarItemFormState> {
   const result = await parseForm(formData);
   if (!result.ok) return result.state;
-  const created = await calendarRepository.create(result.input);
+  await calendarRepository.create(result.input);
   revalidateCalendar();
-  // Kayıt ilgili günde görünür (RESPONSIVE §8.2.1).
-  redirect(calendarHref({ day: created.date }));
+  await setFlash("itemCreated");
+  redirect("/");
 }
 
 export async function updateCalendarItem(id: string, _previous: CalendarItemFormState, formData: FormData): Promise<CalendarItemFormState> {
@@ -108,6 +135,7 @@ export async function updateCalendarItem(id: string, _previous: CalendarItemForm
   if (!result.ok) return result.state;
   await calendarRepository.update(id, result.input);
   revalidateCalendar();
+  await setFlash("itemUpdated");
   redirect(itemHref(id, { day: result.input.date }));
 }
 
@@ -118,10 +146,23 @@ export async function setCalendarItemDoneAction(id: string, done: boolean): Prom
   return { ok: updated !== null };
 }
 
+/** Alt görevi işaretler / işareti kaldırır (detay ve kartlar). İlerleme barı yeniden hesaplanır. */
+export async function setSubtaskDoneAction(itemId: string, subtaskId: string, done: boolean): Promise<{ ok: boolean }> {
+  const item = await calendarRepository.get(itemId);
+  if (!item || !item.subtasks.some((subtask) => subtask.id === subtaskId)) return { ok: false };
+  const updated = await calendarRepository.setSubtasks(
+    itemId,
+    item.subtasks.map((subtask) => (subtask.id === subtaskId ? { ...subtask, done } : subtask)),
+  );
+  revalidateCalendar();
+  return { ok: updated !== null };
+}
+
 /** "Kaydı kalıcı olarak sil" → onay → kalıcı silme (FR-CAL-010, Karar #7, D-10). */
 export async function deleteCalendarItemAction(id: string): Promise<void> {
   const existing = await calendarRepository.get(id);
   if (existing) await calendarRepository.remove(id);
   revalidateCalendar();
+  if (existing) await setFlash("itemDeleted");
   redirect(calendarHref({ day: existing?.date }));
 }

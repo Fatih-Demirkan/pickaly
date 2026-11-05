@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { isDateKey, isTimeValue } from "@/lib/dates";
 import { FREQUENCIES, REMINDER_OFFSETS } from "@/lib/recurrence";
-import { INSTITUTION_MAX_LENGTH, NAME_MAX_LENGTH, NOTE_MAX_LENGTH } from "./domain/limits";
+import { NAME_MAX_LENGTH, NOTE_MAX_LENGTH } from "./domain/limits";
 
 // Yeni Birikim Hesabı / Hesabı Düzenle ve Para ekle / Çek formlarının doğrulama kuralları (PRD §7.2).
 // Asıl doğrulama sunucudadır (TECH_STACK §6.3). Hata mesajları çeviri anahtarıdır.
@@ -12,7 +12,6 @@ export const savingsFormSchema = z.object({
   unit: z.enum(["TRY", "piece", "gram"]),
   amount: z.string().trim(),
   target: z.string().trim(),
-  institution: z.string().trim().max(INSTITUTION_MAX_LENGTH, "institution"),
   sourceAccountId: z.string(),
   date: z.string().refine(isDateKey, "date"),
   time: z.string().refine(isTimeValue, "time"),
@@ -29,7 +28,6 @@ export type SavingsFormErrorKey =
   | "amount"
   | "repeatAmount"
   | "target"
-  | "institution"
   | "account"
   | "date"
   | "time"
@@ -45,13 +43,11 @@ export type SavingsFormState = {
 export const movementFormSchema = z.object({
   direction: z.enum(["in", "out"]),
   amount: z.string().trim().min(1, "amount"),
-  transfer: z.string().trim(),
-  bankAccountId: z.string(),
   date: z.string().refine(isDateKey, "date"),
 });
 
 export type MovementFormField = keyof z.infer<typeof movementFormSchema>;
-export type MovementFormErrorKey = "amount" | "insufficient" | "transfer" | "account" | "date";
+export type MovementFormErrorKey = "amount" | "insufficient" | "date";
 
 export type MovementFormState = {
   errors?: Partial<Record<MovementFormField, MovementFormErrorKey>>;

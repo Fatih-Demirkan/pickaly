@@ -11,7 +11,7 @@ import type { CalendarRepository } from "./repository";
 // Sözleşmesi İnceleme, Haftalık Market Alışverişi). Diğer günlerdeki kayıtlar takvimin boş görünmemesi için
 // eklenmiş örneklerdir; tarihler bugüne göre üretilir.
 
-type Seed = Omit<CalendarItem, "id" | "date" | "completedAt"> & { id: string; daysFromToday: number };
+type Seed = Omit<CalendarItem, "id" | "date" | "completedAt" | "subtasks"> & { id: string; daysFromToday: number };
 
 const base = { description: null, categoryId: null, durationMinutes: 60, reminder: "1h", locationName: null, locationAddress: null, note: null, plannedExpenseMinor: null, priority: "normal", status: "open" } as const;
 
@@ -27,8 +27,8 @@ const seeds: Seed[] = [
     daysFromToday: 0,
     time: "09:30",
     reminder: "1d",
-    locationName: "Dt. Selin Yıldız Kliniği",
-    locationAddress: "Valikonağı Cad. No:42/B, Nişantaşı, Şişli",
+    locationName: "Diş Kliniği, Cumhuriyet Cad. No:12",
+    locationAddress: null,
     note: "Randevu öncesi son tahlil sonuçlarını ve reçeteyi yanına almayı unutma. Girişte onay kodunu ilet.",
     plannedExpenseMinor: majorToMinor(1550),
   },
@@ -67,7 +67,7 @@ function buildSeed(): CalendarItem[] {
   const today = toDateKey(new Date());
   return seeds.map(({ daysFromToday, ...seed }) => {
     const date = addDays(today, daysFromToday);
-    return { ...seed, date, completedAt: seed.status === "done" ? localDateTimeToIso(date, seed.time ?? "09:00") : null };
+    return { ...seed, date, subtasks: [], completedAt: seed.status === "done" ? localDateTimeToIso(date, seed.time ?? "09:00") : null };
   });
 }
 
@@ -103,6 +103,12 @@ export const mockCalendarRepository: CalendarRepository = {
     const item = rows().find((row) => row.id === id);
     if (!item) return null;
     Object.assign(item, { status, completedAt });
+    return item;
+  },
+  async setSubtasks(id, subtasks) {
+    const item = rows().find((row) => row.id === id);
+    if (!item) return null;
+    item.subtasks = subtasks;
     return item;
   },
   async remove(id) {

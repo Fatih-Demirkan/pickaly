@@ -38,20 +38,33 @@ function initials(name: string) {
     .join("");
 }
 
+/** Üst barın tamamı (header). Ana Sayfa'da selamlama, diğer sekmelerde mobilde marka. */
 export function TopBarLead({ name }: { name: string }) {
   const pathname = usePathname();
   const t = useTranslations("header");
   const key = useGreetingKey();
 
-  if (pathname !== "/") {
-    return (
-      <div className="flex flex-col tablet:hidden">
-        <span className="text-title-md text-text-primary">{t("brand")}</span>
-        <span className="text-caption text-text-secondary">{t("tagline")}</span>
-      </div>
-    );
-  }
+  const home = pathname === "/";
 
+  return (
+    <header
+      className={cn(
+        "sticky top-0 z-(--z-sticky) flex h-(--layout-topbar-height) items-center gap-12 bg-surface-page px-16 max-tablet:group-data-[focus]/shell:hidden tablet:px-(--layout-page-padding-x)",
+        // Tablet+: marka rail / sidebar'da; bar yalnızca Ana Sayfa selamlaması için.
+        !home && "tablet:hidden",
+      )}
+    >
+      {home ? <Greeting name={name} greeting={key ? t(`greeting.${key}`) : ""} /> : (
+        <div className="flex flex-col">
+          <span className="text-title-md text-text-primary">{t("brand")}</span>
+          <span className="text-caption text-text-secondary">{t("tagline")}</span>
+        </div>
+      )}
+    </header>
+  );
+}
+
+function Greeting({ name, greeting }: { name: string; greeting: string }) {
   return (
     <div className="flex min-w-0 items-center gap-12">
       {name && (
@@ -63,8 +76,8 @@ export function TopBarLead({ name }: { name: string }) {
         </span>
       )}
       <div className="flex min-w-0 flex-col">
-        <span className={cn("h-16 text-caption text-text-secondary", !name && "sr-only")}>{key ? t(`greeting.${key}`) : ""}</span>
-        <span className="truncate text-title-md text-text-primary">{name || (key ? t(`greeting.${key}`) : " ")}</span>
+        <span className={cn("h-16 text-caption text-text-secondary", !name && "sr-only")}>{greeting}</span>
+        <span className="truncate text-title-md text-text-primary">{name || greeting || " "}</span>
       </div>
     </div>
   );

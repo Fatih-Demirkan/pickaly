@@ -308,6 +308,29 @@
       "target": "Target: {amount}",
       "progress": "Progress",
       "percent": "{percent}%"
+    },
+    "gettingStarted": {
+      "title": "Let’s get started with Pickaly",
+      "subtitle": "Bring your money and plans together in a few steps.",
+      "progress": "{done}/{total}",
+      "done": "done",
+      "todo": "to do",
+      "account": {
+        "title": "Add your accounts",
+        "hint": "Add a bank account or enter your Main Account balance"
+      },
+      "transaction": {
+        "title": "Add your first transaction",
+        "hint": "Record an income or an expense"
+      },
+      "task": {
+        "title": "Plan a task",
+        "hint": "Add your first task or appointment to the calendar"
+      },
+      "savings": {
+        "title": "Create a savings goal",
+        "hint": "Set the amount you want to save"
+      }
     }
   },
   "calendar": {
@@ -355,7 +378,8 @@
       "finished": "Done",
       "highPriority": "Priority",
       "complete": "Mark “{title}” as done",
-      "reopen": "Reopen “{title}”"
+      "reopen": "Reopen “{title}”",
+      "failed": "Couldn’t save. Please try again."
     },
     "toast": {
       "completed": "Marked as done.",
@@ -427,9 +451,8 @@
       "chooseReminder": "Choose reminder",
       "location": "Location (Optional)",
       "locationName": "Place name",
-      "locationNamePlaceholder": "e.g. Dr. Selin Yıldız Clinic",
+      "locationNamePlaceholder": "Enter an address, street or avenue",
       "locationAddress": "Address",
-      "locationAddressPlaceholder": "Street, neighbourhood, district",
       "note": "Note (Optional)",
       "notePlaceholder": "A short note about this item",
       "noteCount": "{count}/{max}",
@@ -449,7 +472,20 @@
         "plannedExpense": "Enter a valid amount.",
         "summary": "Could not save. Check the marked fields.",
         "notFound": "This item no longer exists."
-      }
+      },
+      "multi": "Checklist",
+      "multiHint": "Add subtasks under the notes, like a shopping list"
+    },
+    "subtasks": {
+      "progress": "Subtasks",
+      "toggle": "Mark {title} as done",
+      "item": "Subtask {index}",
+      "placeholder": "Write a subtask",
+      "remove": "Remove subtask {index}",
+      "add": "Add",
+      "finish": "Done",
+      "edit": "Edit list",
+      "title": "Subtasks"
     }
   },
   "savings": {
@@ -505,7 +541,6 @@
       "progressLabel": "Progress",
       "info": "The balance in this account is kept separate from your everyday spendable balance and only counts toward your savings total.",
       "parameters": "Account Parameters",
-      "institution": "Institution",
       "openedAt": "Opened",
       "monthsAgo": "({count, plural, one {# month ago} other {# months ago}})",
       "daysAgo": "({count, plural, one {# day ago} other {# days ago}})",
@@ -525,7 +560,8 @@
       },
       "move": "Deposit / Withdraw",
       "edit": "Edit account",
-      "close": "Close / Delete savings account"
+      "close": "Close / Delete savings account",
+      "account": "Linked Account"
     },
     "frequencyUnit": {
       "daily": "Day",
@@ -560,8 +596,6 @@
       "kind": "Account Type",
       "target": "Target Amount",
       "targetPlaceholder": "Leave empty for no target",
-      "institution": "Institution (Optional)",
-      "institutionPlaceholder": "e.g. İş Bankası (Time Deposit TRY)",
       "account": "Account",
       "when": "Date, Time and Repeat",
       "date": "Date",
@@ -583,7 +617,6 @@
         "amount": "Enter a valid amount.",
         "repeatAmount": "Enter an amount for the regular contribution.",
         "target": "Enter a valid target amount.",
-        "institution": "Institution can be at most {max} characters.",
         "account": "Choose an account.",
         "date": "Choose a valid date.",
         "time": "Choose a valid time.",
@@ -602,10 +635,8 @@
       "inChip": "Add to Savings",
       "outChip": "Withdraw from Savings",
       "balance": "Savings balance: {amount}",
-      "sourceAccount": "Source Account",
-      "targetAccount": "Target Account",
-      "transfer": "TRY Value (Optional)",
-      "transferHint": "If entered, the selected account is updated; otherwise accounts are untouched.",
+      "sourceAccount": "Account to take from",
+      "targetAccount": "Account to send to",
       "date": "Date",
       "chooseDate": "Choose date",
       "negativeWarning": "The balance will go negative.",
@@ -614,12 +645,15 @@
       "errors": {
         "amount": "Enter a valid amount.",
         "insufficient": "You cannot withdraw more than the savings balance.",
-        "transfer": "Enter a valid TRY amount.",
-        "account": "Choose an account.",
         "date": "Choose a valid date.",
         "summary": "Could not save. Check the marked fields.",
         "notFound": "This savings account no longer exists."
-      }
+      },
+      "accountBalance": "Balance {amount}",
+      "fromAccountHint": "The amount is moved from {account} into the savings.",
+      "toAccountHint": "The amount is moved from the savings into {account}.",
+      "noLinkedAccount": "This savings account isn't linked to an account; the movement won't affect account balances. Edit the savings to choose one.",
+      "unitHint": "Piece / gram savings don't affect account balances."
     }
   },
   "categories": {
@@ -851,6 +885,11 @@
     "logout": {
       "title": "Log Out",
       "hint": "End the session on this device"
+    },
+    "accounts": {
+      "title": "My Accounts",
+      "hint": "Bank accounts and transfers between them",
+      "count": "{count, plural, one {# account} other {# accounts}}"
     }
   },
   "auth": {
@@ -925,6 +964,111 @@
       "notConfigured": "This can't be done because the Supabase connection is not configured.",
       "unknown": "Something went wrong. Please try again.",
       "linkInvalid": "The verification link couldn't be opened: it may have expired or been opened in a different browser than the one you signed up in. If your email is verified, sign in with your email and password."
+    },
+    "welcome": {
+      "title": "Plan your money and time in one place.",
+      "body": "Track income, expenses, tasks and savings in one app, and end every month without surprises.",
+      "features": {
+        "money": "Record income and expenses instantly",
+        "plan": "See tasks and payments on your calendar",
+        "savings": "Reach your savings goals step by step"
+      }
+    }
+  },
+  "flash": {
+    "transactionCreated": "Transaction added.",
+    "subscriptionCreated": "Subscription added.",
+    "transactionUpdated": "Transaction updated.",
+    "transactionDeleted": "Transaction deleted.",
+    "itemCreated": "Added to your calendar.",
+    "itemUpdated": "Entry updated.",
+    "itemDeleted": "Entry deleted.",
+    "savingsCreated": "Savings account created.",
+    "savingsUpdated": "Savings account updated.",
+    "savingsMovedIn": "Money added to savings.",
+    "savingsMovedOut": "Money withdrawn from savings.",
+    "savingsClosed": "Savings account closed.",
+    "accountCreated": "Account added.",
+    "accountUpdated": "Account updated.",
+    "accountArchived": "Account archived.",
+    "accountDeleted": "Account deleted.",
+    "transferCreated": "Transfer completed."
+  },
+  "accounts": {
+    "title": "My Accounts",
+    "back": "Back to Profile & Settings",
+    "add": "Add account",
+    "transferAction": "Transfer",
+    "transferNeedsTwo": "You need at least two accounts to transfer money.",
+    "total": "Total balance",
+    "count": "{count, plural, one {# active account} other {# active accounts}}",
+    "listTitle": "Accounts",
+    "default": "Default",
+    "edit": "Edit {name}",
+    "transfersTitle": "Recent Transfers",
+    "transfersEmpty": "No transfers between accounts yet.",
+    "transferRoute": "{from} → {to}",
+    "archivedTitle": "Archived accounts ({count})",
+    "restore": "Restore",
+    "restoreLabel": "Restore {name}",
+    "form": {
+      "newTitle": "New Account",
+      "editTitle": "Edit Account",
+      "cancel": "Cancel",
+      "save": "Save",
+      "required": "required",
+      "name": "Account Name",
+      "namePlaceholder": "e.g. Main Bank",
+      "detail": "Description (Optional)",
+      "detailPlaceholder": "e.g. Debit Card (••4821)",
+      "openingBalance": "Opening Balance",
+      "openingBalanceHint": "The account's current balance. Leave empty for ₺0.",
+      "remove": "Delete account",
+      "defaultNote": "Main Account is the default account; it can't be deleted or archived.",
+      "errors": {
+        "name": "Enter an account name.",
+        "nameLength": "Account name can be at most {max} characters.",
+        "duplicate": "An account with this name already exists.",
+        "detailLength": "Description can be at most {max} characters.",
+        "openingBalance": "Enter a valid amount.",
+        "summary": "Couldn't save. Check the highlighted fields.",
+        "notFound": "This account no longer exists."
+      }
+    },
+    "removeDialog": {
+      "archiveTitle": "Archive this account?",
+      "archiveBody": "{name} has records, so it can't be deleted. It will be archived: hidden from pickers, with its history and balance kept. You can restore it anytime.",
+      "archiveConfirm": "Archive",
+      "deleteTitle": "Delete this account?",
+      "deleteBody": "{name} will be permanently deleted. This can't be undone.",
+      "deleteConfirm": "Delete",
+      "cancel": "Cancel"
+    },
+    "transfer": {
+      "title": "Transfer Money",
+      "chip": "Between Accounts",
+      "amount": "Amount",
+      "from": "From Account",
+      "to": "To Account",
+      "when": "Transfer Time",
+      "date": "Date",
+      "time": "Time",
+      "chooseDate": "Choose a date",
+      "chooseTime": "Choose a time",
+      "note": "Note (Optional)",
+      "notePlaceholder": "A short note about the transfer",
+      "negativeWarning": "The source account's balance will go negative.",
+      "cancel": "Cancel",
+      "save": "Transfer",
+      "errors": {
+        "account": "Choose an account.",
+        "sameAccount": "From and to accounts must be different.",
+        "amount": "Enter a valid amount.",
+        "date": "Choose a valid date.",
+        "time": "Choose a valid time.",
+        "note": "Note can be at most {max} characters.",
+        "summary": "Couldn't transfer. Check the highlighted fields."
+      }
     }
   }
 }

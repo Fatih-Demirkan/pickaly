@@ -1,6 +1,7 @@
 import "server-only";
 import { cache } from "react";
-import { listAccounts } from "@/features/accounts/server";
+import { transferEffect } from "@/features/accounts/domain/types";
+import { listAccounts, listTransfers } from "@/features/accounts/server";
 import { getSavingsTransfersByAccount } from "@/features/savings/server";
 import { localDateTimeToIso, toDateKey } from "@/lib/dates";
 import { isSupabaseConfigured } from "@/lib/env";
@@ -58,12 +59,21 @@ export const transactionRepository: TransactionRepository = {
 };
 
 /**
- * Hesap kimliği → güncel bakiye (açılış + gerçekleşmiş işlemler + birikim aktarımları). Bekleyen ödemeler etkilemez
+ * Hesap kimliği → güncel bakiye (açılış + gerçekleşmiş işlemler + hesaplar arası aktarımlar + birikim aktarımları).
+ * Arşivlenmiş hesaplar da dahildir (toplam bakiye arşivlemeyle değişmez). Bekleyen ödemeler etkilemez
  * (BR-PAY-001); birikime aktarım hesabı azaltır, çekme artırır (BR-SAV-001/002).
  */
 export async function getAccountBalances(): Promise<Map<string, bigint>> {
-  const [accounts, transactions, transfers] = await Promise.all([listAccounts(), transactionRepository.listAll(), getSavingsTransfersByAccount()]);
+  const [accounts, transactions, savingsTransfers, accountTransfers] = await Promise.all([
+    listAccounts({ includeArchived: true }),
+    transactionRepository.listAll(),
+    getSavingsTransfersByAccount(),
+    listTransfers(),
+  ]);
   return new Map(
-    accounts.map((account) => [account.id, accountBalance(account.openingBalanceMinor, account.id, transactions) + (transfers.get(account.id) ?? BigInt(0))]),
+    accounts.map((account) => [
+      account.id,
+      accountBalance(account.openingBalanceMinor, account.id, transactions) + (savingsTransfers.get(account.id) ?? BigInt(0)) + transferEffect(account.id, accountTransfers),
+    ]),
   );
 }

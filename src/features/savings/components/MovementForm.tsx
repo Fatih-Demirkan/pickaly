@@ -5,9 +5,9 @@ import { useLocale, useTranslations } from "next-intl";
 import { ActionFooter } from "@/components/layout/ActionFooter";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { DatePicker } from "@/components/ui/DatePicker";
+import { Icon } from "@/components/ui/Icon";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
-import { amountBoxClass, amountCardClass, amountChipClass, amountInputClass, fieldBoxClass } from "@/components/ui/field";
-import { AccountPicker, type AccountOption } from "@/features/accounts/components/AccountPicker";
+import { amountBoxClass, amountCardClass, amountChipClass, amountInputClass } from "@/components/ui/field";
 import { isLocale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
 import { formatMoneyInput, formatMoneyTyping, parseMoneyInput } from "@/lib/money";
@@ -16,25 +16,26 @@ import type { SavingsUnit } from "../domain/types";
 import type { MovementDirection } from "../routes";
 import type { MovementFormField, MovementFormState } from "../schemas";
 
-// Para ekle / Çek (PRD FR-SAV-005/006) · [Eksik] Pages'ta akış tasarlanmadı; RESPONSIVE §8.2.11:
-//   segmented "Ekle / Çek" + tutar kartı (adet/gram birimde miktar, Q-18) + hesap seçici; tablet+ drawer 480 px.
-// Ekleme kaynak hesaptan aktarımdır (gider sayılmaz), çekme ters aktarımdır (gelir sayılmaz) (BR-SAV-001/002).
-// Adet/gram birimde TL karşılığı isteğe bağlıdır; girilirse hesaba yansır (BR-SAV-004).
-// Kaynak hesap bakiyesi yetersizse uyarı gösterilir ama işleme izin verilir (PRD §7.3, Q-14); birikim bakiyesinden
-// fazla çekme engellenir.
-// [Varsayım] Mobilde bottom sheet yerine diğer formlarla aynı tam ekran sunum kullanılır.
+// Para ekle / Çek (PRD FR-SAV-005/006): segmented "Ekle / Çek" + tutar kartı + tarih.
+// Hesap ayrıca sorulmaz (ürün sahibi kararı 2026-11-05): TL birikimde para, birikimin bağlı olduğu hesaptan aktarılır
+// (ekleme) veya o hesaba döner (çekme). Bağlı hesap formda salt okunur kartla gösterilir. Adet / gram birimde
+// hesaplara dokunulmaz (BR-SAV-004). Ekleme bağlı hesabı eksiye düşürecekse uyarı gösterilir ama izin verilir (Q-14);
+// birikim bakiyesinden fazla çekme engellenir.
+
+type LinkedAccount = { name: string; balance: string; balanceMinor: string };
 
 type MovementFormProps = {
   accountId: string;
   unit: SavingsUnit;
   balanceLabel: string;
   initialDirection: MovementDirection;
-  accounts: (AccountOption & { balanceMinor: string })[];
+  /** Birikimin bağlı olduğu hesap; yoksa (eski kayıt) aktarım hesaplara yansımaz. */
+  linkedAccount: LinkedAccount | null;
   today: string;
   cancelHref: string;
 };
 
-export function MovementForm({ accountId, unit, balanceLabel, initialDirection, accounts, today, cancelHref }: MovementFormProps) {
+export function MovementForm({ accountId, unit, balanceLabel, initialDirection, linkedAccount, today, cancelHref }: MovementFormProps) {
   const t = useTranslations("savings.move");
   const tUnit = useTranslations("savings.unit");
   const rawLocale = useLocale();
@@ -42,8 +43,6 @@ export function MovementForm({ accountId, unit, balanceLabel, initialDirection, 
   const [state, formAction, pending] = useActionState<MovementFormState, FormData>(moveSavingsAction.bind(null, accountId), {});
   const [direction, setDirection] = useState(initialDirection);
   const [amount, setAmount] = useState("");
-  const [transfer, setTransfer] = useState("");
-  const [bankAccountId, setBankAccountId] = useState(accounts[0]?.id ?? "");
   const [date, setDate] = useState(today);
   const [errors, setErrors] = useState(state.errors ?? {});
   const [lastState, setLastState] = useState(state);
@@ -62,10 +61,9 @@ export function MovementForm({ accountId, unit, balanceLabel, initialDirection, 
   const errorText = (field: MovementFormField) => (errors[field] ? t(`errors.${errors[field]}`) : undefined);
   const money = unit === "TRY";
 
-  // Q-14: ekleme kaynak hesabı eksiye düşürecekse uyarı (engellemez).
-  const transferMinor = parseMoneyInput(money ? amount : transfer, locale);
-  const source = accounts.find((account) => account.id === bankAccountId);
-  const negative = direction === "in" && transferMinor !== null && source !== undefined && BigInt(source.balanceMinor) - transferMinor < BigInt(0);
+  // Q-14: ekleme bağlı hesabı eksiye düşürecekse uyarı (engellemez).
+  const minor = parseMoneyInput(amount, locale);
+  const negative = money && direction === "in" && minor !== null && linkedAccount !== null && BigInt(linkedAccount.balanceMinor) - minor < BigInt(0);
 
   return (
     <form action={formAction} noValidate className="flex flex-1 flex-col gap-(--layout-section-gap)">
@@ -91,9 +89,7 @@ export function MovementForm({ accountId, unit, balanceLabel, initialDirection, 
         />
       </div>
 
-      <div
-        className={amountCardClass}
-      >
+      <div className={amountCardClass}>
         <span className={cn(amountChipClass, direction === "in" ? "bg-category-green text-category-fg-green" : "bg-category-red text-category-fg-red")}>
           <span aria-hidden className={cn("size-6 rounded-full", direction === "in" ? "bg-status-success" : "bg-status-danger")} />
           {direction === "in" ? t("inChip") : t("outChip")}
@@ -101,27 +97,20 @@ export function MovementForm({ accountId, unit, balanceLabel, initialDirection, 
         <label htmlFor="amount" className="sr-only">
           {t("title")}
         </label>
-        <label
-          htmlFor="amount"
-          className={cn(
-            amountBoxClass(Boolean(errors.amount)),
-            direction === "in" ? "text-text-success" : "text-text-danger",
-          )}
-        >
+        <label htmlFor="amount" className={cn(amountBoxClass(Boolean(errors.amount)), direction === "in" ? "text-text-success" : "text-text-danger")}>
           <span aria-hidden>{direction === "in" ? "+" : "−"}</span>
           <input
             id="amount"
             name="amount"
             inputMode="decimal"
             autoComplete="off"
-            placeholder={locale === "tr" ? "0,00" : "0.00"}
+            placeholder="0"
             value={amount}
             onChange={(event) => {
               setAmount(formatMoneyTyping(event.target.value, locale));
               clear("amount");
             }}
             onBlur={() => {
-              const minor = parseMoneyInput(amount, locale);
               if (minor !== null) setAmount(formatMoneyInput(minor, locale));
             }}
             aria-invalid={errors.amount ? true : undefined}
@@ -140,73 +129,29 @@ export function MovementForm({ accountId, unit, balanceLabel, initialDirection, 
         )}
       </div>
 
-      {!money && (
+      {money && linkedAccount ? (
         <div className="flex flex-col gap-8">
-          <label htmlFor="transfer" className="text-body-strong text-text-primary">
-            {t("transfer")}
-          </label>
-          <label
-            htmlFor="transfer"
-            className={fieldBoxClass(Boolean(errors.transfer))}
-          >
-            <input
-              id="transfer"
-              name="transfer"
-              inputMode="decimal"
-              autoComplete="off"
-              placeholder={locale === "tr" ? "0,00" : "0.00"}
-              value={transfer}
-              onChange={(event) => {
-                setTransfer(formatMoneyTyping(event.target.value, locale));
-                clear("transfer");
-              }}
-              aria-invalid={errors.transfer ? true : undefined}
-              aria-describedby={errors.transfer ? "transfer-error" : "transfer-hint"}
-              className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-secondary"
-            />
-            <span aria-hidden className="text-text-secondary">
-              ₺
+          <p className="text-body-strong text-text-primary">{direction === "in" ? t("sourceAccount") : t("targetAccount")}</p>
+          {/* Salt okunur: aktarım birikimin bağlı hesabıyla yapılır; hesap birikim düzenlenerek değiştirilir. */}
+          <div className="flex items-center gap-12 rounded-lg bg-surface-card p-12 shadow-elev-1" aria-describedby={negative ? "negative-warning" : undefined}>
+            <span aria-hidden className="inline-flex size-36 shrink-0 items-center justify-center rounded-sm bg-category-blue text-category-fg-blue">
+              <Icon icon="paymentMethod" />
             </span>
-          </label>
-          <p id="transfer-hint" className="text-caption text-text-secondary">
-            {t("transferHint")}
-          </p>
-          {errors.transfer && (
-            <p id="transfer-error" className="text-caption text-text-danger">
-              {errorText("transfer")}
+            <span className="flex min-w-0 flex-1 flex-col">
+              <span className="truncate text-body-strong text-text-primary">{linkedAccount.name}</span>
+              <span className="text-caption text-text-secondary">{t("accountBalance", { amount: linkedAccount.balance })}</span>
+            </span>
+          </div>
+          <p className="text-caption text-text-secondary">{direction === "in" ? t("fromAccountHint", { account: linkedAccount.name }) : t("toAccountHint", { account: linkedAccount.name })}</p>
+          {negative && (
+            <p id="negative-warning" role="status" className="text-caption text-text-warning">
+              {t("negativeWarning")}
             </p>
           )}
         </div>
+      ) : (
+        <p className="rounded-lg bg-status-info-subtle p-16 text-body text-text-primary">{money ? t("noLinkedAccount") : t("unitHint")}</p>
       )}
-
-      <div className="flex flex-col gap-8">
-        <p id="bankAccountId-label" className="text-body-strong text-text-primary">
-          {direction === "in" ? t("sourceAccount") : t("targetAccount")}
-        </p>
-        <AccountPicker
-          id="bankAccountId"
-          name="bankAccountId"
-          accounts={accounts}
-          value={bankAccountId}
-          onChange={(next) => {
-            setBankAccountId(next);
-            clear("bankAccountId");
-          }}
-          labelledBy="bankAccountId-label"
-          invalid={errors.bankAccountId ? true : undefined}
-          describedBy={errors.bankAccountId ? "bankAccountId-error" : negative ? "negative-warning" : undefined}
-        />
-        {negative && (
-          <p id="negative-warning" role="status" className="text-caption text-text-warning">
-            {t("negativeWarning")}
-          </p>
-        )}
-        {errors.bankAccountId && (
-          <p id="bankAccountId-error" className="text-caption text-text-danger">
-            {errorText("bankAccountId")}
-          </p>
-        )}
-      </div>
 
       <div className="flex flex-col gap-4">
         <p id="date-label" className="text-body-strong text-text-primary">

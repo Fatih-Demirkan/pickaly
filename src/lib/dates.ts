@@ -36,6 +36,9 @@ export function toMonthKey(date: Date): MonthKey {
   return toDateKey(date).slice(0, 7);
 }
 
+/** Yeni kayıt formlarının varsayılan saati (ürün sahibi kararı 2026-11-05): tarih bugün, saat 09:00. */
+export const DEFAULT_TIME = "09:00";
+
 /** Yerel saat "HH:mm". */
 export function toTimeValue(date: Date): string {
   const { hour, minute } = localParts(date);

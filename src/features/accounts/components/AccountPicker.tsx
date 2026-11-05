@@ -45,14 +45,15 @@ export function AccountPicker({ id, name, accounts, value, onChange, labelledBy,
         aria-describedby={describedBy}
         onClick={() => setOpen((current) => !current)}
         className={cn(
-          "flex w-full items-center gap-12 rounded-lg bg-surface-card shadow-elev-1 p-12 text-start transition-colors hover:border-border-strong",
+          // Kart görünümü (beyaz + elev-1); odak ve hata durumları için şeffaf çerçeve renklenir.
+          "flex w-full items-center gap-12 rounded-lg border border-transparent bg-surface-card p-12 text-start shadow-elev-1 transition-colors hover:bg-action-tertiary-hover",
           open && "border-border-focus",
           // Hata metni aria-describedby ile okunur; aria-invalid buton rolünde geçerli değildir.
           "data-invalid:border-border-error",
         )}
       >
         {/* [Varsayım] Pages'ta ikon #6366F1; kutu zemini ölçülmedi → Category/Blue + on-task. */}
-        <span aria-hidden className="inline-flex size-40 shrink-0 items-center justify-center rounded-md bg-category-blue text-category-fg-blue">
+        <span aria-hidden className="inline-flex size-36 shrink-0 items-center justify-center rounded-sm bg-category-blue text-category-fg-blue">
           <Icon icon="paymentMethod" />
         </span>
         <span className="flex min-w-0 flex-1 flex-col">

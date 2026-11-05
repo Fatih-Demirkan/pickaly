@@ -3,6 +3,7 @@
 import { getLocale } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { setFlash } from "@/lib/flash";
 import { getAccountMap } from "@/features/accounts/server";
 import { isLocale } from "@/i18n/config";
 import { localDateTimeToIso, toTimeValue } from "@/lib/dates";
@@ -45,7 +46,6 @@ async function parseSavingsForm(formData: FormData, mode: "create" | "edit") {
     unit: formData.get("unit"),
     amount: field("amount"),
     target: field("target"),
-    institution: field("institution"),
     sourceAccountId: field("sourceAccountId"),
     date: field("date"),
     time: field("time"),
@@ -72,9 +72,9 @@ async function parseSavingsForm(formData: FormData, mode: "create" | "edit") {
   if (data.target && (target === null || target <= ZERO)) errors.target = "target";
   // Düzenli katkı tutarı formdaki tutardır ("Aynı birikim periyodik eklensin", Pages).
   if (data.repeat && (amount === null || amount <= ZERO)) errors.amount = "repeatAmount";
-  // TL aktarımı (başlangıç bakiyesi veya düzenli katkı) varsa kaynak hesap zorunlu (PRD §7.2).
-  const transfers = unit === "TRY" && amount !== null && amount > ZERO && (mode === "create" || data.repeat);
-  if (transfers && !(await getAccountMap()).has(data.sourceAccountId)) errors.sourceAccountId = "account";
+  // Birikim her zaman bir hesaba bağlıdır ("İşlem Yapılan Hesap"); para ekle / çek ve katkılar bu hesaptan yapılır.
+  void mode;
+  if (!(await getAccountMap()).has(data.sourceAccountId)) errors.sourceAccountId = "account";
 
   if (Object.keys(errors).length > 0 || amount === null) return { ok: false as const, state: { errors, formError: "summary" as const } };
   return { ok: true as const, data, unit, amount, target };
@@ -89,7 +89,7 @@ export async function createSavingsAccount(_previous: SavingsFormState, formData
     name: data.name,
     kind: data.kind,
     unit,
-    institution: data.institution || null,
+    accountId: data.sourceAccountId,
     target,
     openedAt: data.date,
     note: data.note || null,
@@ -121,7 +121,8 @@ export async function createSavingsAccount(_previous: SavingsFormState, formData
     });
   }
   revalidateSavings();
-  redirect(savingsHref(account.id));
+  await setFlash("savingsCreated");
+  redirect("/");
 }
 
 export async function updateSavingsAccount(id: string, _previous: SavingsFormState, formData: FormData): Promise<SavingsFormState> {
@@ -136,7 +137,7 @@ export async function updateSavingsAccount(id: string, _previous: SavingsFormSta
   const keepsRule = existing.contribution && existing.contribution.frequency === data.frequency;
   await savingsRepository.updateAccount(id, {
     name: data.name,
-    institution: data.institution || null,
+    accountId: data.sourceAccountId,
     target,
     note: data.note || null,
     contribution: data.repeat
@@ -152,18 +153,20 @@ export async function updateSavingsAccount(id: string, _previous: SavingsFormSta
       : null,
   });
   revalidateSavings();
+  await setFlash("savingsUpdated");
   redirect(savingsHref(id));
 }
 
-/** Para ekle / Çek (FR-SAV-005/006): kaynak hesaptan birikime veya birikimden hesaba aktarım (BR-SAV-001/002). */
+/**
+ * Para ekle / Çek (FR-SAV-005/006): birikimin bağlı hesabından birikime veya birikimden o hesaba aktarım
+ * (BR-SAV-001/002). Hesap formda sorulmaz (ürün sahibi kararı 2026-11-05). Adet / gram birimde hesaplara dokunulmaz.
+ */
 export async function moveSavingsAction(id: string, _previous: MovementFormState, formData: FormData): Promise<MovementFormState> {
   const detail = await getSavingsDetail(id);
   if (!detail) return { formError: "notFound" };
   const parsed = movementFormSchema.safeParse({
     direction: formData.get("direction"),
     amount: formData.get("amount") ?? "",
-    transfer: formData.get("transfer") ?? "",
-    bankAccountId: formData.get("bankAccountId") ?? "",
     date: formData.get("date") ?? "",
   });
   const errors: Partial<Record<MovementFormField, MovementFormErrorKey>> = {};
@@ -182,25 +185,23 @@ export async function moveSavingsAction(id: string, _previous: MovementFormState
   if (amount === null || amount <= ZERO) errors.amount = "amount";
   // Çekilecek miktar birikim bakiyesinden büyükse işlem engellenir (PRD §7.3).
   else if (data.direction === "out" && amount > account.balance) errors.amount = "insufficient";
-  // TRY'de aktarılan tutar miktarın kendisidir; adet/gram'da TL tutarı isteğe bağlıdır (BR-SAV-004).
-  const transfer = account.unit === "TRY" ? amount : data.transfer ? parse(data.transfer) : null;
-  if (account.unit !== "TRY" && data.transfer && (transfer === null || transfer <= ZERO)) errors.transfer = "transfer";
-  const touchesBank = transfer !== null && transfer > ZERO;
-  if (touchesBank && !(await getAccountMap()).has(data.bankAccountId)) errors.bankAccountId = "account";
   if (Object.keys(errors).length > 0 || amount === null) return { errors, formError: "summary" };
+  // TRY'de aktarılan tutar miktarın kendisidir ve bağlı hesaba yansır; bağlı hesap silinmişse yansımaz.
+  const bankAccountId = account.unit === "TRY" && account.accountId && (await getAccountMap()).has(account.accountId) ? account.accountId : null;
 
   // [Varsayım] Saat istek anıdır (Pages'ta hareketin saati gösterilmiyor).
   await savingsRepository.createMovement({
     accountId: account.id,
     direction: data.direction,
     amount,
-    transferMinor: touchesBank ? transfer : null,
-    bankAccountId: touchesBank ? data.bankAccountId : null,
+    transferMinor: bankAccountId ? amount : null,
+    bankAccountId,
     occurredAt: localDateTimeToIso(data.date, toTimeValue(new Date())),
     source: "manual",
   });
   revalidateSavings();
-  redirect(savingsHref(account.id));
+  await setFlash(data.direction === "in" ? "savingsMovedIn" : "savingsMovedOut");
+  redirect("/");
 }
 
 /**
@@ -227,5 +228,6 @@ export async function closeSavingsAccountAction(id: string, formData: FormData):
     await savingsRepository.removeAccount(id);
   }
   revalidateSavings();
+  if (detail) await setFlash("savingsClosed");
   redirect("/birikimler");
 }

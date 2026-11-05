@@ -7,7 +7,7 @@ import { Drawer } from "@/components/ui/Drawer";
 import { Icon } from "@/components/ui/Icon";
 import { listCategories } from "@/features/categories/server";
 import { isLocale } from "@/i18n/config";
-import { toDateKey, toTimeValue, type DateKey } from "@/lib/dates";
+import { DEFAULT_TIME, toDateKey, type DateKey } from "@/lib/dates";
 import { formatMoneyInput } from "@/lib/money";
 import { DEFAULT_REMINDER } from "@/lib/recurrence";
 import type { CalendarItemKind } from "../domain/types";
@@ -41,8 +41,11 @@ export async function ItemFormDrawer(props: ItemFormDrawerProps) {
       time: item.time ?? "09:00",
       duration: item.durationMinutes ? String(item.durationMinutes) : "",
       reminder: item.reminder,
-      locationName: item.locationName ?? "",
-      locationAddress: item.locationAddress ?? "",
+      // Tek konum alanı: eski kayıtlarda ayrı tutulan ad ve adres birleştirilir; kaydedilince tek alanda saklanır.
+      locationName: [item.locationName, item.locationAddress].filter(Boolean).join(", "),
+      locationAddress: "",
+      multi: item.subtasks.length > 0,
+      subtasks: item.subtasks,
       note: item.note ?? "",
       plannedExpense: item.plannedExpenseMinor !== null ? formatMoneyInput(item.plannedExpenseMinor, locale) : "",
     };
@@ -58,12 +61,14 @@ export async function ItemFormDrawer(props: ItemFormDrawerProps) {
       categoryId: "",
       date,
       allDay: false,
-      // [Varsayım] Yeni kayıt şu anki saatle açılır (Yeni İşlem ile aynı); süre varsayılan 60 dk.
-      time: toTimeValue(now),
+
+      time: DEFAULT_TIME, // Yeni kayıt: 09:00 (ürün sahibi kararı 2026-11-05); süre varsayılan 60 dk
       duration: "60",
       reminder: DEFAULT_REMINDER,
       locationName: "",
       locationAddress: "",
+      multi: false,
+      subtasks: [],
       note: "",
       plannedExpense: "",
     };

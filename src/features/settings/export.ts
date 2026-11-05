@@ -1,5 +1,5 @@
 import "server-only";
-import { listAccounts } from "@/features/accounts/server";
+import { listAccounts, listTransfers } from "@/features/accounts/server";
 import { calendarRepository } from "@/features/calendar/server";
 import { listCategories } from "@/features/categories/server";
 import { listRecurringPayments } from "@/features/payments/server";
@@ -17,12 +17,13 @@ import { formatMoneyInput } from "@/lib/money";
 const ALL_DATES = { from: "0000-01-01", to: "9999-12-31" };
 
 export async function buildJsonExport(): Promise<string> {
-  const [transactions, recurringRules, recurringPayments, categories, accounts, savingsAccounts, savingsMovements, calendarItems] = await Promise.all([
+  const [transactions, recurringRules, recurringPayments, categories, accounts, accountTransfers, savingsAccounts, savingsMovements, calendarItems] = await Promise.all([
     transactionRepository.listAll(),
     recurringRuleRepository.listActive(),
     listRecurringPayments(),
     listCategories(),
-    listAccounts(),
+    listAccounts({ includeArchived: true }),
+    listTransfers(),
     listSavingsAccounts(),
     listSavingsMovements(),
     calendarRepository.listBetween(ALL_DATES.from, ALL_DATES.to),
@@ -33,7 +34,7 @@ export async function buildJsonExport(): Promise<string> {
     exportedAt: new Date().toISOString(),
     currency: "TRY",
     amountUnit: "minor",
-    data: { accounts, categories, transactions, recurringRules, recurringPayments, savingsAccounts, savingsMovements, calendarItems },
+    data: { accounts, accountTransfers, categories, transactions, recurringRules, recurringPayments, savingsAccounts, savingsMovements, calendarItems },
   };
   return JSON.stringify(backup, (_key, value) => (typeof value === "bigint" ? value.toString() : value), 2);
 }

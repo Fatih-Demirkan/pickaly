@@ -9,7 +9,7 @@ import { isLocale } from "@/i18n/config";
 import { formatMonthLabel, type MonthKey } from "@/lib/dates";
 import { reportHref } from "../routes";
 import { getMonthlyReport } from "../server";
-import { SHARE_CARD_ID, ShareCard, shareRateText } from "./ShareCard";
+import { SHARE_CARD_ID, ShareCard } from "./ShareCard";
 import { ShareImageButton } from "./ShareImageButton";
 
 // Pages → Paylaşılabilir Rapor Görünümü (136:8416), RESPONSIVE §3.5.2: mobil tam sayfa · tablet+ modal (max 520 px).
@@ -30,8 +30,6 @@ export async function ShareReportDialog({ month }: { month: MonthKey }) {
   const closeHref = reportHref(month);
   const titleId = "share-report-title";
   const monthLabel = formatMonthLabel(month, locale);
-  const expense = shareRateText(report.expenseRate, locale);
-  const kept = shareRateText(report.savingsRate, locale);
   const empty = report.incomeMinor === BigInt(0) && report.expenseMinor === BigInt(0);
 
   return (
@@ -46,21 +44,8 @@ export async function ShareReportDialog({ month }: { month: MonthKey }) {
             report={report}
             categories={categories}
             locale={locale}
-            labels={{
-              subtitle: t("subtitle", { month: monthLabel }),
-              net: t("net"),
-              savingsRate: t("savingsRate", { rate: kept }),
-              income: t("income"),
-              expense: t("expense"),
-              balance: t("balance"),
-              balanceValue: t("balanceValue", { spent: expense, kept }),
-              spent: t("spent", { rate: expense }),
-              kept: t("kept", { rate: kept }),
-              top: t("top"),
-              topHint: t("topHint"),
-              empty: t("empty"),
-              footer: t("footer"),
-            }}
+            month={month}
+            labels={{ subtitle: t("subtitle", { month: monthLabel }), footer: t("footer") }}
           />
           <p className="text-center text-caption text-text-secondary">{t("hint")}</p>
           {empty && (
