@@ -7,7 +7,8 @@ import { NavLink } from "./NavLink";
 
 // Ana navigasyonun üç görünümü tek yapılandırmadan üretilir (RESPONSIVE §2, TECH_STACK §8.4).
 // Görünürlük yalnızca CSS ile değişir (sunucuda breakpoint tahmini yapılmaz).
-//   < 768  : Tab bar — DESIGN_SYSTEM.md §A8: siyah pill, 56 px, elev-2, güvenli alanın 16 px üstünde, kenarlardan 16
+//   < 768  : Tab bar — beyaz pill (ürün sahibi kararı 2026-11-05, DS'deki siyah yerine), 56 px, elev-2,
+//            güvenli alanın 16 px üstünde, kenarlardan 16
 //   768+   : Rail    — 80 px, beyaz, sağda border-subtle (DESIGN_SYSTEM_PICKALY §5.6)
 //   1024+  : Sidebar — 240 / 264 px; marka bloğu + Primary "Yeni işlem" + öğeler, Profil altta ayrı
 // Odak ekranlarında mobil FAB ve tab bar gizlenir (ShellFrame data-focus).
@@ -24,17 +25,19 @@ export async function AppNavigation() {
 
   return (
     <>
-      {/* Mobil FAB: tab bar'ın (bottom-nav-offset) 16 px üstünde, sağda. */}
+      {/* Mobil FAB: tab bar'ın (bottom-nav-offset) 16 px üstünde, sağda. Görünür metin kısa "Yeni" (ürün sahibi kararı
+          2026-11-05); erişilebilir ad tam "Yeni işlem" ve görünür metni içerir (WCAG 2.5.3). */}
       <ButtonLink
         href={NEW_TRANSACTION_HREF}
         scroll={false}
         leadingIcon="add"
+        aria-label={t("nav.newTransaction")}
         className="fixed end-16 bottom-[calc(var(--layout-bottom-nav-offset)+env(safe-area-inset-bottom))] z-(--z-fab) shadow-elev-2 group-data-[focus]/shell:hidden tablet:hidden"
       >
-        {t("nav.newTransaction")}
+        {t("nav.newShort")}
       </ButtonLink>
 
-      {/* Mobil: siyah yüzen tab bar */}
+      {/* Mobil: beyaz yüzen tab bar; derinlik gölgeyle (elev-2) */}
       <nav
         aria-label={t("nav.label")}
         className="fixed inset-x-16 bottom-[calc(16px+env(safe-area-inset-bottom))] z-(--z-nav) group-data-[focus]/shell:hidden tablet:hidden"

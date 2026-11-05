@@ -400,10 +400,12 @@ Part A'da yok. Filtre chip'i diliyle türetildi:
 
 ### 5.6 Navigasyon
 
-**Mobil tab bar** [DS "Floating tab bar"]
-- Siyah pill, `radius.full`, yükseklik 56, `elev-2`, güvenli alanın 16 px üstünde, ortalı; yatay kenar 16.
+**Mobil tab bar** [DS "Floating tab bar" yapısı + Karar K-8]
+- **Beyaz** pill (`surface.tabbar`), `radius.full`, yükseklik 56, derinlik `elev-2` gölgeyle; güvenli alanın 16 px üstünde, ortalı; yatay kenar 16.
 - 5 öğe (Ana Sayfa · Takvim · İşlemler · Birikimler · Profil), 24 px ikon.
-- Aktif: 40 px beyaz daire + siyah ikon. Pasif: beyaz %70 ikon.
+- Aktif: 40 px **siyah** daire + beyaz ikon (seçim = siyah). Pasif: `text.secondary` ikon (5,05:1), hover `text.primary`.
+- [Karar K-8, ürün sahibi 2026-11-05] DS'deki siyah bar yerine beyaz bar.
+- **FAB:** görünür metin "Yeni" (`nav.newShort`), erişilebilir ad "Yeni işlem" [Karar K-9, ürün sahibi 2026-11-05].
 - **Etiket:** Part A'da yok (yalnızca ikon). [Karar K-5] Görünür etiket yok (Part A'ya sadık); her öğe `aria-label` taşır.
 - `aria-current="page"` korunur.
 
@@ -521,6 +523,8 @@ Part A hareket tanımı vermiyor; Part B kullanılmadığı için sade bir set:
 | K-5 | Tab bar etiketi (§5.6) | Görünür etiket yok, `aria-label` var |
 | K-6 | Ana Sayfa selamlama header'ı (§5.6) | Yalnızca Ana Sayfa'da avatar + selamlama + ad |
 | K-7 | Input yüksekliği (§5.7) | 48 px |
+| K-8 | Mobil tab bar rengi (§5.6) — 2026-11-05 | Beyaz bar + `elev-2`, aktif öğe siyah daire |
+| K-9 | Mobil FAB metni (§5.6) — 2026-11-05 | "Yeni" (erişilebilir ad "Yeni işlem") |
 
 ---
 

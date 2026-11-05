@@ -7,8 +7,8 @@ import { cn } from "@/lib/cn";
 import { Icon } from "@/components/ui/Icon";
 
 // DESIGN_SYSTEM.md §A8 Floating tab bar + DESIGN_SYSTEM_PICKALY.md §5.6.
-// "tab"     : mobil siyah tab bar — yalnızca 24 px ikon, görünür etiket yok (Karar K-5; ad aria-label ile).
-//             Aktif 40 px beyaz daire + siyah ikon, pasif beyaz %70.
+// "tab"     : mobil beyaz tab bar (ürün sahibi kararı 2026-11-05) — yalnızca 24 px ikon, görünür etiket yok
+//             (Karar K-5; ad aria-label ile). Aktif 40 px siyah daire + beyaz ikon, pasif text-secondary (5,05:1).
 // "stacked" : tablet rail — ikon üstte, nav etiketi (10 px) altta; 64×56 pill.
 // "inline"  : laptop+ sidebar — ikon solda, body-strong etiket; 44 px pill.
 // Rail ve sidebar'da aktif: siyah zemin + beyaz ikon/metin; pasif: text-secondary, hover canvas zemin.
@@ -40,7 +40,7 @@ export function NavLink({ item, label, layout, className }: NavLinkProps) {
         <span
           className={cn(
             "inline-flex size-40 items-center justify-center rounded-full transition-colors",
-            active ? "bg-surface-tabbar-active text-text-primary" : "text-text-inverse-secondary hover:text-text-inverse",
+            active ? "bg-surface-tabbar-active text-text-inverse" : "text-text-secondary hover:text-text-primary",
           )}
         >
           <Icon icon={item.icon} size="lg" />

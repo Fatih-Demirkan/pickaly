@@ -92,8 +92,8 @@
   --color-surface-selected: var(--pk-blue-100);
   --color-surface-selected-strong: var(--pk-black);
   --color-surface-nav-active: var(--pk-black);
-  --color-surface-tabbar: var(--pk-black);
-  --color-surface-tabbar-active: var(--pk-white);
+  --color-surface-tabbar: var(--pk-white);
+  --color-surface-tabbar-active: var(--pk-black);
   --color-surface-inverse: var(--pk-black);
   --color-surface-inverse-raised: var(--pk-neutral-900);
   --color-surface-inverse-control: var(--pk-neutral-800);

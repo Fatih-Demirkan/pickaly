@@ -126,13 +126,13 @@
       },
       "tabbar": {
         "$type": "color",
-        "$value": "{primitive.black}",
-        "$description": "Mobil yüzen tab bar"
+        "$value": "{primitive.white}",
+        "$description": "Mobil yüzen tab bar: beyaz + elev-2 (ürün sahibi kararı 2026-11-05, DS'deki siyah barın yerine)"
       },
       "tabbar-active": {
         "$type": "color",
-        "$value": "{primitive.white}",
-        "$description": "Tab bar içindeki aktif beyaz daire"
+        "$value": "{primitive.black}",
+        "$description": "Tab bar içindeki aktif siyah daire (seçim = siyah)"
       },
       "inverse": {
         "$type": "color",
