@@ -6,8 +6,8 @@ import { TransactionsOverview } from "@/features/transactions/components/Transac
 import { parseFormTypeParam } from "@/features/transactions/routes";
 import { toMonthKey } from "@/lib/dates";
 
-// Yeni İşlem — doğrudan adresle ve diğer sekmelerden ("Yeni işlem" butonu) açılış. Arkada bu ayın listesi çizilir.
-// ?tur=gelir|gider|abonelik seçili sekmeyi belirler; varsayılan Gelir (RESPONSIVE §3.3.3). İşlemler'den açılış: @drawer/(.)yeni.
+// Yeni İşlem — doğrudan adresle açılış (yenileme, paylaşılan bağlantı). Arkada bu ayın listesi çizilir.
+// ?tur=gelir|gider|abonelik seçili sekmeyi belirler; varsayılan Gelir (RESPONSIVE §3.3.3). Uygulama içinden açılış: (app)/@sheet/(.)islemler/yeni (bulunulan ekranın üstünde).
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("transactions.form");

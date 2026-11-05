@@ -5,6 +5,7 @@ import { DrawerBody } from "@/components/layout/DrawerBody";
 import { FocusHeader } from "@/components/layout/FocusHeader";
 import { Drawer } from "@/components/ui/Drawer";
 import { Icon } from "@/components/ui/Icon";
+import { Sheet } from "@/components/ui/Sheet";
 import { listAccounts } from "@/features/accounts/server";
 import { listCategories } from "@/features/categories/server";
 import { isLocale } from "@/i18n/config";
@@ -15,10 +16,12 @@ import type { TransactionFormType } from "../schemas";
 import { getAccountBalances, transactionRepository } from "../server";
 import { TransactionForm, type TransactionFormValues } from "./TransactionForm";
 
-// Yeni İşlem ve Düzenle sunumu (RESPONSIVE §3.3.3): mobil tam ekran form (Pages) · tablet+ sağ drawer 560 px.
-// Hem doğrudan adresle açılan sayfa hem de listeden açılan (intercept edilen) drawer bu bileşeni kullanır.
+// Yeni İşlem: bottom sheet (ürün sahibi isteği 2026-11-05; src/components/ui/Sheet.tsx). Uygulama içinden açıldığında
+//   (intercepted) bulunulan ekranın üstünde açılır; kapanınca ve kayıttan sonra aynı ekrana dönülür.
+// Düzenle (RESPONSIVE §3.3.3): mobil tam ekran form (Pages) · tablet+ sağ drawer 560 px.
+// Hem doğrudan adresle açılan sayfa hem de intercept edilen slot bu bileşeni kullanır. İçerik iki sunumda aynıdır.
 
-type TransactionFormDrawerProps = { mode: "create"; type?: TransactionFormType } | { mode: "edit"; id: string };
+type TransactionFormDrawerProps = { mode: "create"; type?: TransactionFormType; intercepted?: boolean } | { mode: "edit"; id: string };
 
 export async function TransactionFormDrawer(props: TransactionFormDrawerProps) {
   const [t, rawLocale, categories, accounts, balances] = await Promise.all([
@@ -81,11 +84,13 @@ export async function TransactionFormDrawer(props: TransactionFormDrawerProps) {
   const title = props.mode === "create" ? t("newTitle") : t("editTitle");
   const titleId = "transaction-form-title";
 
-  return (
-    <Drawer closeHref={cancelHref} closeLabel={t("cancel")} labelledBy={titleId} size="form">
+  const sheet = props.mode === "create";
+  const content = (
+    <>
       <FocusHeader
         title={title}
         titleId={titleId}
+        inSheet={sheet}
         trailing={
           <Link
             href={cancelHref}
@@ -107,6 +112,16 @@ export async function TransactionFormDrawer(props: TransactionFormDrawerProps) {
           cancelHref={cancelHref}
         />
       </DrawerBody>
+    </>
+  );
+
+  return sheet ? (
+    <Sheet closeHref={cancelHref} labelledBy={titleId} intercepted={props.intercepted}>
+      {content}
+    </Sheet>
+  ) : (
+    <Drawer closeHref={cancelHref} closeLabel={t("cancel")} labelledBy={titleId} size="form">
+      {content}
     </Drawer>
   );
 }

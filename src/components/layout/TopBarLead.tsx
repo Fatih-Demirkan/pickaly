@@ -1,9 +1,9 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
+import { useShellPathname } from "@/lib/sheetRoutes";
 
 // Üst barın sol bloğu (DESIGN_SYSTEM_PICKALY §5.6, Karar K-6).
 //   Ana Sayfa : 40 px avatar + caption selamlama (saate göre) + title-md kullanıcı adı. Ad yoksa yalnızca selamlama.
@@ -40,7 +40,7 @@ function initials(name: string) {
 
 /** Üst barın tamamı (header). Ana Sayfa'da selamlama, diğer sekmelerde mobilde marka. */
 export function TopBarLead({ name }: { name: string }) {
-  const pathname = usePathname();
+  const pathname = useShellPathname(); // Sheet açıkken arkadaki ekranın yolu
   const t = useTranslations("header");
   const key = useGreetingKey();
 

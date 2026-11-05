@@ -2,7 +2,8 @@
 
 import { getLocale } from "next-intl/server";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
+import { isSheetRoute } from "@/config/navigation";
 import { setFlash } from "@/lib/flash";
 import { getAccountMap } from "@/features/accounts/server";
 import { getCategoryMap } from "@/features/categories/server";
@@ -94,6 +95,14 @@ function transactionInput(values: FormValues & { type: TransactionType }): Trans
   };
 }
 
+/** Yeni İşlem sheet'i bir ekranın üstünde açıldıysa kayıttan sonra o ekrana dönülür. Yalnızca uygulama içi yol kabul edilir. */
+function returnPath(formData: FormData) {
+  const value = formData.get("returnTo");
+  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//") || value.includes("\\")) return "/";
+  const pathname = value.split(/[?#]/)[0] ?? "/";
+  return isSheetRoute(pathname) ? "/" : value;
+}
+
 function monthHref(occurredAt: string) {
   return `/islemler?ay=${toMonthKey(new Date(occurredAt))}`;
 }
@@ -118,7 +127,8 @@ export async function createTransaction(_previous: TransactionFormState, formDat
     });
     revalidatePath("/", "layout");
     await setFlash("subscriptionCreated");
-    redirect("/");
+    // Geçmişte sheet adresi kalmaz: geri tuşu formu yeniden açmaz.
+    redirect(returnPath(formData), RedirectType.replace);
   }
 
   const input = transactionInput({ ...values, type: values.type });
@@ -137,7 +147,7 @@ export async function createTransaction(_previous: TransactionFormState, formDat
   await transactionRepository.create(input, rule ? { source: "recurring", recurringRuleId: rule.id } : undefined);
   revalidatePath("/", "layout");
   await setFlash("transactionCreated");
-  redirect("/");
+  redirect(returnPath(formData), RedirectType.replace);
 }
 
 export async function updateTransaction(id: string, _previous: TransactionFormState, formData: FormData): Promise<TransactionFormState> {

@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import type { NavItem } from "@/config/navigation";
 import { cn } from "@/lib/cn";
 import { Icon } from "@/components/ui/Icon";
+import { useShellPathname } from "@/lib/sheetRoutes";
 
 // DESIGN_SYSTEM.md §A8 Floating tab bar + DESIGN_SYSTEM_PICKALY.md §5.6.
 // "tab"     : mobil beyaz tab bar (ürün sahibi kararı 2026-11-05) — yalnızca 24 px ikon, görünür etiket yok
@@ -26,7 +26,7 @@ type NavLinkProps = {
 };
 
 export function NavLink({ item, label, layout, className }: NavLinkProps) {
-  const pathname = usePathname();
+  const pathname = useShellPathname(); // Sheet açıkken arkadaki ekranın yolu
   const active = isActive(pathname, item.href);
 
   if (layout === "tab") {

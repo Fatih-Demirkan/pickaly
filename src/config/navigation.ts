@@ -15,7 +15,16 @@ export type NavItem = {
  * Detay-Nav Bar'ını ve alt aksiyon barını kullanır (RESPONSIVE §2.1, §2.4).
  */
 export function isFocusRoute(pathname: string): boolean {
-  return /^\/(islemler|takvim|birikimler|profil|raporlar)\/[^/]+/.test(pathname);
+  return !isSheetRoute(pathname) && /^\/(islemler|takvim|birikimler|profil|raporlar)\/[^/]+/.test(pathname);
+}
+
+/**
+ * Bottom sheet olarak, bulunulan ekranın üstünde açılan rotalar (ürün sahibi isteği 2026-11-05: Yeni İşlem).
+ * Uygulama içinden gidildiğinde (app)/@sheet slot'u intercept eder; arkadaki ekran değişmez. Odak ekranı sayılmaz:
+ * header ve nav arkada görünür kalır.
+ */
+export function isSheetRoute(pathname: string): boolean {
+  return /^\/islemler\/yeni\/?$/.test(pathname);
 }
 
 export const primaryNavigation: readonly NavItem[] = [

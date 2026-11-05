@@ -3,6 +3,7 @@
 import { useActionState, useLayoutEffect, useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ActionFooter } from "@/components/layout/ActionFooter";
+import { useSheetReturnTo } from "@/components/ui/Sheet";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { ChipSelect, chipSelectClasses } from "@/components/ui/ChipSelect";
 import { DatePicker } from "@/components/ui/DatePicker";
@@ -113,6 +114,7 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
 
   const action = mode === "edit" && transactionId ? updateTransaction.bind(null, transactionId) : createTransaction;
   const [state, formAction, pending] = useActionState<TransactionFormState, FormData>(action, {});
+  const returnTo = useSheetReturnTo();
   const [values, setValues] = useState(initialValues);
   // Sunucudan gelen alan hataları; kullanıcı alanı düzeltmeye başlayınca o alanın hatası kalkar.
   const [errors, setErrors] = useState(state.errors ?? {});
@@ -189,6 +191,8 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
 
   return (
     <form action={formAction} noValidate className="flex flex-1 flex-col gap-(--layout-section-gap)">
+      {/* Sheet bulunulan ekranın üstünde açıldıysa kayıttan sonra o ekrana dönülür. */}
+      {returnTo && <input type="hidden" name="returnTo" value={returnTo} />}
       <input type="hidden" name="type" value={values.type} />
       <input type="hidden" name="categoryId" value={values.categoryId} />
       <input type="hidden" name="repeat" value={String(create && values.repeat)} />

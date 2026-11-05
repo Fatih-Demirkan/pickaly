@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 
 // Pages → Ana Sayfa "Section - 2. Hızlı Aksiyonlar (Minimalist Bar)" (6:1935, PRD FR-DSH-003, RESPONSIVE §3.1).
 //   Kart (DESIGN_SYSTEM_PICKALY §5.2): beyaz, radius-md, dikey padding 12, aralık 8, elev-1; 36 px kategori renkli ikon
-//   karosu (radius-sm) + caption-strong. Renkler: Gelir green · Gider red · Görev violet · Ödeme pink. Mobil/tablet 4 sütun, laptop+ 2×2.
+//   karosu (radius-sm) + caption-strong. Renkler: Gelir green · Gider red · Görev violet · Ödeme pink. Her boyutta 4 sütun (laptop+ İşlemler ile aynı 7/12 sütunda).
 // Hedefler [Karar #2, #3]: Gelir → Yeni İşlem/Gelir · Gider → /Gider · Ödeme → /Abonelik · Görev → Görev Ekle.
 // Görev Ekle formu Pages'ta tasarlanmadı; RESPONSIVE §8.2.1 önerisiyle Takvim modülünde kuruldu.
 // [Varsayım] İkon renkleri ölçülmedi; kutu zeminiyle aynı ailenin koyu tonları.
@@ -28,7 +28,7 @@ export async function QuickActions() {
 
   return (
     <nav aria-label={t("label")}>
-      <ul className="grid grid-cols-4 gap-8 laptop:grid-cols-2">
+      <ul className="grid grid-cols-4 gap-8">
         {actions.map((action) => {
           const content = (
             <>

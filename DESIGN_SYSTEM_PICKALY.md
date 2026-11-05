@@ -244,7 +244,7 @@ DS 4 pt ölçeği [DS≈]: 4 · 8 · 12 · 16 · 20 · 24 · 32. RESPONSIVE §6.
 | Bağlam | Değer | Kaynak |
 |---|---|---|
 | Mobil sayfa kenarı | 16 | [DS] |
-| Bölümler arası | 20 (mobil) | [DS `space-5`] — eski 24'ten değişir |
+| Bölümler arası (`layout.section-gap`) | **40** (tüm boyutlar) | [Karar ürün sahibi 2026-11-05] DS `space-5` (20) yerine; sayfa bölümleri ve form alan grupları arasında |
 | Büyük bloklar arası | 32 | [DS] |
 | Kart iç padding | 16 (standart), 12 (kompakt stat kartı), 24 (büyük kart) | [DS] |
 | Stat kartları / chip'ler arası | 8 | [DS] |
@@ -458,6 +458,7 @@ Part A'da form tasarımı yok; DS'nin composer'ı (pill input) ve kart diliyle t
 | Arka plan (backdrop) | `black` %40 |
 | Modal / onay diyaloğu | `white`, `radius.xl`, padding 24, `elev-3`; başlık `title-md`, metin `body` `text.secondary`; butonlar sağa hizalı (mobilde alt alta, tam genişlik) |
 | Bottom sheet (mobil) | `white`, üst köşeler `radius.xl`, `elev-3`; 36×4 tutamak `neutral.100`; başlık `title-sm` |
+| Yeni İşlem sheet'i [ürün sahibi isteği 2026-11-05] | Bottom sheet stili, her boyutta; alttan header'ın altına (64) kadar, tablet+ ortada 560 genişlik [Varsayım: ölçü]. Bulunulan ekranın üstünde açılır; İptal, tutamak/başlık sürükleme, karartma ve Esc kapatır |
 | Drawer (tablet+) | `white`, iç köşeler `radius.lg`, `elev-3`; genişlikler RESPONSIVE §6.2 |
 | Popover / menü | `white`, `radius.md`, padding 6, `elev-2`; satır 44 yükseklik, `radius.sm`, hover `neutral.50` |
 | Seçici satırı | 48 yükseklik, seçili satırda sağda check (`blue.600`) + `body-strong` |

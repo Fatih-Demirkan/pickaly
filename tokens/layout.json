@@ -36,9 +36,8 @@
     },
     "section-gap": {
       "$type": "dimension",
-      "$value": "20px",
-      "laptop": "32px",
-      "$description": "DS space-5 (mobil bölüm arası)"
+      "$value": "40px",
+      "$description": "Bölümler arası. DS space-5 (20) yerine 40, tüm boyutlarda (ürün sahibi kararı 2026-11-05)"
     },
     "stack-gap": {
       "$type": "dimension",

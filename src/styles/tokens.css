@@ -291,7 +291,7 @@
   --pk-type-button-line-height: 20px;
   --layout-page-padding-x: 16px;
   --layout-page-padding-top: 16px;
-  --layout-section-gap: 20px;
+  --layout-section-gap: 40px;
   --layout-stack-gap: 12px;
   --layout-card-padding: 16px;
   --layout-grid-gutter: 16px;
@@ -324,7 +324,6 @@
     --pk-type-display-balance-line-height: 52px;
     --layout-page-padding-x: 32px;
     --layout-page-padding-top: 32px;
-    --layout-section-gap: 32px;
     --layout-stack-gap: 16px;
     --layout-card-padding: 24px;
     --layout-grid-gutter: 24px;

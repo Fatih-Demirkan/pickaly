@@ -20,8 +20,10 @@ import { TodayAgenda } from "./TodayAgenda";
 //   Mobil sıra [Figma]: Toplam Bakiye · Hızlı Aksiyonlar · Bugünün Akışı · (ayırıcı) · Yaklaşan Ödemeler · Birikim Hedefi
 //   Tablet [Karar]: Bakiye 8/8 · Hızlı Aksiyonlar 8/8 · Bugünün Akışı 4/8 | Yaklaşan Ödemeler 4/8 · Birikim Hedefi 8/8
 //   Laptop+ [Karar]: Bakiye 8/12 | Birikim Hedefi 4/12 · Bugünün Akışı 7/12 | Hızlı Aksiyonlar 2×2 + Yaklaşan Ödemeler 5/12
-// "İşlemler" (son 3 işlem, ürün sahibi isteği 2026-11-05) [Varsayım: yerleşim]: mobil/tablet bakiye ve Başlarken kartının
-//   altında, tam genişlik · laptop+ 7/12, Hızlı Aksiyonlar ile aynı satırda; Bugünün Akışı bir satır aşağı iner.
+// "İşlemler" (son 3 işlem, ürün sahibi isteği 2026-11-05): Hızlı Aksiyonların (Gelir · Gider · Görev · Ödeme) bir alt
+//   sırasında (ürün sahibi isteği 2026-11-05). Mobil/tablet: Bakiye · Başlarken · Hızlı Aksiyonlar · İşlemler · Bugünün Akışı.
+//   [Varsayım: yerleşim] laptop+: Hızlı Aksiyonlar 7/12 (4 sütun) · altında İşlemler 7/12 · altında Bugünün Akışı 7/12;
+//   sağ sütunda Birikim Hedefi ve Yaklaşan Ödemeler.
 // Görevler Takvim modülünden gelir (Bugünün Akışı, "Bugün: n Görev").
 // [Eksik] Haftalık özet kartı (PRD FR-DSH-011, Q-3) ve "Sıradaki" etkinlik satırı (FR-DSH-010) tasarlanmadı.
 
@@ -77,17 +79,17 @@ export async function Dashboard() {
         <GettingStarted steps={steps} />
       </div>
       <div className="tablet:col-span-2 laptop:col-span-7 laptop:col-start-1 laptop:row-start-2 laptop:self-start">
-        <RecentTransactions transactions={allTransactions} locale={locale} />
-      </div>
-      <div className="tablet:col-span-2 laptop:col-span-5 laptop:col-start-8 laptop:row-start-2 laptop:self-start">
         <QuickActions />
       </div>
-      <div className="laptop:col-span-7 laptop:col-start-1 laptop:row-span-2 laptop:row-start-3 laptop:self-start">
+      <div className="tablet:col-span-2 laptop:col-span-7 laptop:col-start-1 laptop:row-start-3 laptop:self-start">
+        <RecentTransactions transactions={allTransactions} locale={locale} />
+      </div>
+      <div className="laptop:col-span-7 laptop:col-start-1 laptop:row-span-2 laptop:row-start-4 laptop:self-start">
         <TodayAgenda today={today} items={todayItems} overdue={overdue} payments={dueToday} />
       </div>
       {/* Pages: mobilde Bugünün Akışı ile Yaklaşan Ödemeler arasında ayırıcı çizgi. */}
       <hr className="border-border-subtle tablet:hidden" />
-      <div className="laptop:col-span-5 laptop:col-start-8 laptop:row-start-3 laptop:self-start">
+      <div className="laptop:col-span-5 laptop:col-start-8 laptop:row-span-3 laptop:row-start-2 laptop:self-start">
         <UpcomingPayments today={today} />
       </div>
       {goal && (
