@@ -16,7 +16,7 @@ type FocusHeaderProps = {
   backIcon?: "back" | "close";
   /** Sağdaki aksiyon (ör. "× İptal"). */
   trailing?: ReactNode;
-  /** Bottom sheet içinde: zemin sheet ile aynı (beyaz), başlığın boş kısmı sheet'i sürükleyerek kapatır. */
+  /** Bottom sheet içinde: başlığın boş kısmı sheet'i sürükleyerek kapatır. */
   inSheet?: boolean;
 };
 
@@ -29,10 +29,7 @@ export function FocusHeader({ title, titleId, back, backIcon = "back", trailing,
   return (
     <div
       data-sheet-drag={inSheet || undefined}
-      className={cn(
-        "sticky top-0 z-(--z-sticky) flex h-56 shrink-0 items-center gap-12 px-16 tablet:px-24",
-        inSheet ? "touch-none bg-surface-card" : "bg-surface-page",
-      )}
+      className={cn("sticky top-0 z-(--z-sticky) flex h-56 shrink-0 items-center gap-12 bg-surface-page px-16 tablet:px-24", inSheet && "touch-none")}
     >
       {back && (
         <Link href={back.href} scroll={false} aria-label={back.label} className={`${iconLinkClass} inline-flex tablet:hidden`}>

@@ -7,29 +7,34 @@ import { Drawer } from "@/components/ui/Drawer";
 import { Icon } from "@/components/ui/Icon";
 import { Sheet } from "@/components/ui/Sheet";
 import { listAccounts } from "@/features/accounts/server";
+import { newItemFormValues } from "@/features/calendar/components/itemFormDefaults";
 import { listCategories } from "@/features/categories/server";
 import { isLocale } from "@/i18n/config";
 import { DEFAULT_TIME, toDateKey, toTimeValue } from "@/lib/dates";
 import { formatMoney, formatMoneyInput } from "@/lib/money";
 import { DEFAULT_REMINDER } from "@/lib/recurrence";
-import type { TransactionFormType } from "../schemas";
+import type { NewEntryType } from "../routes";
 import { getAccountBalances, transactionRepository } from "../server";
+import { NewEntryForm } from "./NewEntryForm";
 import { TransactionForm, type TransactionFormValues } from "./TransactionForm";
 
 // Yeni İşlem: bottom sheet (ürün sahibi isteği 2026-11-05; src/components/ui/Sheet.tsx). Uygulama içinden açıldığında
 //   (intercepted) bulunulan ekranın üstünde açılır; kapanınca ve kayıttan sonra aynı ekrana dönülür.
+//   Tür seçimi Gelir · Gider · Görev · Ödeme (NewEntryForm); Görev, Takvim'in Görev Ekle formunu gösterir.
 // Düzenle (RESPONSIVE §3.3.3): mobil tam ekran form (Pages) · tablet+ sağ drawer 560 px.
 // Hem doğrudan adresle açılan sayfa hem de intercept edilen slot bu bileşeni kullanır. İçerik iki sunumda aynıdır.
 
-type TransactionFormDrawerProps = { mode: "create"; type?: TransactionFormType; intercepted?: boolean } | { mode: "edit"; id: string };
+type TransactionFormDrawerProps = { mode: "create"; type?: NewEntryType; intercepted?: boolean } | { mode: "edit"; id: string };
 
 export async function TransactionFormDrawer(props: TransactionFormDrawerProps) {
-  const [t, rawLocale, categories, accounts, balances] = await Promise.all([
+  const [t, rawLocale, categories, accounts, balances, taskCategories] = await Promise.all([
     getTranslations("transactions.form"),
     getLocale(),
     listCategories(),
     listAccounts(),
     getAccountBalances(),
+    // Görev sekmesi yalnızca Yeni İşlem'de var.
+    props.mode === "create" ? listCategories("calendar") : Promise.resolve([]),
   ]);
   const locale = isLocale(rawLocale) ? rawLocale : "tr";
 
@@ -56,7 +61,7 @@ export async function TransactionFormDrawer(props: TransactionFormDrawerProps) {
   } else {
     const now = new Date();
     cancelHref = "/islemler";
-    const type = props.type ?? "income";
+    const type = props.type && props.type !== "task" ? props.type : "income";
     initialValues = {
       type,
       amount: "",
@@ -103,14 +108,23 @@ export async function TransactionFormDrawer(props: TransactionFormDrawerProps) {
         }
       />
       <DrawerBody>
-        <TransactionForm
-          mode={props.mode}
-          transactionId={props.mode === "edit" ? props.id : undefined}
-          initialValues={initialValues}
-          categories={selectable}
-          accounts={accountOptions}
-          cancelHref={cancelHref}
-        />
+        {props.mode === "create" ? (
+          <NewEntryForm
+            initialType={props.type ?? "income"}
+            transaction={{ initialValues, categories: selectable, accounts: accountOptions }}
+            task={{ initialValues: newItemFormValues(), categories: taskCategories.filter((category) => !category.archived) }}
+            cancelHref={cancelHref}
+          />
+        ) : (
+          <TransactionForm
+            mode="edit"
+            transactionId={props.id}
+            initialValues={initialValues}
+            categories={selectable}
+            accounts={accountOptions}
+            cancelHref={cancelHref}
+          />
+        )}
       </DrawerBody>
     </>
   );

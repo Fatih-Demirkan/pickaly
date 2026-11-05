@@ -3,7 +3,7 @@
 import { getLocale } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { redirect, RedirectType } from "next/navigation";
-import { isSheetRoute } from "@/config/navigation";
+import { returnPath } from "@/lib/returnPath";
 import { setFlash } from "@/lib/flash";
 import { getAccountMap } from "@/features/accounts/server";
 import { getCategoryMap } from "@/features/categories/server";
@@ -93,14 +93,6 @@ function transactionInput(values: FormValues & { type: TransactionType }): Trans
     occurredAt: localDateTimeToIso(values.date, values.time),
     note: values.note,
   };
-}
-
-/** Yeni İşlem sheet'i bir ekranın üstünde açıldıysa kayıttan sonra o ekrana dönülür. Yalnızca uygulama içi yol kabul edilir. */
-function returnPath(formData: FormData) {
-  const value = formData.get("returnTo");
-  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//") || value.includes("\\")) return "/";
-  const pathname = value.split(/[?#]/)[0] ?? "/";
-  return isSheetRoute(pathname) ? "/" : value;
 }
 
 function monthHref(occurredAt: string) {

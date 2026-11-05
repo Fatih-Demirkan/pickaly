@@ -4,8 +4,9 @@ import { createContext, useContext, useEffect, useLayoutEffect, useRef, type Key
 import { useRouter } from "next/navigation";
 import { useBackgroundUrl } from "@/lib/sheetRoutes";
 
-// Bottom sheet sunumu (ürün sahibi isteği 2026-11-05: Yeni İşlem). DESIGN_SYSTEM_PICKALY §5.8 "Bottom sheet":
-//   beyaz zemin, üst köşeler radius-xl, elev-3, 36×4 tutamak (neutral.100 = surface-muted), arka plan black %40.
+// Bottom sheet sunumu (ürün sahibi isteği 2026-11-05: Yeni İşlem). DESIGN_SYSTEM_PICKALY §5.8 "Yeni İşlem sheet'i":
+//   zemin uygulama canvas'ı (surface-page; beyaz kartlar ve alanlar ekranlardaki gibi ayrışır, ürün sahibi kararı
+//   2026-11-05), üst köşeler radius-xl, elev-3, 36×4 tutamak (neutral.100 = surface-muted), arka plan black %40.
 //   [Varsayım: ölçü] Sheet ekranın altından header'ın altına (--layout-topbar-height) kadar uzanır; tablet+ ortada,
 //   form drawer genişliğinde (560). İçerik sheet'in içinde kayar; arkadaki sayfanın kaydırma konumu korunur.
 // Açılış: alttan kayarak (sheet-enter 280 ms). Kapanış: aşağı kayarak (200 ms), sonra adres değişir.
@@ -206,7 +207,7 @@ export function Sheet({ closeHref, labelledBy, intercepted = false, children }: 
           onPointerMove={onPointerMove}
           onPointerUp={onPointerEnd}
           onPointerCancel={onPointerEnd}
-          className="fixed inset-x-0 top-(--layout-topbar-height) bottom-0 z-(--z-drawer) mx-auto flex w-full animate-sheet-enter flex-col overflow-hidden rounded-t-xl bg-surface-card shadow-elev-3 outline-none will-change-transform tablet:max-w-(--layout-drawer-width-form)"
+          className="fixed inset-x-0 top-(--layout-topbar-height) bottom-0 z-(--z-drawer) mx-auto flex w-full animate-sheet-enter flex-col overflow-hidden rounded-t-xl bg-surface-page shadow-elev-3 outline-none will-change-transform tablet:max-w-(--layout-drawer-width-form)"
         >
           {/* Tutamak: dokunma alanı tam genişlik × 24; görsel 36 × 4. Sürükleme bir kısayoldur; "İptal" her zaman var
               (WCAG 2.5.7), bu yüzden tutamak ekran okuyucudan gizlenir. */}

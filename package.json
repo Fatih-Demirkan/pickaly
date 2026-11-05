@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "tokens:build": "node scripts/build-tokens.mjs",
     "tokens:check": "node scripts/build-tokens.mjs --check",
+    "icons:build": "node scripts/build-app-icons.mjs",
     "check": "pnpm tokens:check && pnpm typecheck && pnpm lint"
   },
   "dependencies": {

@@ -5,7 +5,7 @@ import type { TransactionFormType } from "./schemas";
 // İşlemler ekranının URL durumu. Ay, tür ve kategori filtresi adreste tutulur; böylece bağlantı
 // paylaşılabilir, geri tuşu çalışır ve sayfa sunucuda doğru filtreyle çizilir.
 //   ?ay=2026-05   ?tur=gelir|gider   ?kategori=<id>
-// Yeni İşlem: ?tur=gelir|gider|abonelik seçili sekmeyi belirler (TECH_STACK §4).
+// Yeni İşlem: ?tur=gelir|gider|gorev|abonelik seçili sekmeyi belirler (TECH_STACK §4).
 
 export type ListQuery = {
   month?: MonthKey;
@@ -55,13 +55,21 @@ export function detailHref(id: string, query: ListQuery) {
   return `/islemler/${encodeURIComponent(id)}${queryString(query)}`;
 }
 
-const formTypeParam: Record<TransactionFormType, string> = { ...typeParam, subscription: "abonelik" };
+/** Yeni İşlem sheet'inin türleri: işlem türleri + Görev (Görev Ekle formu). */
+export type NewEntryType = TransactionFormType | "task";
+
+const entryParam: Record<NewEntryType, string> = { ...typeParam, subscription: "abonelik", task: "gorev" };
 
 /** Yeni İşlem formunun sekmesi; liste filtresinden farklı olarak Abonelik de vardır. */
 export function parseFormTypeParam(value: unknown): TransactionFormType | undefined {
-  return value === formTypeParam.subscription ? "subscription" : parseTypeParam(value);
+  return value === entryParam.subscription ? "subscription" : parseTypeParam(value);
 }
 
-export function newTransactionHref(type: TransactionFormType) {
-  return `/islemler/yeni?tur=${formTypeParam[type]}`;
+/** Yeni İşlem sheet'inin açılış sekmesi (Gelir / Gider / Görev / Ödeme). */
+export function parseEntryParam(value: unknown): NewEntryType | undefined {
+  return value === entryParam.task ? "task" : parseFormTypeParam(value);
+}
+
+export function newTransactionHref(type: NewEntryType) {
+  return `/islemler/yeni?tur=${entryParam[type]}`;
 }

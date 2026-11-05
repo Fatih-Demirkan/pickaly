@@ -36,8 +36,8 @@
     },
     "section-gap": {
       "$type": "dimension",
-      "$value": "40px",
-      "$description": "Bölümler arası. DS space-5 (20) yerine 40, tüm boyutlarda (ürün sahibi kararı 2026-11-05)"
+      "$value": "32px",
+      "$description": "Bölümler arası. DS space-5 (20) yerine 32 (DS space-8), tüm boyutlarda (ürün sahibi kararı 2026-11-05)"
     },
     "stack-gap": {
       "$type": "dimension",

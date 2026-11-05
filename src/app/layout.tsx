@@ -24,6 +24,8 @@ export const metadata: Metadata = {
   description: trMessages.app.description,
   // Gerçek kullanıcıya açılana kadar arama motorlarına kapalı (PRD §1.8 yayın engelleri).
   robots: { index: false, follow: false },
+  // iOS: ana ekrana eklenince tam ekran (standalone) açılır; durum çubuğu açık zeminde koyu metin.
+  appleWebApp: { capable: true, title: trMessages.app.name, statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = {

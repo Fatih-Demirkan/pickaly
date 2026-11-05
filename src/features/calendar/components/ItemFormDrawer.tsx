@@ -7,13 +7,13 @@ import { Drawer } from "@/components/ui/Drawer";
 import { Icon } from "@/components/ui/Icon";
 import { listCategories } from "@/features/categories/server";
 import { isLocale } from "@/i18n/config";
-import { DEFAULT_TIME, toDateKey, type DateKey } from "@/lib/dates";
+import type { DateKey } from "@/lib/dates";
 import { formatMoneyInput } from "@/lib/money";
-import { DEFAULT_REMINDER } from "@/lib/recurrence";
 import type { CalendarItemKind } from "../domain/types";
 import { calendarHref, itemHref } from "../routes";
 import { calendarRepository } from "../server";
 import { ItemForm, type ItemFormValues } from "./ItemForm";
+import { newItemFormValues } from "./itemFormDefaults";
 
 // Görev Ekle / Düzenle sunumu (RESPONSIVE §3.2.5, §8.2.1): mobil tam sayfa · tablet+ sağ drawer 560 px.
 // Header "Yeni Görev" + "× İptal" (Yeni İşlem ile aynı).
@@ -50,28 +50,8 @@ export async function ItemFormDrawer(props: ItemFormDrawerProps) {
       plannedExpense: item.plannedExpenseMinor !== null ? formatMoneyInput(item.plannedExpenseMinor, locale) : "",
     };
   } else {
-    const now = new Date();
-    const date = props.date ?? toDateKey(now);
-    cancelHref = calendarHref({ day: date });
-    initialValues = {
-      kind: props.kind ?? "task",
-      title: "",
-      description: "",
-      priority: "normal",
-      categoryId: "",
-      date,
-      allDay: false,
-
-      time: DEFAULT_TIME, // Yeni kayıt: 09:00 (ürün sahibi kararı 2026-11-05); süre varsayılan 60 dk
-      duration: "60",
-      reminder: DEFAULT_REMINDER,
-      locationName: "",
-      locationAddress: "",
-      multi: false,
-      subtasks: [],
-      note: "",
-      plannedExpense: "",
-    };
+    initialValues = newItemFormValues({ kind: props.kind, date: props.date });
+    cancelHref = calendarHref({ day: initialValues.date as DateKey });
   }
 
   // Arşivli kategoriler yeni seçimde çıkmaz; düzenlenen kaydın mevcut kategorisi korunur (BR-CAT-002).

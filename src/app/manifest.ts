@@ -3,19 +3,27 @@ import { semanticColors } from "@/styles/tokens";
 import trMessages from "@/locales/tr.json";
 
 // PWA manifest (TECH_STACK §8.5, RESPONSIVE §5.3). Renkler token'lardan gelir: tema ve zemin canvas #F5F6F7
-// (DESIGN_SYSTEM_PICKALY §7).
-// [Eksik] Uygulama ikonu / logo varlığı Figma Pages/Components'ta yok. 192, 512 ve maskable ikonlar
-// tasarım ekibinden gelince "icons" alanına eklenecek; o zamana kadar uygulama ana ekrana kurulamaz.
+// (DESIGN_SYSTEM_PICKALY §7). Kurulum tarayıcının kendi akışıyla (menü → "Uygulamayı yükle" / "Ana Ekrana Ekle").
+// İkonlar scripts/build-app-icons.mjs ile üretilir.
+// [Geçici] Logo dosyası yok (PRD TD-14): ikon, uygulamadaki düz blue.500 logo karosudur. Logo gelince yenilenir.
+// [Ertelendi] Service worker (Serwist, yalnızca uygulama kabuğu ve statik varlık önbelleği) ve çevrimdışı bandı.
+//   Chrome menüden kurulum için service worker istemiyor (Chrome 108+ mobil); iOS da istemiyor.
 export default function manifest(): MetadataRoute.Manifest {
   return {
+    id: "/",
     name: trMessages.app.name,
     short_name: trMessages.app.name,
     description: trMessages.app.description,
     lang: "tr",
     start_url: "/",
+    scope: "/",
     display: "standalone",
     theme_color: semanticColors["surface-page"],
     background_color: semanticColors["surface-page"],
-    icons: [],
+    icons: [
+      { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+      { src: "/icons/icon-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+    ],
   };
 }

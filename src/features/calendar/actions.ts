@@ -2,8 +2,9 @@
 
 import { getLocale } from "next-intl/server";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 import { setFlash } from "@/lib/flash";
+import { returnPath } from "@/lib/returnPath";
 import { SUBTASK_MAX_COUNT, SUBTASK_TITLE_MAX_LENGTH, type Subtask } from "./domain/types";
 import { getCategoryMap } from "@/features/categories/server";
 import { isLocale } from "@/i18n/config";
@@ -125,7 +126,8 @@ export async function createCalendarItem(_previous: CalendarItemFormState, formD
   await calendarRepository.create(result.input);
   revalidateCalendar();
   await setFlash("itemCreated");
-  redirect("/");
+  // Yeni İşlem sheet'inden (Görev) kaydedildiyse sheet'in açıldığı ekrana dönülür; geçmişte sheet adresi kalmaz.
+  redirect(returnPath(formData), RedirectType.replace);
 }
 
 export async function updateCalendarItem(id: string, _previous: CalendarItemFormState, formData: FormData): Promise<CalendarItemFormState> {

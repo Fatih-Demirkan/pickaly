@@ -4,6 +4,7 @@ import { useActionState, useState, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ActionFooter } from "@/components/layout/ActionFooter";
 import { Button, ButtonLink } from "@/components/ui/Button";
+import { useSheetReturnTo } from "@/components/ui/Sheet";
 import { ChipSelect } from "@/components/ui/ChipSelect";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
@@ -57,6 +58,8 @@ type ItemFormProps = {
   initialValues: ItemFormValues;
   categories: Category[];
   cancelHref: string;
+  /** Formun en üstünde gösterilecek alan (Yeni İşlem sheet'inde Gelir · Gider · Görev · Ödeme seçimi). */
+  leading?: ReactNode;
 };
 
 
@@ -95,7 +98,7 @@ const limits: Partial<Record<CalendarItemFormField, number>> = {
   locationAddress: LOCATION_MAX_LENGTH,
 };
 
-export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }: ItemFormProps) {
+export function ItemForm({ mode, itemId, initialValues, categories, cancelHref, leading }: ItemFormProps) {
   const t = useTranslations("calendar");
   const tRecurrence = useTranslations("recurrence");
   const rawLocale = useLocale();
@@ -103,6 +106,7 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
 
   const action = mode === "edit" && itemId ? updateCalendarItem.bind(null, itemId) : createCalendarItem;
   const [state, formAction, pending] = useActionState<CalendarItemFormState, FormData>(action, {});
+  const returnTo = useSheetReturnTo();
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(state.errors ?? {});
   const [lastState, setLastState] = useState(state);
@@ -138,6 +142,8 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
 
   return (
     <form action={formAction} noValidate className="flex flex-1 flex-col gap-(--layout-section-gap)">
+      {/* Yeni İşlem sheet'i bulunulan ekranın üstünde açıldıysa kayıttan sonra o ekrana dönülür. */}
+      {returnTo && <input type="hidden" name="returnTo" value={returnTo} />}
       <input type="hidden" name="kind" value={values.kind} />
       {/* Alt görevler JSON olarak gönderilir; "Çoklu seçim" kapalıysa veya randevuysa boş liste. */}
       <input type="hidden" name="subtasks" value={JSON.stringify(values.kind === "task" && values.multi ? values.subtasks : [])} />
@@ -156,6 +162,8 @@ export function ItemForm({ mode, itemId, initialValues, categories, cancelHref }
           {t(`form.errors.${state.formError}`)}
         </p>
       )}
+
+      {leading}
 
       <div className="flex flex-col gap-8">
         <Label id="kind-label" required>

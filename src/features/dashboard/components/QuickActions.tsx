@@ -7,8 +7,8 @@ import { cn } from "@/lib/cn";
 // Pages → Ana Sayfa "Section - 2. Hızlı Aksiyonlar (Minimalist Bar)" (6:1935, PRD FR-DSH-003, RESPONSIVE §3.1).
 //   Kart (DESIGN_SYSTEM_PICKALY §5.2): beyaz, radius-md, dikey padding 12, aralık 8, elev-1; 36 px kategori renkli ikon
 //   karosu (radius-sm) + caption-strong. Renkler: Gelir green · Gider red · Görev violet · Ödeme pink. Her boyutta 4 sütun (laptop+ İşlemler ile aynı 7/12 sütunda).
-// Hedefler [Karar #2, #3]: Gelir → Yeni İşlem/Gelir · Gider → /Gider · Ödeme → /Abonelik · Görev → Görev Ekle.
-// Görev Ekle formu Pages'ta tasarlanmadı; RESPONSIVE §8.2.1 önerisiyle Takvim modülünde kuruldu.
+// Hedefler [Karar #2, #3]: hepsi Yeni İşlem sheet'i, aynı sırada sekme: Gelir · Gider · Görev · Ödeme (= Abonelik)
+// (ürün sahibi kararı 2026-11-05). Görev sekmesi Takvim modülünün Görev Ekle formunu gösterir.
 // [Varsayım] İkon renkleri ölçülmedi; kutu zeminiyle aynı ailenin koyu tonları.
 
 type Action = { key: "income" | "expense" | "task" | "payment"; icon: AppIconName; tone: string; href?: string };
@@ -16,7 +16,7 @@ type Action = { key: "income" | "expense" | "task" | "payment"; icon: AppIconNam
 const actions: Action[] = [
   { key: "income", icon: "add", tone: "bg-category-green text-category-fg-green", href: "/islemler/yeni?tur=gelir" },
   { key: "expense", icon: "subtract", tone: "bg-category-red text-category-fg-red", href: "/islemler/yeni?tur=gider" },
-  { key: "task", icon: "task", tone: "bg-category-violet text-category-fg-violet", href: "/takvim/yeni?tur=gorev" },
+  { key: "task", icon: "task", tone: "bg-category-violet text-category-fg-violet", href: "/islemler/yeni?tur=gorev" },
   { key: "payment", icon: "payment", tone: "bg-category-pink text-category-fg-pink", href: "/islemler/yeni?tur=abonelik" },
 ];
 

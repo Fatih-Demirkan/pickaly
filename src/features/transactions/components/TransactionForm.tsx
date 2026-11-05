@@ -29,6 +29,7 @@ import { FREQUENCIES, REMINDER_OFFSETS, type Frequency, type ReminderOffset } fr
 import { createTransaction, updateTransaction } from "../actions";
 import { NOTE_MAX_LENGTH, TITLE_MAX_LENGTH } from "../domain/limits";
 import type { TransactionFormField, TransactionFormState, TransactionFormType } from "../schemas";
+import { EntryTypeField } from "./EntryTypeField";
 import { AccountPicker, type AccountOption } from "@/features/accounts/components/AccountPicker";
 
 // Pages → Yeni İşlem / Gelir (121:3180), / Gider (121:3549) ve / Abonelik (121:3649), RESPONSIVE §3.3.3, DESIGN §8.2.
@@ -74,6 +75,8 @@ type TransactionFormProps = {
   categories: Category[];
   accounts: AccountOption[];
   cancelHref: string;
+  /** Yeni İşlem sheet'i: tür seçimine Görev eklenir (Gelir · Gider · Görev · Ödeme); seçilince çağrılır. */
+  onSelectTask?: () => void;
 };
 
 const QUICK_AMOUNTS = [500, 1000, 2500].map(majorToMinor); // Pages: "+ 500 ₺", "+ 1.000 ₺", "+ 2.500 ₺"
@@ -106,7 +109,7 @@ function FieldError({ id, message }: { id: string; message?: string }) {
   );
 }
 
-export function TransactionForm({ mode, transactionId, initialValues, categories, accounts, cancelHref }: TransactionFormProps) {
+export function TransactionForm({ mode, transactionId, initialValues, categories, accounts, cancelHref, onSelectTask }: TransactionFormProps) {
   const t = useTranslations("transactions.form");
   const tType = useTranslations("transactions.type");
   const rawLocale = useLocale();
@@ -203,6 +206,9 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
         </p>
       )}
 
+      {onSelectTask ? (
+        <EntryTypeField value={values.type} onChange={(next) => (next === "task" ? onSelectTask() : changeType(next))} />
+      ) : (
       <div className="flex flex-col gap-8">
         <FieldLabel id="type-label" required>
           {t("type")}
@@ -220,6 +226,7 @@ export function TransactionForm({ mode, transactionId, initialValues, categories
           ]}
         />
       </div>
+      )}
 
       {/* Tutar kartı */}
       <div
