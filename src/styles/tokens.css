@@ -37,6 +37,12 @@
   --pk-green-700: #0E8138;
   --pk-amber-500: #F5A524;
   --pk-amber-700: #8C6710;
+  --pk-daypart-morning-from: #FBD073;
+  --pk-daypart-morning-via: #FDD784;
+  --pk-daypart-evening-from: #EEBBA5;
+  --pk-daypart-evening-via: #F3D0C2;
+  --pk-daypart-night-from: #BBC8E0;
+  --pk-daypart-night-via: #C5CFE2;
   --pk-category-teal-bg: #D1FFF9;
   --pk-category-teal-fg: #0E7E6F;
   --pk-category-blue-bg: #D6E9FF;
@@ -160,11 +166,12 @@
   --color-progress-track: var(--pk-blue-300);
   --color-progress-halo: var(--pk-blue-200);
   --color-progress-track-bar: var(--pk-blue-100);
-  --color-daypart-morning: var(--pk-category-amber-bg);
-  --color-daypart-day: var(--pk-blue-100);
-  --color-daypart-sunset: var(--pk-category-orange-bg);
-  --color-daypart-evening: var(--pk-lavender-200);
-  --color-daypart-night: var(--pk-lilac-200);
+  --color-daypart-morning: var(--pk-daypart-morning-from);
+  --color-daypart-morning-via: var(--pk-daypart-morning-via);
+  --color-daypart-evening: var(--pk-daypart-evening-from);
+  --color-daypart-evening-via: var(--pk-daypart-evening-via);
+  --color-daypart-night: var(--pk-daypart-night-from);
+  --color-daypart-night-via: var(--pk-daypart-night-via);
 
   /* Boşluk: 1 birim = 1px, böylece p-16 = 16px (token adı = değer). Ölçek: --space-* */
   --spacing: 1px;

@@ -432,12 +432,34 @@
       }
     },
     "daypart": {
-      "$description": "Ana Sayfa zamana duyarlı karşılama alanı zemini (ürün sahibi isteği 2026-11-06). [Türetme] Yalnızca DS'deki mevcut pastel tonlar; sahne görselleri public/illustrations/daypart",
-      "morning": { "$type": "color", "$value": "{primitive.category.amber.bg}", "$description": "05–11 Günaydın · gün doğumu" },
-      "day": { "$type": "color", "$value": "{primitive.blue.100}", "$description": "11–17 İyi günler · güneş ve bulutlar" },
-      "sunset": { "$type": "color", "$value": "{primitive.category.orange.bg}", "$description": "17–20 İyi akşamlar · gün batımı" },
-      "evening": { "$type": "color", "$value": "{primitive.lavender.200}", "$description": "20–23 İyi akşamlar · ay" },
-      "night": { "$type": "color", "$value": "{primitive.lilac.200}", "$description": "23–05 İyi geceler · ay ve yıldızlar" }
+      "$description": "Ana Sayfa karşılama alanı (Figma, ürün sahibi 2026-11-06): üstten from → %50'de via → altta via %0 (sayfaya karışır)",
+      "morning": {
+        "$type": "color",
+        "$value": "{primitive.daypart.morning.from}",
+        "$description": "05–12 Günaydın · 12–17 İyi günler"
+      },
+      "morning-via": {
+        "$type": "color",
+        "$value": "{primitive.daypart.morning.via}"
+      },
+      "evening": {
+        "$type": "color",
+        "$value": "{primitive.daypart.evening.from}",
+        "$description": "17–22 İyi akşamlar"
+      },
+      "evening-via": {
+        "$type": "color",
+        "$value": "{primitive.daypart.evening.via}"
+      },
+      "night": {
+        "$type": "color",
+        "$value": "{primitive.daypart.night.from}",
+        "$description": "22–05 İyi geceler"
+      },
+      "night-via": {
+        "$type": "color",
+        "$value": "{primitive.daypart.night.via}"
+      }
     }
   }
 }

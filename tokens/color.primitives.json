@@ -46,6 +46,12 @@
       "500": { "$type": "color", "$value": "#F5A524", "$description": "[DS≈] warning (suggested); siyah metinli zemin" },
       "700": { "$type": "color", "$value": "#8C6710", "$description": "[Türetme] beyazda 5,17:1" }
     },
+    "daypart": {
+      "$description": "Ana Sayfa karşılama alanı geçiş renkleri — ürün sahibinin Figma tasarımı (Fatih-Test 205:1668 Günaydın, 205:1679 İyi akşamlar, 205:1691 İyi geceler; 2026-11-06)",
+      "morning": { "from": { "$type": "color", "$value": "#FBD073" }, "via": { "$type": "color", "$value": "#FDD784" } },
+      "evening": { "from": { "$type": "color", "$value": "#EEBBA5" }, "via": { "$type": "color", "$value": "#F3D0C2" } },
+      "night": { "from": { "$type": "color", "$value": "#BBC8E0" }, "via": { "$type": "color", "$value": "#C5CFE2" } }
+    },
     "category": {
       "$description": "Kategori zemin (bg) ve ön plan (fg) çiftleri. Anahtarlar veritabanındaki renk adlarıdır, değişmez. DESIGN_SYSTEM_PICKALY §2.2",
       "teal": { "bg": { "$type": "color", "$value": "#D1FFF9" }, "fg": { "$type": "color", "$value": "#0E7E6F" } },

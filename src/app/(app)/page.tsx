@@ -8,8 +8,8 @@ import { Dashboard } from "@/features/dashboard/components/Dashboard";
 export default function HomePage() {
   return (
     <Suspense fallback={<DashboardSkeleton />}>
-      {/* Karşılama alanının renk geçişi bakiyenin üstünde bitsin diye ek üst boşluk (ürün sahibi isteği 2026-11-06). */}
-      <PageContainer className="pt-32! tablet:pt-40! laptop:pt-48!">
+      {/* Karşılama alanının (Figma, 32 px alt boşluklu geçiş) altında standart sayfa üst boşluğu. */}
+      <PageContainer>
         <Dashboard />
       </PageContainer>
     </Suspense>

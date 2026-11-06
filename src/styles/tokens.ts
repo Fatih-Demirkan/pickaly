@@ -99,11 +99,12 @@ export const semanticColors = {
   "progress-track": "#7BBEFE",
   "progress-halo": "#A8D3FE",
   "progress-track-bar": "#D6E9FF",
-  "daypart-morning": "#FFEEC7",
-  "daypart-day": "#D6E9FF",
-  "daypart-sunset": "#FFDEC7",
-  "daypart-evening": "#D0D1FF",
-  "daypart-night": "#E7D0FF"
+  "daypart-morning": "#FBD073",
+  "daypart-morning-via": "#FDD784",
+  "daypart-evening": "#EEBBA5",
+  "daypart-evening-via": "#F3D0C2",
+  "daypart-night": "#BBC8E0",
+  "daypart-night-via": "#C5CFE2"
 } as const;
 
 export const breakpoints = {

@@ -427,17 +427,20 @@ Part A'da yok. Filtre chip'i diliyle türetildi:
 - Sağda outline ikon butonları (36): arama, bildirim (sayı rozetiyle), hesap → 40 px avatar daire.
 - [Karar K-6] Ana Sayfa header'ı Part A selamlama dilini kullanır: 40 px avatar + `caption` selamlama + `title-md` kullanıcı adı. Diğer sekmelerde yukarıdaki "Pickaly" + alt başlık düzeni kalır. Ad yoksa yalnızca selamlama gösterilir.
 - **Ad gösterimi** [Karar ürün sahibi 2026-11-06]: kullanıcı adı nasıl girilmiş olursa olsun her kelimenin baş harfi büyük gösterilir (dil kurallarıyla: "ışıl" → "Işıl"); kayıtlı değer değişmez.
-- **Zamana duyarlı karşılama alanı (Ana Sayfa)** [Karar K-19, ürün sahibi 2026-11-06; Türetme: renkler; Varsayım: sahneler ve ölçüler]: 168 px yükseklik, sayfayla birlikte kayar (yapışık değil); bakiye bloğu altında ek üst boşlukla (mobil 32, tablet 40, laptop+ 48) başlar. Solda sahneye eşlik eden büyük tipografi: `body-strong` selamlama · `title-lg` ad (en fazla 2 satır) · `caption` bugünün tarihi ("6 Kasım Cuma"); bu alanda avatar yok [Karar ürün sahibi 2026-11-06, K-6'nın Ana Sayfa avatarı yerine]. Sağda gün diliminin vektörel sahnesi (`public/illustrations/daypart/*.svg`, 200×140 çizim, mobilde 176 px, tablet+ 216 px genişlik): sarı güneş ve arkasında hafif bulutlar, gün doğumu, gün batımı, hilal ay ve yıldızlar. Bulutlar yavaşça kayar, güneş/ay parıltısı hafifçe nefes alır, yıldızlar yanıp söner; "hareketi azalt" tercihinde hareket yok. Zemin gün diliminin pastel tonu (`daypart.*` token'ları); içeriğin ARKASINDA, alanın altında önce hızlı sonra yavaş solarak 120 px'te canvas'a karışır (kesin çizgi yok). Renk ve sahne istemcide yumuşakça (700 ms) belirir. Renkli zeminde tüm metin `text.primary`. Geçiş, bakiye etiketinin olduğu yerde %10'un altına düşer (ikincil metin ≥4,5:1). Sayfa yukarı çekildiğinde (iOS esneme) görünen alan ve tarayıcı tema rengi de gün diliminin tonundadır; aşağıda ve diğer sayfalarda canvas. Sahne ekran okuyucuya gün dilimi adıyla okunur.
+- **Zamana duyarlı karşılama alanı (Ana Sayfa)** [Karar K-19, ürün sahibi 2026-11-06; kaynak: Figma "Fatih-Test" 205:1668 Günaydın · 205:1679 İyi akşamlar · 205:1691 İyi geceler]:
+  - Kap 122 px, padding 16 üst / 32 alt / 16 yan, öğeler dikey ortalı, iki uç arası boşluk; sayfayla birlikte kayar. Zemin dikey geçiş: üst renk → %50'de ara renk → altta saydam (kesin çizgi yok). Sayfa yukarı çekildiğinde görünen alan ve tarayıcı tema rengi üst renkte.
+  - Sol: selamlama `caption-strong` BÜYÜK HARF (siyah %50; gece `text.secondary`) · ad 24 px bold `text.primary` (en fazla 2 satır) · tarih rozeti (`white` %40, padding 4/8, `radius.sm`, `caption-strong`, "6 Kasım Cuma").
+  - Sağ: 120×74 görsel Figma katmanlarından (arka şekiller SVG · 72 px 3D görsel PNG · öndeki süs SVG), `public/illustrations/daypart/greeting-*`.
+  - Yazı tipi Geist (Figma'daki Manrope yerine, §3.1). Ad için 24 px bold DS ölçeğinde yok; ürün sahibinin tasarımı olarak yalnızca burada kullanılır.
 
-  | Dilim | Selamlama | Sahne | Zemin (token `daypart.*`) |
+  | Dilim [Varsayım: saatler] | Selamlama | Tasarım | Üst → ara renk (`daypart.*`) |
   |---|---|---|---|
-  | 05–11 sabah | Günaydın | doğan güneş, ön planda bulut bandı | `category.amber` |
-  | 11–17 gündüz | İyi günler | sarı güneş, arkasında ve önünde hafif bulutlar | `blue.100` |
-  | 17–20 akşamüstü | İyi akşamlar | alçak turuncu-pembe güneş, yatay bulut şeritleri | `category.orange` |
-  | 20–23 akşam | İyi akşamlar | hilal ay, birkaç yıldız, soluk bulut | `lavender.200` |
-  | 23–05 gece | İyi geceler | hilal ay, yanıp sönen yıldızlar | `lilac.200` |
+  | 05–12 | GÜNAYDIN | Günaydın (güneş) | `#FBD073` → `#FDD784` |
+  | 12–17 | İYİ GÜNLER | Günaydın tasarımı [Varsayım: Figma'da ayrı tasarım yok] | aynı |
+  | 17–22 | İYİ AKŞAMLAR | İyi akşamlar (güneş + bulut) | `#EEBBA5` → `#F3D0C2` |
+  | 22–05 | İYİ GECELER | İyi geceler (köprü, ay, yıldızlar) | `#BBC8E0` → `#C5CFE2` |
 
-  - Sahne renkleri (sarı güneş, beyaz bulut vb.) yalnızca illüstrasyon dosyalarındadır; arayüz token'ı değildir.
+  - **Kontrast açığı (ürün sahibine soruldu):** selamlama metni 12 px'te AA'nın altında: sabah 3,67 · akşam 3,52 · gece 2,99 (gerekli 4,5). Öneri: siyah %65 (6,01 / 5,59) ve gecede de aynı.
   - DS Part A gradyan kullanmaz (§5.2); bu geçiş ürün sahibinin açık isteğidir ve yalnızca Ana Sayfa üst barında kullanılır.
 
 **Detay / form header (odak ekranları)** [DS AI chat header yapısı, AI öğeleri olmadan]
@@ -559,7 +562,7 @@ Part A hareket tanımı vermiyor; Part B kullanılmadığı için sade bir set:
 | K-15 | Birikim ilerlemesi (§5.2, §5.9) — 2026-11-05 | Her yerde noktalı Progress meter |
 | K-16 | Görev formu — 2026-11-05 | Tür (Görev/Randevu), Öncelik, Açıklama kaldırıldı; arayüzde tek tür "Görev" (PRD FR-CAL-006 iptal) |
 | K-17 | Mobil yakınlaştırma (§5.7) — 2026-11-05 | Odakta ve çift dokunmada yakınlaştırma yok |
-| K-19 | Ana Sayfa zamana duyarlı karşılama alanı (§5.6) — 2026-11-06 | 5 gün dilimi, DS pastel zeminler, 168 px alan, büyük tipografi + tarih (avatar yok), vektörel güneş/bulut/ay/yıldız sahneleri, yumuşak geçiş; ad baş harfleri büyük |
+| K-19 | Ana Sayfa zamana duyarlı karşılama alanı (§5.6) — 2026-11-06 | Ürün sahibinin Figma tasarımı (3 durum); İyi günler = Günaydın tasarımı; ad baş harfleri büyük |
 | K-18 | Logo (§5.13, §7) — 2026-11-06 | Ürün sahibinin logo kiti: favicon, PWA/iOS ikonları ve uygulama içi marka yerleri; düz mavi logo karosu kalktı |
 
 ---
