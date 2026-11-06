@@ -1,18 +1,16 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { Icon } from "@/components/ui/Icon";
 import { LogoMark } from "@/components/ui/Logo";
-import type { AppIconName } from "@/config/icons";
 import { cn } from "@/lib/cn";
 import { useShellPathname } from "@/lib/sheetRoutes";
 
 // Üst bar (DESIGN_SYSTEM_PICKALY §5.6, Karar K-6, K-19).
-//   Ana Sayfa : zamana duyarlı bar (ürün sahibi isteği 2026-11-06). Solda 40 px avatar + caption selamlama +
-//               title-md kullanıcı adı; sağda gün dilimi belirteci (40 px daire, 20 px Lucide ikon). Bar gün diliminin
-//               pastel tonunda; altında 120 px'lik yumuşak bir geçişle sayfa zeminine karışır (kesin çizgi yok).
-//               Kaydırınca bar yapışık kalır, içerik geçişin altından solarak geçer.
+//   Ana Sayfa : zamana duyarlı karşılama alanı (ürün sahibi isteği 2026-11-06). 136 px yükseklik, sayfayla birlikte
+//               kayar. Solda 40 px avatar + caption selamlama + title-md ad; sağda gün diliminin vektörel sahnesi
+//               (176 px, tablet+ 200 px). Zemin gün diliminin pastel tonu; altta 120 px'lik yumuşak geçişle sayfaya karışır.
 //   Diğer     : mobilde 32 px logo sembolü + "Pickaly" (title-md) + tagline (caption); tablet+ marka rail/sidebar'da.
 // Gün dilimi cihazın yerel saatinden hesaplanır ve dakikada bir yenilenir. Sunucu kullanıcının saatini bilmediği için
 // ilk HTML'de bar zemin renginde gelir; renk istemcide yumuşakça (700 ms) belirir (yükseklik sabit, kayma olmaz).
@@ -28,13 +26,14 @@ function daypartOf(hour: number): Daypart {
   return "night";
 }
 
-// Tailwind sınıfları derleme anında bulunabilsin diye tam yazılır. Renkler tokens/color.semantic.light.json "daypart".
-const DAYPARTS: Record<Daypart, { greeting: "morning" | "afternoon" | "evening" | "night"; icon: AppIconName; bar: string; fade: string; fg: string }> = {
-  morning: { greeting: "morning", icon: "sunrise", bar: "bg-daypart-morning", fade: "from-daypart-morning via-daypart-morning/45 to-daypart-morning/0", fg: "text-daypart-morning-fg" },
-  day: { greeting: "afternoon", icon: "sun", bar: "bg-daypart-day", fade: "from-daypart-day via-daypart-day/45 to-daypart-day/0", fg: "text-daypart-day-fg" },
-  sunset: { greeting: "evening", icon: "sunset", bar: "bg-daypart-sunset", fade: "from-daypart-sunset via-daypart-sunset/45 to-daypart-sunset/0", fg: "text-daypart-sunset-fg" },
-  evening: { greeting: "evening", icon: "moon", bar: "bg-daypart-evening", fade: "from-daypart-evening via-daypart-evening/45 to-daypart-evening/0", fg: "text-daypart-evening-fg" },
-  night: { greeting: "night", icon: "moonStar", bar: "bg-daypart-night", fade: "from-daypart-night via-daypart-night/45 to-daypart-night/0", fg: "text-daypart-night-fg" },
+// tint: zemin rengini --daypart-tint değişkenine taşır. Sınıf tam yazılır; Tailwind yalnızca kaynakta geçen tema
+// değişkenlerini CSS'e ekler (tokens/color.semantic.light.json "daypart").
+const DAYPARTS: Record<Daypart, { greeting: "morning" | "afternoon" | "evening" | "night"; tint: string }> = {
+  morning: { greeting: "morning", tint: "[--daypart-tint:var(--color-daypart-morning)]" },
+  day: { greeting: "afternoon", tint: "[--daypart-tint:var(--color-daypart-day)]" },
+  sunset: { greeting: "evening", tint: "[--daypart-tint:var(--color-daypart-sunset)]" },
+  evening: { greeting: "evening", tint: "[--daypart-tint:var(--color-daypart-evening)]" },
+  night: { greeting: "night", tint: "[--daypart-tint:var(--color-daypart-night)]" },
 };
 
 function subscribeMinute(callback: () => void) {
@@ -71,69 +70,67 @@ export function TopBarLead({ name }: { name: string }) {
   return (
     <>
       {home && (
-        // Sayfanın üstündeki renk geçişi: içeriğin ARKASINDA (AppShell isolate), sayfayla birlikte kayar. Bar yüksekliği
-        // boyunca düz renk, sonra önce hızlı sonra yavaş solarak 120 px'te sayfa zeminine karışır (kesin çizgi yok).
-        // Hızlı ilk düşüş, "Toplam Bakiye" gibi ikincil metinlerin zemin kontrastını korur (DESIGN_SYSTEM_PICKALY §2.4).
+        // Sayfanın üstündeki renk alanı: içeriğin ARKASINDA (AppShell isolate), sayfayla birlikte kayar. Karşılama alanı
+        // (136 px) boyunca düz renk, sonra önce hızlı sonra yavaş solarak 120 px'te sayfa zeminine karışır (kesin çizgi
+        // yok). Hızlı ilk düşüş, alttaki ikincil metinlerin zemin kontrastını korur (DESIGN_SYSTEM_PICKALY §2.4).
         <span
           aria-hidden
           className={cn(
-            "pointer-events-none absolute inset-x-0 top-0 -z-10 h-184 transition-opacity duration-700 max-tablet:group-data-[focus]/shell:hidden",
-            part ? "opacity-100" : "opacity-0",
+            "pointer-events-none absolute inset-x-0 top-0 -z-10 h-256 transition-opacity duration-700 max-tablet:group-data-[focus]/shell:hidden",
+            part ? cn(part.tint, "opacity-100") : "opacity-0",
           )}
-          style={daypart ? { backgroundImage: fadeGradient(`var(--color-daypart-${daypart})`) } : undefined}
+          style={{ backgroundImage: fadeGradient("var(--daypart-tint, transparent)") }}
         />
       )}
-    <header
-      className={cn(
-        "sticky top-0 z-(--z-sticky) flex h-(--layout-topbar-height) items-center gap-12 px-16 transition-colors duration-700 max-tablet:group-data-[focus]/shell:hidden tablet:px-(--layout-page-padding-x)",
-        part ? part.bar : "bg-surface-page",
-        // Tablet+: marka rail / sidebar'da; bar yalnızca Ana Sayfa selamlaması için.
-        !home && "tablet:hidden",
-      )}
-    >
-      {home && (
-        // Kaydırınca içerik barın altından geçer: barın alt kenarı 24 px'lik bir solmayla biter, sert çizgi oluşmaz.
-        <span
-          aria-hidden
-          className={cn("pointer-events-none absolute inset-x-0 top-full h-24 bg-linear-to-b transition-opacity duration-700", part ? cn(part.fade, "opacity-100") : "opacity-0")}
-        />
-      )}
-      {home ? (
-        <>
-          <Greeting name={name} greeting={part ? t(`greeting.${part.greeting}`) : ""} tinted={Boolean(part)} />
-          {part && daypart && (
-            <span
-              role="img"
-              aria-label={t(`daypart.${daypart}`)}
-              className={cn("ms-auto inline-flex size-40 shrink-0 animate-fade-in items-center justify-center rounded-full bg-surface-card/60", part.fg)}
-            >
-              <Icon icon={part.icon} />
-            </span>
-          )}
-        </>
-      ) : (
-        <div className="flex items-center gap-12">
-          <LogoMark size={32} />
-          <div className="flex flex-col">
-            <span className="text-title-md text-text-primary">{t("brand")}</span>
-            <span className="text-caption text-text-secondary">{t("tagline")}</span>
+      <header
+        className={cn(
+          "flex items-center gap-12 px-16 max-tablet:group-data-[focus]/shell:hidden tablet:px-(--layout-page-padding-x)",
+          // Ana Sayfa: yüksek karşılama alanı, sayfayla birlikte kayar (yapışık değil). Diğer sekmeler: 64 px yapışık bar.
+          home ? "relative h-136 overflow-hidden" : "sticky top-0 z-(--z-sticky) h-(--layout-topbar-height) bg-surface-page tablet:hidden",
+        )}
+      >
+        {home ? (
+          <>
+            <Greeting name={name} greeting={part ? t(`greeting.${part.greeting}`) : ""} tinted={Boolean(part)} />
+            {daypart && part && (
+              // Gün dilimi sahnesi (public/illustrations/daypart): güneş, bulutlar, ay ve yıldızlar. Yavaş hareketler SVG'nin
+              // içinde; "hareketi azalt" tercihinde durur. Ekran okuyucuya gün dilimi adı okunur.
+              <Image
+                key={daypart}
+                src={`/illustrations/daypart/${daypart}.svg`}
+                alt={t(`daypart.${daypart}`)}
+                width={200}
+                height={140}
+                unoptimized
+                priority
+                className="pointer-events-none absolute end-0 top-1/2 h-auto w-176 -translate-y-1/2 animate-fade-in tablet:end-(--layout-page-padding-x) tablet:w-200"
+              />
+            )}
+          </>
+        ) : (
+          <div className="flex items-center gap-12">
+            <LogoMark size={32} />
+            <div className="flex flex-col">
+              <span className="text-title-md text-text-primary">{t("brand")}</span>
+              <span className="text-caption text-text-secondary">{t("tagline")}</span>
+            </div>
           </div>
-        </div>
-      )}
-    </header>
+        )}
+      </header>
     </>
   );
 }
 
-/** Bar (64 px) boyunca düz, sonra kolay-çıkış eğrisiyle solan dikey geçiş. */
+/** Karşılama alanı (136 px) boyunca düz, sonra kolay-çıkış eğrisiyle solan dikey geçiş. */
 function fadeGradient(color: string) {
   const alpha = (percent: number) => `color-mix(in srgb, ${color} ${percent}%, transparent)`;
-  return `linear-gradient(to bottom, ${color} 0, ${color} 64px, ${alpha(55)} 80px, ${alpha(28)} 96px, ${alpha(12)} 128px, ${alpha(4)} 160px, transparent 184px)`;
+  return `linear-gradient(to bottom, ${color} 0, ${color} 136px, ${alpha(55)} 152px, ${alpha(28)} 168px, ${alpha(12)} 200px, ${alpha(4)} 232px, transparent 256px)`;
 }
 
 function Greeting({ name, greeting, tinted }: { name: string; greeting: string; tinted: boolean }) {
   return (
-    <div className="flex min-w-0 items-center gap-12">
+    // Sağdaki sahneye taşmasın diye en fazla genişlik sınırlı; uzun ad kısaltılır.
+    <div className="relative z-1 flex min-w-0 max-w-[calc(100%-136px)] items-center gap-12 tablet:max-w-[calc(100%-200px)]">
       {name && (
         <span
           aria-hidden
