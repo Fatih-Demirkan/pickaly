@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useLayoutEffect, useRef, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { isSheetRoute } from "@/config/navigation";
 import { useBackgroundUrl } from "@/lib/sheetRoutes";
 
 // Bottom sheet sunumu (ürün sahibi isteği 2026-11-05: Yeni İşlem). DESIGN_SYSTEM_PICKALY §5.8 "Yeni İşlem sheet'i":
@@ -47,7 +48,19 @@ function reducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-export function Sheet({ closeHref, labelledBy, intercepted = false, children }: SheetProps) {
+/**
+ * Adres sheet adresi değilse (ör. kayıttan sonra başka ekrana geçildi) sheet kapanır. @sheet slot'u eşleşmeyen yumuşak
+ * geçişte önceki hâlini koruduğu için bu kontrol bileşende yapılır; kök seviyede bir [...catchAll] sayfası her adrese
+ * (giriş sayfaları dahil) eklenip dev sunucusunda (auth) rotalarını 404'e düşürüyordu. Panel söküldüğünde efektleri
+ * temizlenir (sayfa kaydırması, odak).
+ */
+export function Sheet(props: SheetProps) {
+  const pathname = usePathname();
+  if (!isSheetRoute(pathname)) return null;
+  return <SheetPanel {...props} />;
+}
+
+function SheetPanel({ closeHref, labelledBy, intercepted = false, children }: SheetProps) {
   const router = useRouter();
   const panelRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
