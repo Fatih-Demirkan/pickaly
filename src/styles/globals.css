@@ -67,6 +67,9 @@
 
 @layer base {
   html {
+    /* Sayfa esnediğinde (yukarı/aşağı çekme) beyaz değil canvas görünür. Ana Sayfa üstte gün dilimi tonuna çeker
+       (TopBarLead useOverscrollTint). */
+    @apply bg-surface-page;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     /* Çift dokunmayla yakınlaştırma kapalı (uygulama hissi, ürün sahibi isteği 2026-11-05). */

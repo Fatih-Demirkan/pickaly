@@ -1,19 +1,21 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { LogoMark } from "@/components/ui/Logo";
 import { cn } from "@/lib/cn";
 import { useShellPathname } from "@/lib/sheetRoutes";
 
 // Üst bar (DESIGN_SYSTEM_PICKALY §5.6, Karar K-6, K-19).
-//   Ana Sayfa : zamana duyarlı karşılama alanı (ürün sahibi isteği 2026-11-06). 136 px yükseklik, sayfayla birlikte
-//               kayar. Solda 40 px avatar + caption selamlama + title-md ad; sağda gün diliminin vektörel sahnesi
-//               (176 px, tablet+ 200 px). Zemin gün diliminin pastel tonu; altta 120 px'lik yumuşak geçişle sayfaya karışır.
+//   Ana Sayfa : zamana duyarlı karşılama alanı (ürün sahibi isteği 2026-11-06). 168 px yükseklik, sayfayla birlikte
+//               kayar. Solda sahneye eşlik eden büyük tipografi: body-strong selamlama · title-lg ad (en fazla 2 satır) ·
+//               caption bugünün tarihi. Sağda gün diliminin vektörel sahnesi (176 px, tablet+ 216 px). Zemin gün
+//               diliminin pastel tonu; altta 120 px'lik yumuşak geçişle sayfaya karışır. Sayfa yukarı çekildiğinde
+//               (iOS esneme) ve tarayıcı çubuğunda da aynı renk görünür.
 //   Diğer     : mobilde 32 px logo sembolü + "Pickaly" (title-md) + tagline (caption); tablet+ marka rail/sidebar'da.
 // Gün dilimi cihazın yerel saatinden hesaplanır ve dakikada bir yenilenir. Sunucu kullanıcının saatini bilmediği için
-// ilk HTML'de bar zemin renginde gelir; renk istemcide yumuşakça (700 ms) belirir (yükseklik sabit, kayma olmaz).
+// ilk HTML'de alan zemin renginde gelir; renk ve sahne istemcide yumuşakça (700 ms) belirir (yükseklik sabit, kayma olmaz).
 
 type Daypart = "morning" | "day" | "sunset" | "evening" | "night";
 
@@ -36,6 +38,9 @@ const DAYPARTS: Record<Daypart, { greeting: "morning" | "afternoon" | "evening" 
   night: { greeting: "night", tint: "[--daypart-tint:var(--color-daypart-night)]" },
 };
 
+/** Karşılama alanının yüksekliği (px). Bakiye bloğu bunun altında başlar. */
+const HERO = 168;
+
 function subscribeMinute(callback: () => void) {
   const id = window.setInterval(callback, 60_000);
   return () => window.clearInterval(id);
@@ -49,34 +54,57 @@ function useDaypart(): Daypart | null {
   );
 }
 
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part.charAt(0))
-    .join("");
+/**
+ * Sayfa yukarı çekildiğinde (iOS esneme / Android aşırı kaydırma) görünen boşluk <html> zeminidir. Ana Sayfa'nın
+ * üstündeyken bu zemin ve tarayıcı tema rengi gün diliminin tonuna çekilir; aşağı inildiğinde (alttaki esneme
+ * canvas kalsın diye) ve sayfadan çıkınca eski hâline döner.
+ */
+function useOverscrollTint(daypart: Daypart | null) {
+  useEffect(() => {
+    if (!daypart) return;
+    const root = document.documentElement;
+    const tint = getComputedStyle(root).getPropertyValue(`--color-daypart-${daypart}`).trim();
+    if (!tint) return;
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    const previousTheme = meta?.content;
+    const apply = () => {
+      const top = window.scrollY < HERO;
+      root.style.backgroundColor = top ? tint : "";
+      if (meta && previousTheme) meta.content = top ? tint : previousTheme;
+    };
+    apply();
+    window.addEventListener("scroll", apply, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", apply);
+      root.style.backgroundColor = "";
+      if (meta && previousTheme) meta.content = previousTheme;
+    };
+  }, [daypart]);
 }
 
-/** Üst barın tamamı (header). Ana Sayfa'da zamana duyarlı selamlama, diğer sekmelerde mobilde marka. */
+/** Üst barın tamamı (header). Ana Sayfa'da zamana duyarlı karşılama, diğer sekmelerde mobilde marka. */
 export function TopBarLead({ name }: { name: string }) {
   const pathname = useShellPathname(); // Sheet açıkken arkadaki ekranın yolu
   const t = useTranslations("header");
+  const locale = useLocale();
   const daypart = useDaypart();
 
   const home = pathname === "/";
   const part = home && daypart ? DAYPARTS[daypart] : null;
+  useOverscrollTint(home ? daypart : null);
+  // Tarih cihazın saatinden, gün dilimiyle birlikte istemcide hesaplanır; sunucuda boş (yükseklik sabit).
+  const today = part ? new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long" }).format(new Date()) : "";
 
   return (
     <>
       {home && (
         // Sayfanın üstündeki renk alanı: içeriğin ARKASINDA (AppShell isolate), sayfayla birlikte kayar. Karşılama alanı
-        // (136 px) boyunca düz renk, sonra önce hızlı sonra yavaş solarak 120 px'te sayfa zeminine karışır (kesin çizgi
-        // yok). Hızlı ilk düşüş, alttaki ikincil metinlerin zemin kontrastını korur (DESIGN_SYSTEM_PICKALY §2.4).
+        // boyunca düz renk, sonra önce hızlı sonra yavaş solarak 120 px'te sayfa zeminine karışır (kesin çizgi yok).
+        // Hızlı ilk düşüş, alttaki ikincil metinlerin zemin kontrastını korur (DESIGN_SYSTEM_PICKALY §2.4).
         <span
           aria-hidden
           className={cn(
-            "pointer-events-none absolute inset-x-0 top-0 -z-10 h-256 transition-opacity duration-700 max-tablet:group-data-[focus]/shell:hidden",
+            "pointer-events-none absolute inset-x-0 top-0 -z-10 h-288 transition-opacity duration-700 max-tablet:group-data-[focus]/shell:hidden",
             part ? cn(part.tint, "opacity-100") : "opacity-0",
           )}
           style={{ backgroundImage: fadeGradient("var(--daypart-tint, transparent)") }}
@@ -86,12 +114,12 @@ export function TopBarLead({ name }: { name: string }) {
         className={cn(
           "flex items-center gap-12 px-16 max-tablet:group-data-[focus]/shell:hidden tablet:px-(--layout-page-padding-x)",
           // Ana Sayfa: yüksek karşılama alanı, sayfayla birlikte kayar (yapışık değil). Diğer sekmeler: 64 px yapışık bar.
-          home ? "relative h-136 overflow-hidden" : "sticky top-0 z-(--z-sticky) h-(--layout-topbar-height) bg-surface-page tablet:hidden",
+          home ? "relative h-168 overflow-hidden" : "sticky top-0 z-(--z-sticky) h-(--layout-topbar-height) bg-surface-page tablet:hidden",
         )}
       >
         {home ? (
           <>
-            <Greeting name={name} greeting={part ? t(`greeting.${part.greeting}`) : ""} tinted={Boolean(part)} />
+            <Greeting name={name} greeting={part ? t(`greeting.${part.greeting}`) : ""} date={today} />
             {daypart && part && (
               // Gün dilimi sahnesi (public/illustrations/daypart): güneş, bulutlar, ay ve yıldızlar. Yavaş hareketler SVG'nin
               // içinde; "hareketi azalt" tercihinde durur. Ekran okuyucuya gün dilimi adı okunur.
@@ -103,7 +131,7 @@ export function TopBarLead({ name }: { name: string }) {
                 height={140}
                 unoptimized
                 priority
-                className="pointer-events-none absolute end-0 top-1/2 h-auto w-176 -translate-y-1/2 animate-fade-in tablet:end-(--layout-page-padding-x) tablet:w-200"
+                className="pointer-events-none absolute end-0 top-1/2 h-auto w-176 -translate-y-1/2 animate-fade-in tablet:end-(--layout-page-padding-x) tablet:w-216"
               />
             )}
           </>
@@ -121,33 +149,22 @@ export function TopBarLead({ name }: { name: string }) {
   );
 }
 
-/** Karşılama alanı (136 px) boyunca düz, sonra kolay-çıkış eğrisiyle solan dikey geçiş. */
+/** Karşılama alanı boyunca düz, sonra kolay-çıkış eğrisiyle 120 px'te solan dikey geçiş. */
 function fadeGradient(color: string) {
   const alpha = (percent: number) => `color-mix(in srgb, ${color} ${percent}%, transparent)`;
-  return `linear-gradient(to bottom, ${color} 0, ${color} 136px, ${alpha(55)} 152px, ${alpha(28)} 168px, ${alpha(12)} 200px, ${alpha(4)} 232px, transparent 256px)`;
+  const at = (offset: number) => `${HERO + offset}px`;
+  // Bakiye etiketi (≈ +40 px) bölgesinde ton %15'in altında: ikincil metin her gün diliminde ≥4,5:1 kalır.
+  return `linear-gradient(to bottom, ${color} 0, ${color} ${at(0)}, ${alpha(40)} ${at(16)}, ${alpha(16)} ${at(32)}, ${alpha(7)} ${at(56)}, ${alpha(2)} ${at(88)}, transparent ${at(120)})`;
 }
 
-function Greeting({ name, greeting, tinted }: { name: string; greeting: string; tinted: boolean }) {
+function Greeting({ name, greeting, date }: { name: string; greeting: string; date: string }) {
+  // Sahneye eşlik eden büyük tipografi (DESIGN_SYSTEM_PICKALY §3.2 ölçeği): selamlama body-strong, ad title-lg,
+  // tarih caption. Renkli zeminde tüm metin text.primary (§2.4). Sahneye taşmasın diye genişlik sınırlı; uzun ad 2 satır.
   return (
-    // Sağdaki sahneye taşmasın diye en fazla genişlik sınırlı; uzun ad kısaltılır.
-    <div className="relative z-1 flex min-w-0 max-w-[calc(100%-136px)] items-center gap-12 tablet:max-w-[calc(100%-200px)]">
-      {name && (
-        <span
-          aria-hidden
-          className={cn(
-            "inline-flex size-40 shrink-0 items-center justify-center rounded-full text-title-sm text-text-brand transition-colors duration-700",
-            // Renkli barda avatar beyaz zeminde (gündüz tonu blue.100 ile aynı olduğu için kaybolmasın) [Uyarlama].
-            tinted ? "bg-surface-card" : "bg-brand-primary-subtle",
-          )}
-        >
-          {initials(name)}
-        </span>
-      )}
-      <div className="relative z-1 flex min-w-0 flex-col">
-        {/* Renkli zeminde ikincil gri metin kontrastı tutmaz: selamlama siyah (DESIGN_SYSTEM_PICKALY §2.4). */}
-        <span className={cn("h-16 text-caption", tinted ? "text-text-primary" : "text-text-secondary", !name && "sr-only")}>{greeting}</span>
-        <span className="truncate text-title-md text-text-primary">{name || greeting || " "}</span>
-      </div>
+    <div className="relative z-1 flex min-w-0 max-w-[calc(100%-144px)] flex-col gap-4 tablet:max-w-[calc(100%-232px)]">
+      <span className={cn("h-20 text-body-strong text-text-primary", !name && "sr-only")}>{greeting}</span>
+      <span className="line-clamp-2 text-title-lg break-words text-text-primary">{name || greeting || " "}</span>
+      <span className="h-16 text-caption text-text-primary first-letter:uppercase">{date}</span>
     </div>
   );
 }
