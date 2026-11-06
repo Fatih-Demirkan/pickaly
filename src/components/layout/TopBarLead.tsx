@@ -138,7 +138,7 @@ export function TopBarLead({ name }: { name: string }) {
   return (
     <header
       // Figma: 122 px, padding 16 (üst) / 32 (alt) / 16 (yan), öğeler dikey ortalı, iki uç arası boşluk.
-      className="relative flex h-122 items-center justify-between gap-12 px-16 pt-16 pb-32 max-tablet:group-data-[focus]/shell:hidden tablet:px-(--layout-page-padding-x)"
+      className="relative flex min-h-122 items-center justify-between gap-12 px-16 pt-16 pb-32 max-tablet:group-data-[focus]/shell:hidden tablet:px-(--layout-page-padding-x)"
     >
       {/* Zemin geçişi: üst renk → %50'de ara renk → altta saydam (sayfaya kesin çizgisiz karışır). İçeriğin arkasında;
           renk istemcide belirince yumuşakça görünür, metin baştan görünür kalır. */}
@@ -149,13 +149,13 @@ export function TopBarLead({ name }: { name: string }) {
           part ? cn(part.tint, "opacity-100") : "opacity-0",
         )}
       />
-      <div className="flex min-w-0 flex-1 flex-col items-start">
+      <div className="flex min-w-0 flex-1 flex-col items-start gap-4">
         {/* Selamlama: büyük harf, 12 px semibold (ürün sahibi). Büyük harf dönüşümü sayfa diliyle (tr: i → İ). */}
         <p className={cn("text-caption-strong uppercase", part?.greetingTone)}>{part ? t(`greeting.${part.greeting}`) : " "}</p>
         <p className="line-clamp-2 text-[24px] leading-[1.35] font-bold break-words text-text-primary">{name || " "}</p>
         {today && (
           // Tarih rozeti: beyaz %40, padding 4/8, radius-sm, caption-strong (Figma "badge").
-          <p className="mt-0 rounded-sm bg-surface-card/40 px-8 py-4 text-caption-strong whitespace-nowrap text-text-primary first-letter:uppercase">{today}</p>
+          <p className="rounded-sm bg-surface-card/40 px-8 py-4 text-caption-strong whitespace-nowrap text-text-primary first-letter:uppercase">{today}</p>
         )}
       </div>
       {part && daypart && (

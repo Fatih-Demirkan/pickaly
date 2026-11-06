@@ -429,7 +429,7 @@ Part A'da yok. Filtre chip'i diliyle türetildi:
 - **Ad gösterimi** [Karar ürün sahibi 2026-11-06]: kullanıcı adı nasıl girilmiş olursa olsun her kelimenin baş harfi büyük gösterilir (dil kurallarıyla: "ışıl" → "Işıl"); kayıtlı değer değişmez.
 - **Zamana duyarlı karşılama alanı (Ana Sayfa)** [Karar K-19, ürün sahibi 2026-11-06; kaynak: Figma "Fatih-Test" 205:1668 Günaydın · 205:1679 İyi akşamlar · 205:1691 İyi geceler]:
   - Kap 122 px, padding 16 üst / 32 alt / 16 yan, öğeler dikey ortalı, iki uç arası boşluk; sayfayla birlikte kayar. Zemin dikey geçiş: üst renk → %50'de ara renk → altta saydam (kesin çizgi yok). Sayfa yukarı çekildiğinde görünen alan ve tarayıcı tema rengi üst renkte.
-  - Sol: selamlama `caption-strong` BÜYÜK HARF, siyah %65 [Uyarlama, ürün sahibi onayı 2026-11-06: Figma'daki siyah %50 / gecede `text.secondary` AA'nın altındaydı] · ad 24 px bold `text.primary` (en fazla 2 satır) · tarih rozeti (`white` %40, padding 4/8, `radius.sm`, `caption-strong`, "6 Kasım Cuma").
+  - Sol: selamlama `caption-strong` BÜYÜK HARF, siyah %65 [Uyarlama, ürün sahibi onayı 2026-11-06: Figma'daki siyah %50 / gecede `text.secondary` AA'nın altındaydı] · ad 24 px bold `text.primary` (en fazla 2 satır) · tarih rozeti; öğeler arası 4 px [ürün sahibi 2026-11-06] (`white` %40, padding 4/8, `radius.sm`, `caption-strong`, "6 Kasım Cuma").
   - Sağ: 120×74 görsel Figma katmanlarından (arka şekiller SVG · 72 px 3D görsel PNG · öndeki süs SVG), `public/illustrations/daypart/greeting-*`.
   - Yazı tipi Geist (Figma'daki Manrope yerine, §3.1). Ad için 24 px bold DS ölçeğinde yok; ürün sahibinin tasarımı olarak yalnızca burada kullanılır.
 
