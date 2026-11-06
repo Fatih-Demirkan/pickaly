@@ -429,7 +429,7 @@ Part A'da yok. Filtre chip'i diliyle türetildi:
 - **Ad gösterimi** [Karar ürün sahibi 2026-11-06]: kullanıcı adı nasıl girilmiş olursa olsun her kelimenin baş harfi büyük gösterilir (dil kurallarıyla: "ışıl" → "Işıl"); kayıtlı değer değişmez.
 - **Zamana duyarlı karşılama alanı (Ana Sayfa)** [Karar K-19, ürün sahibi 2026-11-06; kaynak: Figma "Fatih-Test" 205:1668 Günaydın · 205:1679 İyi akşamlar · 205:1691 İyi geceler]:
   - Kap 122 px, padding 16 üst / 32 alt / 16 yan, öğeler dikey ortalı, iki uç arası boşluk; sayfayla birlikte kayar. Zemin dikey geçiş: üst renk → %50'de ara renk → altta saydam (kesin çizgi yok). Sayfa yukarı çekildiğinde görünen alan ve tarayıcı tema rengi üst renkte.
-  - Sol: selamlama `caption-strong` BÜYÜK HARF (siyah %50; gece `text.secondary`) · ad 24 px bold `text.primary` (en fazla 2 satır) · tarih rozeti (`white` %40, padding 4/8, `radius.sm`, `caption-strong`, "6 Kasım Cuma").
+  - Sol: selamlama `caption-strong` BÜYÜK HARF, siyah %65 [Uyarlama, ürün sahibi onayı 2026-11-06: Figma'daki siyah %50 / gecede `text.secondary` AA'nın altındaydı] · ad 24 px bold `text.primary` (en fazla 2 satır) · tarih rozeti (`white` %40, padding 4/8, `radius.sm`, `caption-strong`, "6 Kasım Cuma").
   - Sağ: 120×74 görsel Figma katmanlarından (arka şekiller SVG · 72 px 3D görsel PNG · öndeki süs SVG), `public/illustrations/daypart/greeting-*`.
   - Yazı tipi Geist (Figma'daki Manrope yerine, §3.1). Ad için 24 px bold DS ölçeğinde yok; ürün sahibinin tasarımı olarak yalnızca burada kullanılır.
 
@@ -440,7 +440,7 @@ Part A'da yok. Filtre chip'i diliyle türetildi:
   | 17–22 | İYİ AKŞAMLAR | İyi akşamlar (güneş + bulut) | `#EEBBA5` → `#F3D0C2` |
   | 22–05 | İYİ GECELER | İyi geceler (köprü, ay, yıldızlar) | `#BBC8E0` → `#C5CFE2` |
 
-  - **Kontrast açığı (ürün sahibine soruldu):** selamlama metni 12 px'te AA'nın altında: sabah 3,67 · akşam 3,52 · gece 2,99 (gerekli 4,5). Öneri: siyah %65 (6,01 / 5,59) ve gecede de aynı.
+  - **Kontrast:** Figma değerleri 12 px'te AA'nın altındaydı (sabah 3,67 · akşam 3,52 · gece 2,99). Siyah %65 ile üst/ara renklerde 6,01–6,16 · 5,59–6,04 · 5,62–5,81 ✔.
   - DS Part A gradyan kullanmaz (§5.2); bu geçiş ürün sahibinin açık isteğidir ve yalnızca Ana Sayfa üst barında kullanılır.
 
 **Detay / form header (odak ekranları)** [DS AI chat header yapısı, AI öğeleri olmadan]

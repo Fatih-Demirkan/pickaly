@@ -11,8 +11,8 @@ import { useShellPathname } from "@/lib/sheetRoutes";
 //   Ana Sayfa : zamana duyarlı karşılama alanı — ürün sahibinin Figma tasarımı (Fatih-Test 205:1668 "Günaydın",
 //               205:1679 "İyi akşamlar", 205:1691 "İyi geceler"; 2026-11-06).
 //               Kap: dikey geçiş (üst renk → %50'de ara renk → altta saydam, sayfaya karışır), padding 16 / 16 / 32,
-//               öğeler dikey ortalı, iki uç arası boşluk. Solda: 12 px semibold BÜYÜK HARF selamlama (siyah %50; gece
-//               text.secondary) · 24 px bold ad · tarih rozeti (beyaz %40, padding 4/8, radius-sm, caption-strong).
+//               öğeler dikey ortalı, iki uç arası boşluk. Solda: 12 px semibold BÜYÜK HARF selamlama (siyah %65: Figma'daki %50
+//               AA'yı karşılamıyordu, ürün sahibi onayı 2026-11-06; tüm durumlarda ≥5,59:1) · 24 px bold ad · tarih rozeti (beyaz %40, padding 4/8, radius-sm, caption-strong).
 //               Sağda 120×74 görsel: Figma katmanları (arka şekiller SVG · 3D görsel 72 px · öndeki süs).
 //               Yazı tipi DS'deki Geist (Figma'daki Manrope yerine; DESIGN_SYSTEM.md §A3).
 //   Diğer     : mobilde 32 px logo sembolü + "Pickaly" (title-md) + tagline (caption); tablet+ marka rail/sidebar'da.
@@ -38,28 +38,28 @@ const DAYPARTS: Record<Daypart, { greeting: "morning" | "afternoon" | "evening" 
     greeting: "morning",
     scene: "morning",
     tint: "[--daypart-from:var(--color-daypart-morning)] [--daypart-via:var(--color-daypart-morning-via)]",
-    greetingTone: "text-text-primary/50",
+    greetingTone: "text-text-primary/65",
     front: true,
   },
   day: {
     greeting: "afternoon",
     scene: "morning",
     tint: "[--daypart-from:var(--color-daypart-morning)] [--daypart-via:var(--color-daypart-morning-via)]",
-    greetingTone: "text-text-primary/50",
+    greetingTone: "text-text-primary/65",
     front: true,
   },
   evening: {
     greeting: "evening",
     scene: "evening",
     tint: "[--daypart-from:var(--color-daypart-evening)] [--daypart-via:var(--color-daypart-evening-via)]",
-    greetingTone: "text-text-primary/50",
+    greetingTone: "text-text-primary/65",
     front: true,
   },
   night: {
     greeting: "night",
     scene: "night",
     tint: "[--daypart-from:var(--color-daypart-night)] [--daypart-via:var(--color-daypart-night-via)]",
-    greetingTone: "text-text-secondary",
+    greetingTone: "text-text-primary/65",
     front: false,
   },
 };
