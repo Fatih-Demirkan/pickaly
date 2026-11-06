@@ -4,8 +4,9 @@ import trMessages from "@/locales/tr.json";
 
 // PWA manifest (TECH_STACK §8.5, RESPONSIVE §5.3). Renkler token'lardan gelir: tema ve zemin canvas #F5F6F7
 // (DESIGN_SYSTEM_PICKALY §7). Kurulum tarayıcının kendi akışıyla (menü → "Uygulamayı yükle" / "Ana Ekrana Ekle").
-// İkonlar scripts/build-app-icons.mjs ile üretilir.
-// [Geçici] Logo dosyası yok (PRD TD-14): ikon, uygulamadaki düz blue.500 logo karosudur. Logo gelince yenilenir.
+// İkonlar ürün sahibinin logo kitinden (pickaly-logo/web: kırmızı zeminde beyaz kiraz) scripts/build-app-icons.mjs
+// ile kopyalanır (2026-11-06). Tema ve açılış zemini DESIGN_SYSTEM_PICKALY §7'deki canvas rengidir; kitin önerdiği
+// kırmızı tema rengi (#E23A4E) kullanılmaz.
 // [Ertelendi] Service worker (Serwist, yalnızca uygulama kabuğu ve statik varlık önbelleği) ve çevrimdışı bandı.
 //   Chrome menüden kurulum için service worker istemiyor (Chrome 108+ mobil); iOS da istemiyor.
 export default function manifest(): MetadataRoute.Manifest {

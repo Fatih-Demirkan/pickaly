@@ -2,12 +2,14 @@
 
 import { useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
+import { LogoMark } from "@/components/ui/Logo";
 import { cn } from "@/lib/cn";
 import { useShellPathname } from "@/lib/sheetRoutes";
 
 // Üst barın sol bloğu (DESIGN_SYSTEM_PICKALY §5.6, Karar K-6).
 //   Ana Sayfa : 40 px avatar + caption selamlama (saate göre) + title-md kullanıcı adı. Ad yoksa yalnızca selamlama.
-//   Diğer     : mobilde "Pickaly" (title-md) + tagline (caption); tablet+ marka rail/sidebar'da olduğu için boş.
+//   Diğer     : mobilde 32 px logo sembolü + "Pickaly" (title-md) + tagline (caption) [logo: 2026-11-06];
+//               tablet+ marka rail/sidebar'da olduğu için boş.
 // Selamlama cihazın yerel saatinden hesaplanır. Sunucu kullanıcının saatini bilmediği için ilk HTML'de selamlama
 // satırı boş gelir ve istemcide dolar (yükseklik sabit, kayma olmaz).
 
@@ -55,9 +57,12 @@ export function TopBarLead({ name }: { name: string }) {
       )}
     >
       {home ? <Greeting name={name} greeting={key ? t(`greeting.${key}`) : ""} /> : (
-        <div className="flex flex-col">
-          <span className="text-title-md text-text-primary">{t("brand")}</span>
-          <span className="text-caption text-text-secondary">{t("tagline")}</span>
+        <div className="flex items-center gap-12">
+          <LogoMark size={32} />
+          <div className="flex flex-col">
+            <span className="text-title-md text-text-primary">{t("brand")}</span>
+            <span className="text-caption text-text-secondary">{t("tagline")}</span>
+          </div>
         </div>
       )}
     </header>

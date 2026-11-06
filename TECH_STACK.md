@@ -558,7 +558,7 @@ src/styles/tokens.css   (CSS değişkenleri) → Tailwind @theme
 
 | Konu | Karar |
 |---|---|
-| Manifest | `display: standalone`, `theme_color` ve `background_color: #F5F6F7` (DESIGN_SYSTEM_PICKALY §7), ikonlar 192 / 512 / maskable (`public/icons/`), favicon ve `apple-touch-icon` (`src/app/icon.png`, `apple-icon.png`). İkonlar `pnpm icons:build` ile üretilir. ✅ 2026-11-05 |
+| Manifest | `display: standalone`, `theme_color` ve `background_color: #F5F6F7` (DESIGN_SYSTEM_PICKALY §7), ikonlar 192 / 512 / maskable (`public/icons/`), favicon (`src/app/favicon.ico`, `icon.svg`) ve `apple-touch-icon` (`src/app/apple-icon.png`). Kaynak ürün sahibinin logo kiti `pickaly-logo/`; `pnpm icons:build` kitten kopyalar. ✅ 2026-11-06 |
 | Önbellek | **Yalnızca uygulama kabuğu ve statik varlıklar.** Kullanıcı verisi service worker'da önbelleklenmez; finansal veri paylaşılan cihazda kalmasın. [Ertelendi] Service worker (Serwist) henüz yok; kurulum için gerekmiyor (Chrome 108+ mobil, iOS) |
 | Çevrimdışı | Bağlantı yokken üstte "Çevrimdışısınız" bandı gösterilir, yazma aksiyonları devre dışı kalır. [Eksik] Bandın tasarımı yok |
 | Kurulum | Tarayıcının kendi kurulum akışı. Özel "Yükle" butonu v1.1 |
@@ -840,7 +840,7 @@ Kurulumun her ortamda tamamlanmış sayılması için:
 | P1-10 | z-index katmanları | Tanımlı değil | **[Varsayım]** `base 0 · sticky 10 · nav 20 · fab 30 · drawer 40 · modal 50 · toast 60` (`tokens/layout.json`, durum: proposed) | DESIGN/RESPONSIVE'de z-index yok; overlay hiyerarşisinden türetildi |
 | P1-11 | ESLint mimari kuralları | Lint ile zorlanır | Aktif: `process.env` yalnızca `src/lib/env.ts`'te; `lucide-react` yalnızca ikon kayıt defterinde; `.tsx` dosyalarında HEX renk yasak. Feature katman kuralları ilk modülle eklenecek | Kural ihlali deneme dosyasıyla doğrulandı |
 | P1-12 | Kurulum betikleri | – | `pnpm-workspace.yaml` → `allowBuilds`: sharp, unrs-resolver, @parcel/watcher, @swc/core **çalıştırılmaz** | Tedarik zinciri güvenliği; bu paketlerin betikleri gerekmiyor |
-| P1-13 | Favicon / PWA ikonları | 192 / 512 / maskable | ✅ 2026-11-05: ikonlar üretildi, manifest ve apple-touch-icon bağlı | **[Geçici]** Logo yok; ikon düz `blue.500` logo karosu. Logo gelince `scripts/build-app-icons.mjs` güncellenir |
+| P1-13 | Favicon / PWA ikonları | 192 / 512 / maskable | ✅ 2026-11-06: logo kitinden favicon, PWA ve apple-touch ikonları | Logo kiti `pickaly-logo/` (ürün sahibi) |
 | P1-14 | Ertelenen paketler | TanStack Query, RHF + Zod, Radix, Vaul, date-fns, Sonner, Serwist, Sentry, Vitest, Playwright, Prettier | Kurulmadı | Phase 1'de kullanılmıyor; ilgili aşamada eklenecek |
 
 ### 14.1 Phase 2 – UI temeli ve navigasyon

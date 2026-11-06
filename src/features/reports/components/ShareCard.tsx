@@ -1,3 +1,4 @@
+import { LogoMark } from "@/components/ui/Logo";
 import type { Category } from "@/features/categories/domain/types";
 import { formatPercent } from "@/features/savings/format";
 import type { Locale } from "@/i18n/config";
@@ -8,7 +9,7 @@ import { ReportComparison, ReportSummary, ReportTopSpending } from "./ReportSect
 // Paylaşılabilir Rapor kartı (PRD FR-REP-007, D-11). Aylık Rapor ekranıyla AYNI bölümleri aynı sırayla gösterir
 // (ürün sahibi isteği 2026-11-05): Özet → Gelir & Gider Karşılaştırması → En Çok Harcama Yapılanlar (ReportSections,
 // compact). Görünüm DESIGN_SYSTEM_PICKALY §5.2: beyaz, radius-xl, padding 24, aralık 16, elev-2.
-//   Başlık: 28 px blue.500 logo karosu + "Pickaly" title-sm · "Mayıs 2026 Finansal Özeti" caption-strong
+//   Başlık: 28 px Pickaly logo sembolü (küçük boyut çizimi, logo kiti 2026-11-06) + "Pickaly" title-sm · "Mayıs 2026 Finansal Özeti" caption-strong
 //   Alt satır "… ile oluşturuldu". Görselde yer sınırlı olduğu için harcama listesi ilk 3 kalemle sınırlı.
 // Kart her cihazda sabit 358 px'tir; dışa aktarılan görsel cihaza göre değişmez (RESPONSIVE §3.5.2).
 // [Varsayım] Alt satırdaki alan adı yazılmaz: alan adı henüz alınmadı (TECH_STACK K-8).
@@ -34,7 +35,7 @@ export async function ShareCard({ report, categories, locale, month, labels }: S
     >
       <header className="flex flex-col gap-4">
         <p className="flex items-center gap-8">
-          <span aria-hidden className="size-28 rounded-sm bg-brand-accent" />
+          <LogoMark size={28} />
           <span className="text-title-sm text-text-primary">Pickaly</span>
         </p>
         <p className="text-caption-strong text-text-secondary">{labels.subtitle}</p>

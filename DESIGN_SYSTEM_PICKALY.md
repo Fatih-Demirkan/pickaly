@@ -41,7 +41,7 @@ Tüm kontrast oranları WCAG 2.x formülüyle hesaplandı (`sRGB` göreli parlak
 | `blue.100` | `#D6E9FF` | [DS≈] `brand-100` | Gelir kartı zemini, Secondary buton zemini, bilgi zemini, seçili gün zemini |
 | `blue.200` | `#A8D3FE` | [DS≈] `brand-200` | İlerleme göstergesi knob halesi |
 | `blue.300` | `#7BBEFE` | [DS≈] `brand-300` | İlerleme izi noktaları (dekoratif) |
-| `blue.500` | `#41A1FD` | **[DS] exact** | Marka rengi: logo karosu, ilerleme dolgusu, grafik vurgusu, büyük dekoratif yüzeyler. **Metin ve beyaz metinli buton zemini olarak kullanılmaz** (§2.4) |
+| `blue.500` | `#41A1FD` | **[DS] exact** | Marka rengi: ilerleme dolgusu, grafik vurgusu, büyük dekoratif yüzeyler. **Metin ve beyaz metinli buton zemini olarak kullanılmaz** (§2.4) |
 | `blue.600` | `#0267C5` | [Uyarlama] DS `brand-600 ≈ #2D7FE0` beyaz metinle 4,02:1 veriyor. Aynı ton (209°) ve doygunlukta, beyaz / `neutral.50` / `blue.100` üzerinde ≥4,5:1 sağlayan en açık ton | Birincil aksiyon zemini, marka metni, metin butonu, odak halkası, form kontrolü "açık" durumu |
 | `blue.650` | `#0258A9` | [Türetme] aynı ton, 7:1 | Birincil aksiyon hover |
 | `blue.700` | `#0B4C9A` | [DS≈] `brand-700` | Birincil aksiyon pressed |
@@ -351,7 +351,7 @@ Mobil ve tablette en az **44×44** (eski kural, korunur). Görsel olarak daha k�
 - **Ajanda kartı (Takvim)** → standart kart; solda saat kutusu `neutral.50` zemin, `radius.sm`, `body-strong` saat.
 - **Durum & Başlık kartı (detay ekranları)** → standart kart, `radius.lg`; tutar `title-lg`, durum chip'i (§5.4).
 - **Birikim hesabı kartı** ve **hesap detayı** → standart kart + Birikim Hedefi'ndeki noktalı Progress meter [Karar ürün sahibi 2026-11-05; eski: basit ilerleme çubuğu §5.9].
-- **Paylaşım kartı (rapor)** → 358 px sabit genişlik korunur [Karar: RESPONSIVE]. `white` zemin, `radius.xl`, padding 24, `elev-2`; üstte 28 px `blue.500` logo karosu + "Pickaly"; içerik Balance header ve stat kartı düzeniyle.
+- **Paylaşım kartı (rapor)** → 358 px sabit genişlik korunur [Karar: RESPONSIVE]. `white` zemin, `radius.xl`, padding 24, `elev-2`; üstte 28 px Pickaly logo sembolü (§5.13) + "Pickaly"; içerik Balance header ve stat kartı düzeniyle.
 
 ### 5.3 Liste satırı (işlem, ödeme, ayar) [DS]
 - 36 px ikon karosu (`radius.sm`, kategori zemini, 20 px ikon ön plan renginde) → başlık `body-strong` + meta `caption` `text.secondary` ("Market · Ana Hesap · 15:11") → sağda tutar `body-strong` (§2.6 rengi).
@@ -419,10 +419,11 @@ Part A'da yok. Filtre chip'i diliyle türetildi:
 - Aktif: `black` zemin, beyaz ikon ve metin. Pasif: şeffaf zemin, `neutral.600` ikon ve metin (5,05). Hover: `neutral.50`.
 - Rail'de etiketler `type.nav` ile ikonun altında.
 - Sidebar'daki "Yeni işlem": Primary LG tam genişlik.
+- Marka: sidebar'ın üstünde 32 px logo sembolü + "Pickaly" + tagline; rail'in en üstünde 40 px logo sembolü (§5.13) [Karar ürün sahibi 2026-11-06; Varsayım: ölçü].
 
 **Header (sekme ekranları)** [Türetme: DS Balance header üst satırı]
 - Zemin `neutral.50` (canvas ile aynı; alt çerçeve yok), yükseklik 64, padding 8/16.
-- Solda "Pickaly" `title-md` + "Life & Money Planner" `caption` `text.secondary`.
+- Solda 32 px Pickaly logo sembolü (§5.13) + "Pickaly" `title-md` + "Life & Money Planner" `caption` `text.secondary` (sembol–metin 12) [Karar ürün sahibi 2026-11-06; Varsayım: ölçü].
 - Sağda outline ikon butonları (36): arama, bildirim (sayı rozetiyle), hesap → 40 px avatar daire.
 - [Karar K-6] Ana Sayfa header'ı Part A selamlama dilini kullanır: 40 px avatar + `caption` "Günaydın" (saate göre "İyi günler / İyi akşamlar"; EN çevirisiyle) + `title-md` kullanıcı adı. Diğer sekmelerde yukarıdaki "Pickaly" + alt başlık düzeni kalır. Ad yoksa yalnızca selamlama gösterilir.
 
@@ -498,6 +499,12 @@ Part A'da form tasarımı yok; DS'nin composer'ı (pill input) ve kart diliyle t
 ### 5.12 Avatar
 40 daire [DS]; profil kartında 56. Fotoğraf yoksa `blue.100` zemin + `blue.600` baş harf (`title-sm`).
 
+### 5.13 Logo [Karar ürün sahibi 2026-11-06]
+- Kaynak: ürün sahibinin logo kiti `pickaly-logo/` (kiraz + yaprak/sap onay işareti; kullanım kuralları `pickaly-logo/KULLANIM-KILAVUZU.md`). Logo yeniden çizilmez, renkleri değiştirilmez; kitteki SVG/PNG dosyaları kullanılır.
+- Logo renkleri (kiraz `#E23A4E`, yaprak `#1E9E6A`) yalnızca logonun kendisindedir; arayüz token'ı değildir, UI renkleri §2'deki sistemden gelir. Kitin önerdiği Nunito yazı tipi kullanılmaz (font Geist, §3.1).
+- Uygulama içi: `LogoMark` (`src/components/ui/Logo.tsx`), dekoratif (yanında her zaman "Pickaly" metni). 32 px ve altında kitin küçük boyut çizimi (`pickaly-symbol-small`).
+- Kullanım yerleri: giriş ekranları karşılama bloğu 48 · paylaşım kartı 28 · mobil header (Ana Sayfa dışı sekmeler) 32 · laptop+ sidebar 32 · tablet rail 40. Eski düz `blue.500` logo karosunun yerine geçer.
+
 ---
 
 ## 6. Hareket [Türetme]
@@ -513,12 +520,12 @@ Part A hareket tanımı vermiyor; Part B kullanılmadığı için sade bir set:
 - DS'nin `tailwind.config.js` örneği Tailwind v3 içindir; projede Tailwind v4 `@theme` kullanılır.
 - Primitive değerler `tokens/color.primitives.json`, semantic eşleme `tokens/color.semantic.light.json` dosyalarına §2.3'e göre işlenir; `tokens.css` üretilir, elle düzenlenmez.
 - Kategori anahtarları (§2.2) veritabanında değişmez; yalnızca token değerleri değişir.
-- PWA tema rengi (`manifest.ts`, `theme-color`): `#F5F6F7` zemin; ikon karosu `blue.500`, `radius.2xl` maske. İkonlar `scripts/build-app-icons.mjs` ile üretilir (192, 512, maskable 512, favicon 64, apple-touch 180). [Geçici] Logo yok: ikon düz `blue.500` karo.
+- PWA tema rengi (`manifest.ts`, `theme-color`): `#F5F6F7` zemin (kitin önerdiği kırmızı `#E23A4E` tema rengi kullanılmaz). Uygulama ikonu logo kitinden: kırmızı zeminde beyaz kiraz (192, 512, maskable 512, apple-touch 180) ve favicon (`favicon.ico` 16/32/48 + `icon.svg`). `scripts/build-app-icons.mjs` (`pnpm icons:build`) kitten kopyalar [Karar ürün sahibi 2026-11-06].
 - Eski tasarımın Figma ile eşleşen değerleri (teal, Manrope, gradyanlar) artık geçerli değil; Figma Pages yalnızca ekran içeriği ve akış referansıdır.
 
 ---
 
-## 8. Kararlar [ürün sahibi onayı, 2026-11-04; K-8 ve sonrası 2026-11-05]
+## 8. Kararlar [ürün sahibi onayı, 2026-11-04; K-8…K-17 2026-11-05; K-18 2026-11-06]
 
 | # | Konu | Karar |
 |---|---|---|
@@ -539,6 +546,7 @@ Part A hareket tanımı vermiyor; Part B kullanılmadığı için sade bir set:
 | K-15 | Birikim ilerlemesi (§5.2, §5.9) — 2026-11-05 | Her yerde noktalı Progress meter |
 | K-16 | Görev formu — 2026-11-05 | Tür (Görev/Randevu), Öncelik, Açıklama kaldırıldı; arayüzde tek tür "Görev" (PRD FR-CAL-006 iptal) |
 | K-17 | Mobil yakınlaştırma (§5.7) — 2026-11-05 | Odakta ve çift dokunmada yakınlaştırma yok |
+| K-18 | Logo (§5.13, §7) — 2026-11-06 | Ürün sahibinin logo kiti: favicon, PWA/iOS ikonları ve uygulama içi marka yerleri; düz mavi logo karosu kalktı |
 
 ---
 

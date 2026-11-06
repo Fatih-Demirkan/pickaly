@@ -1,0 +1,36 @@
+{
+  "brand": "Pickaly",
+  "tagline": "Yapılacakların ve bütçen tek yerde",
+  "brief": "Pickaly, yapılacaklar listesi ile bütçe takibini bir araya getiren bir uygulama. Logo samimi, akıllı ve güven veren bir his taşımalı; finans uygulamalarının soğuk mavisinden ve tek başına onay kutusu klişesinden ayrışmalı.",
+  "adjectives": ["samimi", "akıllı", "düzenli", "güven veren"],
+  "criteria": "Başarı ölçütü: kategoride ayırt edici olması, 16 px'te tanınması, tek renkte ve koyu zeminde çalışması.",
+  "mockups": ["app-icon", "website", "favicon-tab", "social", "payment-card", "sticker"],
+  "nav": ["Görevler", "Bütçe", "İndir"],
+  "brand_color": "#E23A4E",
+  "greyscale": false,
+  "final": true,
+  "deck_title": "logo kiti",
+  "designer": "Pickaly",
+  "concepts": [
+    {
+      "name": "Cherry-pick",
+      "symbol": "../masters/pickaly-symbol.svg",
+      "lockup": "../masters/pickaly-horizontal.svg",
+      "stacked": "../masters/pickaly-stacked.svg",
+      "symbol_on_tile": "../masters/pickaly-symbol-white.svg",
+      "stacked_on_tile": "../masters/pickaly-stacked-white.svg",
+      "symbol_on_dark": "../masters/pickaly-symbol-dark.svg",
+      "lockup_on_dark": "../masters/pickaly-horizontal-dark.svg",
+      "stacked_on_dark": "../masters/pickaly-stacked-dark.svg",
+      "idea": "Kirazın yaprağı ve sapı birlikte bir onay işareti çiziyor: \"cherry-pick\", yani en iyisini seçmek.",
+      "rationale": [
+        "Onay işareti (görev tamam) ile kiraz (değerli olanı seçmek) tek formda",
+        "Kırmızı-yeşil ikilisi mavi finans uygulamalarından net ayrışıyor",
+        "i harfinin kırmızı noktası, yazıda kirazı yankılıyor",
+        "16 px için kalın saplı ayrı küçük boyut çizimi var"
+      ]
+    }
+  ],
+  "recommendation": "Cherry-pick: ana sembol uygulama ikonu, favicon ve yazıyla birlikte tüm boyutlarda test edildi.",
+  "next_steps": ["Profesyonel marka tescil araştırması", "Uygulama içi ikon setini aynı çizgi diliyle genişletme", "Açılış animasyonu: yaprak ve sap tiki çizer, kiraz düşer"]
+}
