@@ -160,6 +160,16 @@
   --color-progress-track: var(--pk-blue-300);
   --color-progress-halo: var(--pk-blue-200);
   --color-progress-track-bar: var(--pk-blue-100);
+  --color-daypart-morning: var(--pk-category-amber-bg);
+  --color-daypart-morning-fg: var(--pk-category-amber-fg);
+  --color-daypart-day: var(--pk-blue-100);
+  --color-daypart-day-fg: var(--pk-category-amber-fg);
+  --color-daypart-sunset: var(--pk-category-orange-bg);
+  --color-daypart-sunset-fg: var(--pk-category-orange-fg);
+  --color-daypart-evening: var(--pk-lavender-200);
+  --color-daypart-evening-fg: var(--pk-category-violet-fg);
+  --color-daypart-night: var(--pk-lilac-200);
+  --color-daypart-night-fg: var(--pk-category-violet-fg);
 
   /* Boşluk: 1 birim = 1px, böylece p-16 = 16px (token adı = değer). Ölçek: --space-* */
   --spacing: 1px;

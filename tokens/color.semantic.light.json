@@ -430,6 +430,19 @@
         "$value": "{primitive.blue.100}",
         "$description": "Basit ilerleme çubuğu izi"
       }
+    },
+    "daypart": {
+      "$description": "Ana Sayfa zamana duyarlı üst bar (ürün sahibi isteği 2026-11-06). [Türetme] Yalnızca DS'deki mevcut pastel tonlar; ön plan = aynı ailenin kategori ön planı (≥3:1 grafik öğe)",
+      "morning": { "$type": "color", "$value": "{primitive.category.amber.bg}", "$description": "05–11 Günaydın · gün doğumu" },
+      "morning-fg": { "$type": "color", "$value": "{primitive.category.amber.fg}" },
+      "day": { "$type": "color", "$value": "{primitive.blue.100}", "$description": "11–17 İyi günler · güneş (gök mavisi)" },
+      "day-fg": { "$type": "color", "$value": "{primitive.category.amber.fg}", "$description": "Güneş ikonu" },
+      "sunset": { "$type": "color", "$value": "{primitive.category.orange.bg}", "$description": "17–20 İyi akşamlar · gün batımı" },
+      "sunset-fg": { "$type": "color", "$value": "{primitive.category.orange.fg}" },
+      "evening": { "$type": "color", "$value": "{primitive.lavender.200}", "$description": "20–23 İyi akşamlar · ay" },
+      "evening-fg": { "$type": "color", "$value": "{primitive.category.violet.fg}" },
+      "night": { "$type": "color", "$value": "{primitive.lilac.200}", "$description": "23–05 İyi geceler · ay ve yıldız" },
+      "night-fg": { "$type": "color", "$value": "{primitive.category.violet.fg}" }
     }
   }
 }

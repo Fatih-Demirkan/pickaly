@@ -22,7 +22,8 @@ export function AppShell({ navigation, topBar, children }: AppShellProps) {
   const hasNavigation = Boolean(navigation);
 
   return (
-    <ShellFrame className="group/shell min-h-dvh bg-surface-page text-text-primary">
+    // relative + isolate: Ana Sayfa üst barının renk geçişi (TopBarLead) içeriğin ARKASINDA, sayfa zemininin önünde çizilir.
+    <ShellFrame className="group/shell relative isolate min-h-dvh bg-surface-page text-text-primary">
       {navigation}
       <div
         className={cn(

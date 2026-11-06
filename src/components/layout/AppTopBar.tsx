@@ -1,5 +1,7 @@
+import { getLocale } from "next-intl/server";
 import { getSessionUser } from "@/features/auth/server";
 import { getProfile } from "@/features/settings/server";
+import { formatPersonName } from "@/lib/names";
 import { TopBarLead } from "./TopBarLead";
 
 // Üst bar (DESIGN_SYSTEM_PICKALY §5.6, RESPONSIVE §2.2–§2.3, §4.9).
@@ -11,6 +13,7 @@ import { TopBarLead } from "./TopBarLead";
 
 export async function AppTopBar() {
   const sessionUser = await getSessionUser();
-  const name = sessionUser?.name ?? (await getProfile()).name;
-  return <TopBarLead name={name.trim()} />;
+  const [locale, name] = await Promise.all([getLocale(), sessionUser?.name ?? getProfile().then((profile) => profile.name)]);
+  // Ad, kullanıcı nasıl yazmış olursa olsun baş harfleri büyük gösterilir (ürün sahibi isteği 2026-11-06).
+  return <TopBarLead name={formatPersonName(name, locale)} />;
 }

@@ -61,6 +61,11 @@ import {
   ShoppingCart,
   SquareArrowOutUpRight,
   Store,
+  Sun,
+  Sunrise,
+  Sunset,
+  Moon,
+  MoonStar,
   Timer,
   Trash,
   TurkishLira,
@@ -149,6 +154,12 @@ export const appIcons = {
   weekStart: Calendar1,
   download: Download,
   logout: LogOut,
+  // Ana Sayfa zamana duyarlı üst bar: gün dilimi belirteci (ürün sahibi isteği 2026-11-06)
+  sunrise: Sunrise,
+  sun: Sun,
+  sunset: Sunset,
+  moon: Moon,
+  moonStar: MoonStar,
 } satisfies Record<string, LucideIcon>;
 
 export type AppIconName = keyof typeof appIcons;

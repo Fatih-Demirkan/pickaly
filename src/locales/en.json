@@ -41,7 +41,15 @@
     "greeting": {
       "morning": "Good morning",
       "afternoon": "Good afternoon",
-      "evening": "Good evening"
+      "evening": "Good evening",
+      "night": "Good night"
+    },
+    "daypart": {
+      "morning": "Morning",
+      "day": "Daytime",
+      "sunset": "Sunset",
+      "evening": "Evening",
+      "night": "Night"
     }
   },
   "pages": {

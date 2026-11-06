@@ -425,7 +425,19 @@ Part A'da yok. Filtre chip'i diliyle türetildi:
 - Zemin `neutral.50` (canvas ile aynı; alt çerçeve yok), yükseklik 64, padding 8/16.
 - Solda 32 px Pickaly logo sembolü (§5.13) + "Pickaly" `title-md` + "Life & Money Planner" `caption` `text.secondary` (sembol–metin 12) [Karar ürün sahibi 2026-11-06; Varsayım: ölçü].
 - Sağda outline ikon butonları (36): arama, bildirim (sayı rozetiyle), hesap → 40 px avatar daire.
-- [Karar K-6] Ana Sayfa header'ı Part A selamlama dilini kullanır: 40 px avatar + `caption` "Günaydın" (saate göre "İyi günler / İyi akşamlar"; EN çevirisiyle) + `title-md` kullanıcı adı. Diğer sekmelerde yukarıdaki "Pickaly" + alt başlık düzeni kalır. Ad yoksa yalnızca selamlama gösterilir.
+- [Karar K-6] Ana Sayfa header'ı Part A selamlama dilini kullanır: 40 px avatar + `caption` selamlama + `title-md` kullanıcı adı. Diğer sekmelerde yukarıdaki "Pickaly" + alt başlık düzeni kalır. Ad yoksa yalnızca selamlama gösterilir.
+- **Ad gösterimi** [Karar ürün sahibi 2026-11-06]: kullanıcı adı nasıl girilmiş olursa olsun her kelimenin baş harfi büyük gösterilir (dil kurallarıyla: "ışıl" → "Işıl"); kayıtlı değer değişmez.
+- **Zamana duyarlı üst bar (Ana Sayfa)** [Karar K-19, ürün sahibi 2026-11-06; Türetme: renkler]: bar gün diliminin pastel tonunda; sağda 40 px gün dilimi belirteci (`white` %60 daire, 20 px Lucide ikon, dilimin ön plan renginde, ekran okuyucu adı "Sabah" vb.). Renk barın altında içeriğin ARKASINDA, önce hızlı sonra yavaş solarak 120 px'te canvas'a karışır; kaydırınca bar yapışık kalır ve alt kenarı 24 px'lik solmayla biter (kesin çizgi yok). Renk istemcide 700 ms'de belirir. Renkli barda selamlama `text.primary`, avatar `white` zeminde [Uyarlama: gündüz tonu `blue.100` ile avatar zemini aynı].
+
+  | Dilim [Varsayım: saatler] | Selamlama | İkon | Zemin (token `daypart.*`) | İkon rengi |
+  |---|---|---|---|---|
+  | 05–11 sabah | Günaydın | sunrise | `category.amber` | `#8C6710` |
+  | 11–17 gündüz | İyi günler | sun | `blue.100` | `#8C6710` |
+  | 17–20 akşamüstü | İyi akşamlar | sunset | `category.orange` | `#A34E12` |
+  | 20–23 akşam | İyi akşamlar | moon | `lavender.200` | `#3E41EA` |
+  | 23–05 gece | İyi geceler | moon-star | `lilac.200` | `#3E41EA` |
+
+  - DS Part A gradyan kullanmaz (§5.2); bu geçiş ürün sahibinin açık isteğidir ve yalnızca Ana Sayfa üst barında kullanılır.
 
 **Detay / form header (odak ekranları)** [DS AI chat header yapısı, AI öğeleri olmadan]
 - 56 yükseklik, `neutral.50` zemin; solda geri chevron (outline ikon butonu), ortada `title-sm` başlık, sağda aksiyonlar. Formlarda solda "×".
@@ -525,7 +537,7 @@ Part A hareket tanımı vermiyor; Part B kullanılmadığı için sade bir set:
 
 ---
 
-## 8. Kararlar [ürün sahibi onayı, 2026-11-04; K-8…K-17 2026-11-05; K-18 2026-11-06]
+## 8. Kararlar [ürün sahibi onayı, 2026-11-04; K-8…K-17 2026-11-05; K-18…K-19 2026-11-06]
 
 | # | Konu | Karar |
 |---|---|---|
@@ -546,6 +558,7 @@ Part A hareket tanımı vermiyor; Part B kullanılmadığı için sade bir set:
 | K-15 | Birikim ilerlemesi (§5.2, §5.9) — 2026-11-05 | Her yerde noktalı Progress meter |
 | K-16 | Görev formu — 2026-11-05 | Tür (Görev/Randevu), Öncelik, Açıklama kaldırıldı; arayüzde tek tür "Görev" (PRD FR-CAL-006 iptal) |
 | K-17 | Mobil yakınlaştırma (§5.7) — 2026-11-05 | Odakta ve çift dokunmada yakınlaştırma yok |
+| K-19 | Ana Sayfa zamana duyarlı üst bar (§5.6) — 2026-11-06 | 5 gün dilimi, DS pastel tonları, belirteç ikonu, yumuşak geçiş; ad baş harfleri büyük |
 | K-18 | Logo (§5.13, §7) — 2026-11-06 | Ürün sahibinin logo kiti: favicon, PWA/iOS ikonları ve uygulama içi marka yerleri; düz mavi logo karosu kalktı |
 
 ---

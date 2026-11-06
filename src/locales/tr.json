@@ -41,7 +41,15 @@
     "greeting": {
       "morning": "Günaydın",
       "afternoon": "İyi günler",
-      "evening": "İyi akşamlar"
+      "evening": "İyi akşamlar",
+      "night": "İyi geceler"
+    },
+    "daypart": {
+      "morning": "Sabah",
+      "day": "Gündüz",
+      "sunset": "Akşamüstü",
+      "evening": "Akşam",
+      "night": "Gece"
     }
   },
   "pages": {

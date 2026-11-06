@@ -98,7 +98,17 @@ export const semanticColors = {
   "progress-fill": "#41A1FD",
   "progress-track": "#7BBEFE",
   "progress-halo": "#A8D3FE",
-  "progress-track-bar": "#D6E9FF"
+  "progress-track-bar": "#D6E9FF",
+  "daypart-morning": "#FFEEC7",
+  "daypart-morning-fg": "#8C6710",
+  "daypart-day": "#D6E9FF",
+  "daypart-day-fg": "#8C6710",
+  "daypart-sunset": "#FFDEC7",
+  "daypart-sunset-fg": "#A34E12",
+  "daypart-evening": "#D0D1FF",
+  "daypart-evening-fg": "#3E41EA",
+  "daypart-night": "#E7D0FF",
+  "daypart-night-fg": "#3E41EA"
 } as const;
 
 export const breakpoints = {
