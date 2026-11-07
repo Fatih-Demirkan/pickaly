@@ -15,7 +15,7 @@ import { editAccountHref, newAccountHref, transferHref } from "../routes";
 import { listAccounts, listTransfers } from "../server";
 
 // Profil → Hesaplarım (ürün sahibi isteği 2026-11-05). Görünüm DESIGN_SYSTEM_PICKALY §5.2–§5.3:
-//   Odak başlığı "← Hesaplarım" · özet kartı: caption "Toplam bakiye" + title-lg (aktif hesaplar, birikimler hariç)
+//   Odak başlığı "← Hesaplarım" · özet kartı: caption "Toplam bakiye" + title-lg (aktif hesaplar, birikimler ve "Toplam dışı" hesaplar hariç)
 //   Hesap listesi (liste grubu, radius-md): 36 px ikon karosu + ad body-strong + açıklama caption (varsayılan hesapta
 //     "Varsayılan" çipi) · sağda bakiye body-strong + chevron. Satır Hesabı Düzenle'yi açar.
 //   "Son Aktarımlar": son 5 hesaplar arası aktarım (kaynak → hedef, tarih, tutar).
@@ -38,7 +38,9 @@ export async function AccountManagement() {
   const archived = accounts.filter((account) => account.archived);
   const names = new Map(accounts.map((account) => [account.id, account.name]));
   const balanceOf = (id: string, opening: bigint) => balances.get(id) ?? opening;
-  const total = active.reduce((sum, account) => sum + balanceOf(account.id, account.openingBalanceMinor), BigInt(0));
+  // "Toplam bakiyeye dahil et" kapalı hesaplar toplama girmez (2026-11-07); satırda "Toplam dışı" çipi taşır.
+  const total = active.reduce((sum, account) => (account.includeInTotal ? sum + balanceOf(account.id, account.openingBalanceMinor) : sum), BigInt(0));
+  const excludedCount = active.filter((account) => !account.includeInTotal).length;
   const [totalWhole, totalFraction] = splitMoneyDecimals(formatMoney(total, locale), locale);
   const canTransfer = active.length >= 2;
 
@@ -91,7 +93,10 @@ export async function AccountManagement() {
             {totalWhole}
             <span className="text-text-tertiary">{totalFraction}</span>
           </p>
-          <p className="text-caption text-text-secondary">{t("count", { count: active.length })}</p>
+          <p className="text-caption text-text-secondary">
+            {t("count", { count: active.length })}
+            {excludedCount > 0 && ` · ${t("countExcluded", { count: excludedCount })}`}
+          </p>
         </section>
 
         <div className="grid grid-cols-1 gap-(--layout-section-gap) laptop:grid-cols-2 laptop:items-start">
@@ -115,6 +120,7 @@ export async function AccountManagement() {
                       <span className="flex min-w-0 items-center gap-8">
                         <span className="truncate text-body-strong text-text-primary">{account.name}</span>
                         {account.isDefault && <Chip>{t("default")}</Chip>}
+                        {!account.includeInTotal && <Chip>{t("excluded")}</Chip>}
                       </span>
                       {account.detail && <span className="truncate text-caption text-text-secondary">{account.detail}</span>}
                     </span>

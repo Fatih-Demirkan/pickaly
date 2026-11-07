@@ -7,10 +7,10 @@ import { mockAccountStore } from "./data/mock-accounts";
 // Hesap ve hesaplar arası aktarım verisine sunucu tarafı erişim. Supabase tanımlıysa veritabanı (kullanıcıya özel,
 // RLS), değilse yerel depo. Kayıtta "Ana Hesap" veritabanı tetikleyicisiyle oluşturulur (FR-AUTH-005).
 
-type AccountRow = { id: string; name: string; detail: string | null; opening_balance_minor: number; is_default: boolean; archived_at: string | null };
+type AccountRow = { id: string; name: string; detail: string | null; opening_balance_minor: number; is_default: boolean; archived_at: string | null; include_in_total: boolean };
 type TransferRow = { id: string; from_account_id: string; to_account_id: string; amount_minor: number; occurred_at: string; note: string | null };
 
-const ACCOUNT_COLUMNS = "id, name, detail, opening_balance_minor, is_default, archived_at";
+const ACCOUNT_COLUMNS = "id, name, detail, opening_balance_minor, is_default, archived_at, include_in_total";
 const TRANSFER_COLUMNS = "id, from_account_id, to_account_id, amount_minor, occurred_at, note";
 
 function toAccount(row: AccountRow): Account {
@@ -21,6 +21,7 @@ function toAccount(row: AccountRow): Account {
     openingBalanceMinor: toBigInt(row.opening_balance_minor),
     isDefault: row.is_default,
     archived: row.archived_at !== null,
+    includeInTotal: row.include_in_total,
   };
 }
 
@@ -55,7 +56,7 @@ export async function getAccount(id: string): Promise<Account | null> {
   return (await getAccountMap()).get(id) ?? null;
 }
 
-type AccountInput = { name: string; detail: string | null; openingBalanceMinor: bigint };
+type AccountInput = { name: string; detail: string | null; openingBalanceMinor: bigint; includeInTotal: boolean };
 
 export async function createAccount(input: AccountInput): Promise<Account> {
   if (!isSupabaseConfigured()) {
@@ -66,7 +67,7 @@ export async function createAccount(input: AccountInput): Promise<Account> {
   const row = unwrap(
     await (await db())
       .from("accounts")
-      .insert({ name: input.name, detail: input.detail, opening_balance_minor: fromBigInt(input.openingBalanceMinor) })
+      .insert({ name: input.name, detail: input.detail, opening_balance_minor: fromBigInt(input.openingBalanceMinor), include_in_total: input.includeInTotal })
       .select(ACCOUNT_COLUMNS)
       .single(),
   );
@@ -83,7 +84,7 @@ export async function updateAccount(id: string, input: AccountInput): Promise<Ac
   const row = unwrap(
     await (await db())
       .from("accounts")
-      .update({ name: input.name, detail: input.detail, opening_balance_minor: fromBigInt(input.openingBalanceMinor) })
+      .update({ name: input.name, detail: input.detail, opening_balance_minor: fromBigInt(input.openingBalanceMinor), include_in_total: input.includeInTotal })
       .eq("id", id)
       .select(ACCOUNT_COLUMNS)
       .maybeSingle(),

@@ -60,6 +60,7 @@ import {
   ScrollText,
   Search,
   ShoppingCart,
+  Sigma,
   SquareArrowOutUpRight,
   Store,
   Timer,
@@ -152,6 +153,8 @@ export const appIcons = {
   logout: LogOut,
   // Alacaklar (borç verilen para, ürün sahibi isteği 2026-11-07)
   loan: Handshake,
+  // Hesap → "Toplam bakiyeye dahil et" (2026-11-07) [Varsayım: ikon seçimi]
+  totalBalance: Sigma,
 } satisfies Record<string, LucideIcon>;
 
 export type AppIconName = keyof typeof appIcons;

@@ -295,7 +295,8 @@
       "accounts": "{count, plural, one {# hesapta} other {# hesapta}}",
       "vsLastMonth": "Geçen aya göre",
       "openIncome": "Bu ayın gelirlerini aç",
-      "openExpense": "Bu ayın giderlerini aç"
+      "openExpense": "Bu ayın giderlerini aç",
+      "separateLabel": "Toplama dahil olmayan hesaplar"
     },
     "quick": {
       "label": "Hızlı aksiyonlar",
@@ -1065,7 +1066,10 @@
         "balance": "Geçerli bir tutar girin.",
         "summary": "Kaydedilemedi. İşaretli alanları kontrol edin.",
         "notFound": "Bu hesap artık mevcut değil."
-      }
+      },
+      "includeInTotal": "Toplam bakiyeye dahil et",
+      "includeInTotalHintOn": "Bakiyesi Ana Sayfa'daki toplam bakiyeye eklenir",
+      "includeInTotalHintOff": "Bakiyesi korunur; toplamın altında ayrı gösterilir"
     },
     "removeDialog": {
       "archiveTitle": "Hesap arşivlensin mi?",
@@ -1101,7 +1105,9 @@
         "note": "Not en fazla {max} karakter olabilir.",
         "summary": "Aktarılamadı. İşaretli alanları kontrol edin."
       }
-    }
+    },
+    "excluded": "Toplam dışı",
+    "countExcluded": "{count, plural, one {# hesap toplam dışı} other {# hesap toplam dışı}}"
   },
   "loans": {
     "title": "Alacaklarım",

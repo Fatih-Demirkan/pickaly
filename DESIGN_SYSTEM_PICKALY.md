@@ -337,6 +337,7 @@ Mobil ve tablette en az **44×44** (eski kural, korunur). Görsel olarak daha k�
 
 - **Toplam Bakiye (Ana Sayfa)** → DS **Balance header** [DS]. Gradyanlı koyu kart **kaldırılır** (Part A'da gradyan yok).
   - Canvas üzerinde ortalı: `caption` "Toplam bakiye" (`text.secondary`) → `display-balance` tutar, ondalık `text.tertiary` → `caption` "n hesapta".
+  - **Toplama dahil olmayan hesaplar** [ürün sahibi isteği 2026-11-07, K-21]: hesapta "Toplam bakiyeye dahil et" kapalıysa bakiyesi toplama ve "n hesapta" sayısına girmez; "n hesapta" satırının altında ortalı, salt okunur pill'lerde ayrı gösterilir: ad `caption` `text.secondary` + tutar `caption-strong` [Türetme: §5.4 seçilebilir chip'in "seçili değil" görünümü — `white`, `border.subtle`, `radius.full`, 32 yükseklik, yatay 12, aralık 8]. Hesaplarım'da satırda nötr "Toplam dışı" çipi; özet kartı toplamı da bu hesapları içermez.
   - Altında 3'lü stat kartı ızgarası (gap 8): **Bu ay gelir** (`surface.income`, `+` önekli) · **Bu ay gider** (`surface.expense`, `−` önekli) · **Geçen aya göre** (`surface.compare`, `±%`). Her kartta köşede filled ok ikon butonu (↗ / ↙) → ilgili liste veya rapor.
   - "Bugün: n Görev, n Ödeme bekliyor" → stat ızgarasının altında `caption` satırı + Text buton.
   - "Aylık Rapor ›" → Text buton.
@@ -565,6 +566,7 @@ Part A hareket tanımı vermiyor; Part B kullanılmadığı için sade bir set:
 | K-17 | Mobil yakınlaştırma (§5.7) — 2026-11-05 | Odakta ve çift dokunmada yakınlaştırma yok |
 | K-19 | Ana Sayfa zamana duyarlı karşılama alanı (§5.6) — 2026-11-06 | Ürün sahibinin Figma tasarımı (3 durum); İyi günler = Günaydın tasarımı; ad baş harfleri büyük |
 | K-20 | Alacaklar (borç verilen para) — 2026-11-07 | Profil → Alacaklarım (Hesaplarım kalıbı); takvimde teal "Alacak" türü; bakiye etkisi aktarım gibi (gelir/gider değil) |
+| K-21 | Toplam bakiyeye dahil et (§5.2) — 2026-11-07 | Hesap formunda Switch kartı (varsayılan açık); kapalı hesap Ana Sayfa toplamının altında ayrı pill'de [Türetme: görünüm] |
 | K-18 | Logo (§5.13, §7) — 2026-11-06 | Ürün sahibinin logo kiti: favicon, PWA/iOS ikonları ve uygulama içi marka yerleri; düz mavi logo karosu kalktı |
 
 ---

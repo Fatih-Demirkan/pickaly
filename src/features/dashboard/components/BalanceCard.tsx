@@ -19,12 +19,18 @@ import { formatMoney, splitMoneyDecimals } from "@/lib/money";
 //     (renkli zeminde ikincil gri AA'yı karşılamaz). Köşede 28 px beyaz ok butonu → ilgili liste / rapor.
 //   Alt satır: "Bugün: n Görev, n Ödeme bekleniyor." + "Aylık Rapor ›" metin butonu.
 // Toplam Bakiye: tüm hesapların bakiyesi, birikimler hariç (BR-BAL-003). Gelir/gider: bu ayın gerçekleşmiş işlemleri.
+// "Toplam bakiyeye dahil et" kapalı hesaplar (ürün sahibi isteği 2026-11-07) toplama girmez; "n hesapta" satırının altında
+//   ayrı bakiye olarak ortalı salt okunur pill'lerde gösterilir: ad caption text-secondary + tutar caption-strong.
+//   [Türetme: DS filtre chip'i "seçili değil" görünümü — beyaz, border-subtle, radius-full, yükseklik 32, yatay 12, aralık 8]
+//   Liste "Toplama dahil olmayan hesaplar" adıyla okunur.
 // "Geçen aya göre": bu ayki giderin geçen ayın toplam giderine göre yüzde değişimi; geçen ay gider yoksa "—".
 // Sayılar yalnızca bugün tarihli, tamamlanmamış görev/randevu ve bekleyen ödemelerdir (FR-DSH-001, BR-TSK-002).
 
 type BalanceCardProps = {
   totalMinor: bigint;
   accountCount: number;
+  /** Toplama dahil olmayan aktif hesaplar. */
+  separate: { id: string; name: string; balanceMinor: bigint }[];
   incomeMinor: bigint;
   expenseMinor: bigint;
   previousExpenseMinor: bigint;
@@ -87,6 +93,7 @@ function percentChange(current: bigint, previous: bigint): number | null {
 export async function BalanceCard({
   totalMinor,
   accountCount,
+  separate,
   incomeMinor,
   expenseMinor,
   previousExpenseMinor,
@@ -114,6 +121,16 @@ export async function BalanceCard({
           <span className="text-text-tertiary">{fraction}</span>
         </p>
         <p className="text-caption text-text-secondary">{t("accounts", { count: accountCount })}</p>
+        {separate.length > 0 && (
+          <ul aria-label={t("separateLabel")} className="flex flex-wrap justify-center gap-8 pt-8">
+            {separate.map((account) => (
+              <li key={account.id} className="inline-flex h-32 max-w-full items-center gap-6 rounded-full border border-border-subtle bg-surface-card px-12 text-caption">
+                <span className="min-w-0 truncate text-text-secondary">{account.name}</span>
+                <span className="shrink-0 text-caption-strong text-text-primary">{formatMoney(account.balanceMinor, locale)}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* Mobilde TR tutarları 3 sütuna sığmaz: gelir/gider yan yana, karşılaştırma tam genişlik; tablet+ 3 sütun. */}

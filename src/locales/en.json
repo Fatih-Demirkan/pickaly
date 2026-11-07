@@ -295,7 +295,8 @@
       "accounts": "{count, plural, one {Across # account} other {Across # accounts}}",
       "vsLastMonth": "Vs last month",
       "openIncome": "Open this month’s income",
-      "openExpense": "Open this month’s expenses"
+      "openExpense": "Open this month’s expenses",
+      "separateLabel": "Accounts not in the total"
     },
     "quick": {
       "label": "Quick actions",
@@ -1065,7 +1066,10 @@
         "balance": "Enter a valid amount.",
         "summary": "Couldn't save. Check the highlighted fields.",
         "notFound": "This account no longer exists."
-      }
+      },
+      "includeInTotal": "Include in total balance",
+      "includeInTotalHintOn": "Its balance is added to the total balance on Home",
+      "includeInTotalHintOff": "Its balance is kept and shown separately below the total"
     },
     "removeDialog": {
       "archiveTitle": "Archive this account?",
@@ -1101,7 +1105,9 @@
         "note": "Note can be at most {max} characters.",
         "summary": "Couldn't transfer. Check the highlighted fields."
       }
-    }
+    },
+    "excluded": "Not in total",
+    "countExcluded": "{count, plural, one {# account not in total} other {# accounts not in total}}"
   },
   "loans": {
     "title": "Money lent",

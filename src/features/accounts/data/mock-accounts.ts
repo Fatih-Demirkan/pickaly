@@ -15,10 +15,10 @@ const globalStore = globalThis as typeof globalThis & { __pickalyAccounts?: Stor
 function seed(): Store {
   const accounts: Account[] = isDemoDataEnabled()
     ? [
-        { id: "acc-main", name: "Ana Hesap", detail: "Banka Kartı (••4821)", openingBalanceMinor: majorToMinor(12000), isDefault: true, archived: false },
-        { id: "acc-card", name: "Kredi Kartı", detail: null, openingBalanceMinor: majorToMinor(0), isDefault: false, archived: false },
+        { id: "acc-main", name: "Ana Hesap", detail: "Banka Kartı (••4821)", openingBalanceMinor: majorToMinor(12000), isDefault: true, archived: false, includeInTotal: true },
+        { id: "acc-card", name: "Kredi Kartı", detail: null, openingBalanceMinor: majorToMinor(0), isDefault: false, archived: false, includeInTotal: true },
       ]
-    : [{ id: "acc-main", name: "Ana Hesap", detail: null, openingBalanceMinor: majorToMinor(0), isDefault: true, archived: false }];
+    : [{ id: "acc-main", name: "Ana Hesap", detail: null, openingBalanceMinor: majorToMinor(0), isDefault: true, archived: false, includeInTotal: true }];
   return { accounts, transfers: [] };
 }
 

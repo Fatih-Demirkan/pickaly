@@ -1,6 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { connection } from "next/server";
-import { listAccounts } from "@/features/accounts/server";
+import { getAccountMap, listAccounts } from "@/features/accounts/server";
 import { calendarRepository } from "@/features/calendar/server";
 import { UpcomingPayments } from "@/features/payments/components/UpcomingPayments";
 import { UpcomingLoans } from "@/features/loans/components/UpcomingLoans";
@@ -33,7 +33,7 @@ export async function Dashboard() {
   const now = new Date();
   const today = toDateKey(now);
   const currentMonth = toMonthKey(now);
-  const [t, rawLocale, balances, monthTransactions, previousTransactions, dueToday, goal, todayItems, overdue, accounts, allTransactions, allItems, savings] = await Promise.all([
+  const [t, rawLocale, balances, monthTransactions, previousTransactions, dueToday, goal, todayItems, overdue, accounts, allTransactions, allItems, savings, accountMap] = await Promise.all([
     getTranslations("nav"),
     getLocale(),
     getAccountBalances(),
@@ -48,11 +48,18 @@ export async function Dashboard() {
     transactionRepository.listAll(),
     calendarRepository.listBetween("0000-01-01", "9999-12-31"),
     listSavingsAccounts(),
+    getAccountMap(),
   ]);
   const locale = isLocale(rawLocale) ? rawLocale : "tr";
   const month = summarize(monthTransactions);
   const previousMonth = summarize(previousTransactions);
-  const totalMinor = [...balances.values()].reduce((sum, balance) => sum + balance, BigInt(0));
+  // Toplam bakiye: "Toplam bakiyeye dahil et" açık hesaplar (arşivlenmiş dahil). Kapalı aktif hesaplar toplamın altında
+  // ayrı gösterilir (ürün sahibi isteği 2026-11-07).
+  const totalMinor = [...balances].reduce((sum, [id, balance]) => (accountMap.get(id)?.includeInTotal === false ? sum : sum + balance), BigInt(0));
+  const included = accounts.filter((account) => account.includeInTotal);
+  const separate = accounts
+    .filter((account) => !account.includeInTotal)
+    .map((account) => ({ id: account.id, name: account.name, balanceMinor: balances.get(account.id) ?? account.openingBalanceMinor }));
   const steps = {
     // Hesap adımı: ikinci bir hesap eklendi ya da bir hesabın bakiyesi girildi.
     account: accounts.length > 1 || accounts.some((account) => account.openingBalanceMinor !== BigInt(0)),
@@ -67,7 +74,8 @@ export async function Dashboard() {
       <div className="flex flex-col gap-(--layout-section-gap) tablet:col-span-2 laptop:col-span-8 laptop:col-start-1 laptop:row-start-1">
         <BalanceCard
           totalMinor={totalMinor}
-          accountCount={accounts.length}
+          accountCount={included.length}
+          separate={separate}
           previousExpenseMinor={previousMonth.expenseMinor}
           month={currentMonth}
           incomeMinor={month.incomeMinor}

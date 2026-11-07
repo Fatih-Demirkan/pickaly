@@ -9,6 +9,7 @@ export const accountFormSchema = z.object({
   name: z.string().trim().min(1, "name").max(ACCOUNT_NAME_MAX_LENGTH, "nameLength"),
   detail: z.string().trim().max(ACCOUNT_DETAIL_MAX_LENGTH, "detailLength"),
   balance: z.string().trim(),
+  includeInTotal: z.enum(["true", "false"]),
 });
 
 export type AccountFormField = keyof z.infer<typeof accountFormSchema>;

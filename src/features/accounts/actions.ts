@@ -43,6 +43,7 @@ export async function saveAccount(id: string | null, _previous: AccountFormState
     name: formData.get("name") ?? "",
     detail: formData.get("detail") ?? "",
     balance: formData.get("balance") ?? "",
+    includeInTotal: formData.get("includeInTotal") ?? "true",
   });
   const errors: Partial<Record<AccountFormField, AccountFormErrorKey>> = {};
   if (!parsed.success) {
@@ -72,7 +73,7 @@ export async function saveAccount(id: string | null, _previous: AccountFormState
     opening = desired - (current - existing.openingBalanceMinor);
   }
 
-  const input = { name: data.name, detail: data.detail || null, openingBalanceMinor: opening };
+  const input = { name: data.name, detail: data.detail || null, openingBalanceMinor: opening, includeInTotal: data.includeInTotal === "true" };
   if (id) {
     if (!(await updateAccount(id, input))) return { formError: "notFound" };
   } else {

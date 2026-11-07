@@ -24,7 +24,7 @@ export async function AccountFormDrawer(props: AccountFormDrawerProps) {
   const [t, rawLocale] = await Promise.all([getTranslations("accounts"), getLocale()]);
   const locale = isLocale(rawLocale) ? rawLocale : "tr";
 
-  let initialValues: AccountFormValues = { name: "", detail: "", balance: "" };
+  let initialValues: AccountFormValues = { name: "", detail: "", balance: "", includeInTotal: true };
   let removal: { inUse: boolean; name: string } | null = null;
   let isDefault = false;
   if (props.mode === "edit") {
@@ -36,6 +36,7 @@ export async function AccountFormDrawer(props: AccountFormDrawerProps) {
       name: account.name,
       detail: account.detail ?? "",
       balance: `${current < BigInt(0) ? "-" : ""}${formatMoneyInput(current, locale)}`,
+      includeInTotal: account.includeInTotal,
     };
     isDefault = account.isDefault;
     if (!account.isDefault) {

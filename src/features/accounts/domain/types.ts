@@ -13,6 +13,11 @@ export type Account = {
   isDefault: boolean;
   /** Arşivlenmiş hesap seçicilerde görünmez; geçmiş kayıtlar ve bakiye korunur. */
   archived: boolean;
+  /**
+   * "Toplam bakiyeye dahil et" (ürün sahibi isteği 2026-11-07). Kapalıysa bakiye korunur ama Ana Sayfa ve Hesaplarım
+   * toplamına eklenmez; Ana Sayfa'da toplamın altında ayrı bakiye olarak görünür.
+   */
+  includeInTotal: boolean;
 };
 
 /** Hesaplar arası para aktarımı. Gelir / gider sayılmaz; yalnızca iki hesabın bakiyesini değiştirir. */
