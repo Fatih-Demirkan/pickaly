@@ -20,6 +20,7 @@ import { AGENDA_KINDS, kindDot, type AgendaKind } from "./kindStyle";
 const cellChip: Record<AgendaKind, string> = {
   task: "bg-category-violet text-category-fg-violet",
   payment: "bg-category-pink text-category-fg-pink",
+  loan: "bg-category-teal text-category-fg-teal",
 };
 
 type MonthMatrixProps = {

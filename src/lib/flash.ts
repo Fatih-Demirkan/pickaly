@@ -26,6 +26,9 @@ export const FLASH_KEYS = [
   "accountArchived",
   "accountDeleted",
   "transferCreated",
+  "loanCreated",
+  "loanUpdated",
+  "loanDeleted",
 ] as const;
 
 export type FlashKey = (typeof FLASH_KEYS)[number];

@@ -6,6 +6,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { SegmentedLinks } from "@/components/ui/SegmentedControl";
 import { getCategoryMap } from "@/features/categories/server";
+import { listLoans } from "@/features/loans/server";
 import { listPaymentsBetween } from "@/features/payments/server";
 import { getSettings } from "@/features/settings/server";
 import { isLocale } from "@/i18n/config";
@@ -16,7 +17,7 @@ import { calendarRepository } from "../server";
 import { DayAgenda } from "./DayAgenda";
 import { DaySummary } from "./DaySummary";
 import { DayTimeline } from "./DayTimeline";
-import { buildEntries, groupByDate } from "./entries";
+import { buildEntries, groupByDate, loanDate } from "./entries";
 import { MonthMatrix } from "./MonthMatrix";
 import { WeekStrip } from "./WeekStrip";
 
@@ -41,16 +42,22 @@ export async function CalendarScreen({ query }: { query: CalendarQuery }) {
   const from = range[0] ?? day;
   const to = range.at(-1) ?? day;
 
-  const [t, tPage, rawLocale, items, payments, categories] = await Promise.all([
+  const [t, tPage, rawLocale, items, payments, categories, loans] = await Promise.all([
     getTranslations("calendar"),
     getTranslations("pages.calendar"),
     getLocale(),
     calendarRepository.listBetween(from, to),
     listPaymentsBetween(from, to),
     getCategoryMap(),
+    listLoans(),
   ]);
   const locale = isLocale(rawLocale) ? rawLocale : "tr";
-  const byDate = groupByDate(buildEntries(items, payments));
+  // Alacaklar geri alınacak (kapalıysa geri alındığı) günde görünür (2026-11-07).
+  const visibleLoans = loans.filter((loan) => {
+    const date = loanDate(loan);
+    return date >= from && date <= to;
+  });
+  const byDate = groupByDate(buildEntries(items, payments, visibleLoans));
   const dayEntries = byDate.get(day) ?? [];
   const current: CalendarQuery = { view: query.view, day };
 

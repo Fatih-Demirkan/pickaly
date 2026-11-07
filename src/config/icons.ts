@@ -39,6 +39,7 @@ import {
   Fuel,
   Gift,
   HandCoins,
+  Handshake,
   Heart,
   Hash,
   Hospital,
@@ -149,6 +150,8 @@ export const appIcons = {
   weekStart: Calendar1,
   download: Download,
   logout: LogOut,
+  // Alacaklar (borç verilen para, ürün sahibi isteği 2026-11-07)
+  loan: Handshake,
 } satisfies Record<string, LucideIcon>;
 
 export type AppIconName = keyof typeof appIcons;

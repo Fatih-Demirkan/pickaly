@@ -383,6 +383,7 @@ Mobil ve tablette en az **44×44** (eski kural, korunur). Görsel olarak daha k�
 |---|---|---|
 | `task` (Görev) | `category.violet` | `#3E41EA` |
 | `payment` (Ödeme) | `category.pink` | `#BC1569` |
+| `loan` (Alacak) [Türetme 2026-11-07] | `category.teal` | `#0E7E6F` |
 | `neutral` (Genel, Randevu) | `category.slate` | `#616975` |
 | `success` (Ödendi, Tamamlandı) | `category.green` | `#0E8138` |
 | `warning` (Bekliyor, Yaklaşan) | `category.amber` | `#8C6710` |
@@ -503,7 +504,7 @@ Part A'da form tasarımı yok; DS'nin composer'ı (pill input) ve kart diliyle t
 - **Seçili gün**: `black` daire, beyaz `body-strong` (seçim = siyah).
 - **Bugün** (seçili değilse): `blue.100` daire, `blue.600` `body-strong`.
 - Başka aydaki günler: `text.secondary`. Disabled günler: `text.disabled`.
-- Etkinlik noktaları (6 px): görev `#3E41EA`, ödeme `#BC1569`, en fazla 3 nokta.
+- Etkinlik noktaları (6 px): görev `#3E41EA`, ödeme `#BC1569`, alacak `#0E7E6F` [2026-11-07], en fazla 3 nokta.
 - Hafta şeridi: aynı kurallar, `radius.full` pill hücre.
 - Ajanda kartları §5.2.
 
@@ -541,7 +542,7 @@ Part A hareket tanımı vermiyor; Part B kullanılmadığı için sade bir set:
 
 ---
 
-## 8. Kararlar [ürün sahibi onayı, 2026-11-04; K-8…K-17 2026-11-05; K-18…K-19 2026-11-06]
+## 8. Kararlar [ürün sahibi onayı, 2026-11-04; K-8…K-17 2026-11-05; K-18…K-19 2026-11-06; K-20 2026-11-07]
 
 | # | Konu | Karar |
 |---|---|---|
@@ -563,6 +564,7 @@ Part A hareket tanımı vermiyor; Part B kullanılmadığı için sade bir set:
 | K-16 | Görev formu — 2026-11-05 | Tür (Görev/Randevu), Öncelik, Açıklama kaldırıldı; arayüzde tek tür "Görev" (PRD FR-CAL-006 iptal) |
 | K-17 | Mobil yakınlaştırma (§5.7) — 2026-11-05 | Odakta ve çift dokunmada yakınlaştırma yok |
 | K-19 | Ana Sayfa zamana duyarlı karşılama alanı (§5.6) — 2026-11-06 | Ürün sahibinin Figma tasarımı (3 durum); İyi günler = Günaydın tasarımı; ad baş harfleri büyük |
+| K-20 | Alacaklar (borç verilen para) — 2026-11-07 | Profil → Alacaklarım (Hesaplarım kalıbı); takvimde teal "Alacak" türü; bakiye etkisi aktarım gibi (gelir/gider değil) |
 | K-18 | Logo (§5.13, §7) — 2026-11-06 | Ürün sahibinin logo kiti: favicon, PWA/iOS ikonları ve uygulama içi marka yerleri; düz mavi logo karosu kalktı |
 
 ---

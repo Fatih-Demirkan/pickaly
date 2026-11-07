@@ -364,7 +364,8 @@
     "kind": {
       "task": "Task",
       "appointment": "Appointment",
-      "payment": "Payment"
+      "payment": "Payment",
+      "loan": "Receivable"
     },
     "legend": "Legend",
     "matrix": {
@@ -378,7 +379,8 @@
       "tasks": "{count, plural, one {# Task} other {# Tasks}}",
       "appointments": "{count, plural, one {# Appointment} other {# Appointments}}",
       "payments": "{count, plural, one {# Payment} other {# Payments}}",
-      "none": "Nothing on this day."
+      "none": "Nothing on this day.",
+      "loans": "{count} Receivable"
     },
     "agenda": {
       "todo": "To Do",
@@ -905,6 +907,11 @@
       "title": "My Accounts",
       "hint": "Bank accounts and transfers between them",
       "count": "{count, plural, one {# account} other {# accounts}}"
+    },
+    "loans": {
+      "title": "Money lent",
+      "hint": "Money I lent and when I get it back",
+      "count": "{count, plural, one {# open} other {# open}}"
     }
   },
   "auth": {
@@ -1007,7 +1014,10 @@
     "accountUpdated": "Account updated.",
     "accountArchived": "Account archived.",
     "accountDeleted": "Account deleted.",
-    "transferCreated": "Transfer completed."
+    "transferCreated": "Transfer completed.",
+    "loanCreated": "Loan saved.",
+    "loanUpdated": "Loan updated.",
+    "loanDeleted": "Loan deleted."
   },
   "accounts": {
     "title": "My Accounts",
@@ -1084,6 +1094,92 @@
         "time": "Choose a valid time.",
         "note": "Note can be at most {max} characters.",
         "summary": "Couldn't transfer. Check the highlighted fields."
+      }
+    }
+  },
+  "loans": {
+    "title": "Money lent",
+    "back": "Back to Profile",
+    "add": "Lend money",
+    "total": "Open receivables",
+    "openCount": "{count, plural, one {# open loan} other {# open loans}}",
+    "overdueCount": "{count} overdue",
+    "openTitle": "Open",
+    "empty": "No open loans. When you lend money, save it with \"Lend money\"; the payback day appears in the calendar.",
+    "closedTitle": "Closed ({count})",
+    "dueOn": "Due back: {date}",
+    "overdueBy": "{count, plural, one {# day overdue} other {# days overdue}}",
+    "repaidOn": "Paid back: {date}",
+    "markRepaid": "Paid back",
+    "reopen": "Reopen",
+    "status": {
+      "open": "Open",
+      "due": "Due back",
+      "overdue": "Overdue",
+      "repaid": "Paid back"
+    },
+    "toast": {
+      "repaid": "Loan closed; the amount was added to your account.",
+      "reopened": "Loan reopened.",
+      "undo": "Undo",
+      "failed": "Couldn't complete that. Please try again."
+    },
+    "detail": {
+      "title": "Loan details",
+      "back": "Back to Money lent",
+      "close": "Close details",
+      "lentOn": "Lent on",
+      "dueOn": "Due back on",
+      "account": "Paid from",
+      "noAccount": "Not from an account",
+      "repaidOn": "Paid back on",
+      "repaidAccount": "Paid into",
+      "note": "Note",
+      "balanceHint": "The amount was taken from the account balance and goes back to the same account when repaid. It isn't counted as income or expense.",
+      "balanceHintNoAccount": "This loan was recorded without money leaving an account; when repaid, the amount is added to your default account. It isn't counted as income or expense.",
+      "edit": "Edit",
+      "delete": "Delete loan"
+    },
+    "deleteDialog": {
+      "title": "Delete this loan?",
+      "body": "The loan to {person} will be permanently deleted and its effect on your balance removed. This can't be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "form": {
+      "newTitle": "Lend Money",
+      "editTitle": "Edit Loan",
+      "cancel": "Cancel",
+      "save": "Save",
+      "required": "required",
+      "chip": "Lent",
+      "amount": "Amount",
+      "person": "To whom",
+      "personPlaceholder": "e.g. Alex Smith",
+      "purpose": "What for (optional)",
+      "purposePlaceholder": "e.g. Car repair",
+      "fromAccount": "Paid from my account",
+      "fromAccountHintOn": "The amount is taken from the selected account",
+      "fromAccountHintOff": "Record only; your balance doesn't change",
+      "account": "Account",
+      "dates": "Dates",
+      "lentOn": "Lent on",
+      "dueOn": "Due back on",
+      "chooseLentOn": "Choose the lending date",
+      "chooseDueOn": "Choose the payback date",
+      "note": "Note (optional)",
+      "notePlaceholder": "Any detail you want to add",
+      "errors": {
+        "summary": "Please check the highlighted fields.",
+        "notFound": "Loan not found. It may have been deleted.",
+        "person": "Enter who you lent to.",
+        "personLength": "Up to {max} characters.",
+        "purposeLength": "Up to {max} characters.",
+        "amount": "Enter a valid amount.",
+        "account": "Choose an account.",
+        "date": "Choose a valid date.",
+        "dueBeforeLent": "The payback date can't be before the lending date.",
+        "note": "The note can be up to {max} characters."
       }
     }
   }

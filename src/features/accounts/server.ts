@@ -111,7 +111,7 @@ export async function deleteAccount(id: string): Promise<void> {
 
 /**
  * Hesaba bağlı kayıt var mı? Varsa hesap silinmez, arşivlenir (geçmiş korunur).
- * İşlemler, tekrar kuralları, abonelikler, birikimler, birikim hareketleri ve hesaplar arası aktarımlar sayılır.
+ * İşlemler, tekrar kuralları, abonelikler, birikimler, birikim hareketleri, hesaplar arası aktarımlar ve alacaklar sayılır.
  */
 export async function isAccountInUse(id: string, transactionAccountIds: ReadonlySet<string>): Promise<boolean> {
   if (transactionAccountIds.has(id)) return true;
@@ -124,6 +124,7 @@ export async function isAccountInUse(id: string, transactionAccountIds: Readonly
     client.from("recurring_payments").select("id", { count: "exact", head: true }).eq("account_id", id),
     client.from("savings_accounts").select("id", { count: "exact", head: true }).eq("account_id", id),
     client.from("savings_movements").select("id", { count: "exact", head: true }).eq("bank_account_id", id),
+    client.from("loans").select("id", { count: "exact", head: true }).or(`account_id.eq.${id},repaid_account_id.eq.${id}`),
   ]);
   return checks.some((result) => (result.count ?? 0) > 0);
 }

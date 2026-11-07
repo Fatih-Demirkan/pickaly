@@ -10,7 +10,7 @@ import { AGENDA_KINDS, kindChip } from "./kindStyle";
 // canvas kutuda calendar-check, "Bugün:" caption + Görev / Randevu / Ödeme çipleri (DESIGN_SYSTEM_PICKALY §5.10).
 // [Varsayım] Seçili gün bugün değilse "Gün:"; sıfır olan türün çipi gösterilmez.
 
-const countKey = { task: "tasks", payment: "payments" } as const;
+const countKey = { task: "tasks", payment: "payments", loan: "loans" } as const;
 
 export async function DaySummary({ day, today, entries, locale }: { day: DateKey; today: DateKey; entries: AgendaEntry[]; locale: Locale }) {
   const t = await getTranslations("calendar.summary");

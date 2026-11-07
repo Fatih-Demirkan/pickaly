@@ -5,6 +5,9 @@ import { Chip } from "@/components/ui/Chip";
 import { Icon } from "@/components/ui/Icon";
 import type { AppIconName } from "@/config/icons";
 import { resolveCategoryIcon, type Category } from "@/features/categories";
+import { MarkRepaidButton } from "@/features/loans/components/RepaidButtons";
+import { isOverdue, type Loan } from "@/features/loans/domain/types";
+import { loanHref } from "@/features/loans/routes";
 import { paymentHref, type Payment, type RecurringPayment } from "@/features/payments";
 import { MarkPaidButton } from "@/features/payments/components/MarkPaidButton";
 import type { Locale } from "@/i18n/config";
@@ -105,6 +108,34 @@ export async function AgendaPaymentCard({ payment, series, locale, today }: Paym
       {!paid && (
         <span className="relative z-1 mt-8 flex justify-end">
           <MarkPaidButton paymentId={payment.id} variant="secondary" size="sm" />
+        </span>
+      )}
+    </CardShell>
+  );
+}
+
+type LoanCardProps = { loan: Loan; locale: Locale; today: string };
+
+// Alacak kartı (2026-11-07): ödeme kartı kalıbı. Solda "Tüm gün" + durum (Geri alınacak / Gecikti / Geri alındı),
+// "Alacak" çipi, sağda + tutar (geri alındığında hesaba eklenir), başlık "Kişi · Ne için", açıkken "Geri alındı" Secondary SM.
+export async function AgendaLoanCard({ loan, locale, today }: LoanCardProps) {
+  const [t, tLoans] = await Promise.all([getTranslations("calendar"), getTranslations("loans")]);
+  const done = loan.repaidOn !== null;
+  const overdue = isOverdue(loan, today);
+  const sub = done ? tLoans("status.repaid") : overdue ? tLoans("status.overdue") : tLoans("status.due");
+
+  return (
+    <CardShell done={done} time={t("card.allDay")} sub={sub} subTone={done ? "text-text-success" : overdue ? "text-text-danger" : "text-text-warning"}>
+      <span className="flex items-center justify-between gap-8">
+        <Chip variant={kindChip.loan}>{t("kind.loan")}</Chip>
+        <span className="text-body-strong text-text-success">{formatMoney(loan.amountMinor, locale, "always")}</span>
+      </span>
+      <Link href={loanHref(loan.id)} scroll={false} className={titleLinkClass(done)}>
+        {loan.purpose ? `${loan.person} · ${loan.purpose}` : loan.person}
+      </Link>
+      {!done && (
+        <span className="relative z-1 mt-8 flex justify-end">
+          <MarkRepaidButton loanId={loan.id} variant="secondary" size="sm" />
         </span>
       )}
     </CardShell>

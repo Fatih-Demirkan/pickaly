@@ -2,6 +2,8 @@ import "server-only";
 import { cache } from "react";
 import { transferEffect } from "@/features/accounts/domain/types";
 import { listAccounts, listTransfers } from "@/features/accounts/server";
+import { loanEffect } from "@/features/loans/domain/types";
+import { listLoans } from "@/features/loans/server";
 import { getSavingsTransfersByAccount } from "@/features/savings/server";
 import { localDateTimeToIso, toDateKey } from "@/lib/dates";
 import { isSupabaseConfigured } from "@/lib/env";
@@ -64,16 +66,19 @@ export const transactionRepository: TransactionRepository = {
  * (BR-PAY-001); birikime aktarım hesabı azaltır, çekme artırır (BR-SAV-001/002).
  */
 export async function getAccountBalances(): Promise<Map<string, bigint>> {
-  const [accounts, transactions, savingsTransfers, accountTransfers] = await Promise.all([
+  const [accounts, transactions, savingsTransfers, accountTransfers, loans] = await Promise.all([
     listAccounts({ includeArchived: true }),
     transactionRepository.listAll(),
     getSavingsTransfersByAccount(),
     listTransfers(),
+    listLoans(),
   ]);
   return new Map(
     accounts.map((account) => [
       account.id,
-      accountBalance(account.openingBalanceMinor, account.id, transactions) + (savingsTransfers.get(account.id) ?? BigInt(0)) + transferEffect(account.id, accountTransfers),
+      accountBalance(account.openingBalanceMinor, account.id, transactions) + (savingsTransfers.get(account.id) ?? BigInt(0)) + transferEffect(account.id, accountTransfers) +
+        // Alacaklar: borç verilen tutar düşer, geri alınan tutar eklenir (gelir / gider sayılmaz).
+        loanEffect(account.id, loans),
     ]),
   );
 }

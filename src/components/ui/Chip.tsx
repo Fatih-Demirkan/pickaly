@@ -4,11 +4,13 @@ import { cn } from "@/lib/cn";
 // DESIGN_SYSTEM_PICKALY.md §5.4 Durum chip'i (salt okunur). Kayıt türü ve durum etiketi.
 // Zemin/metin çiftleri kategori tonlarından; hepsi ≥4,5:1. Ölçü: 24 px, yatay 8, iç boşluk 4, tam yuvarlak, caption-strong.
 
-export type ChipVariant = "task" | "payment" | "neutral" | "success" | "warning" | "danger";
+export type ChipVariant = "task" | "payment" | "loan" | "neutral" | "success" | "warning" | "danger";
 
 const variantClass: Record<ChipVariant, string> = {
   task: "bg-category-violet text-category-fg-violet",
   payment: "bg-category-pink text-category-fg-pink",
+  // Alacak (borç verilen para, 2026-11-07) [Türetme: kategori teal çifti, 4,58:1]
+  loan: "bg-category-teal text-category-fg-teal",
   neutral: "bg-category-slate text-category-fg-slate",
   success: "bg-status-success-subtle text-text-on-success",
   warning: "bg-status-warning-subtle text-text-on-warning",

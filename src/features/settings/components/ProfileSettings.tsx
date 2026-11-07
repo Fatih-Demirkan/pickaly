@@ -5,6 +5,8 @@ import { Chip } from "@/components/ui/Chip";
 import { getSessionUser } from "@/features/auth/server";
 import { listCategories } from "@/features/categories/server";
 import { ACCOUNTS_PATH } from "@/features/accounts/routes";
+import { LOANS_PATH } from "@/features/loans/routes";
+import { listLoans } from "@/features/loans/server";
 import { listAccounts } from "@/features/accounts/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import packageJson from "../../../../package.json";
@@ -43,7 +45,7 @@ function initials(name: string) {
 }
 
 export async function ProfileSettings() {
-  const [t, tPage, tHeader, mockProfile, sessionUser, settings, categories, accounts] = await Promise.all([
+  const [t, tPage, tHeader, mockProfile, sessionUser, settings, categories, accounts, loans] = await Promise.all([
     getTranslations("settings"),
     getTranslations("pages.profile"),
     getTranslations("header"),
@@ -52,10 +54,12 @@ export async function ProfileSettings() {
     getSettings(),
     listCategories(),
     listAccounts(),
+    listLoans(),
   ]);
   const profile = sessionUser ? { name: sessionUser.name, email: sessionUser.email } : mockProfile;
   const authEnabled = isSupabaseConfigured();
   const activeCategories = categories.filter((category) => !category.archived).length;
+  const openLoans = loans.filter((loan) => loan.repaidOn === null).length;
 
   return (
     <PageContainer className="flex flex-col gap-(--layout-section-gap)">
@@ -92,6 +96,15 @@ export async function ProfileSettings() {
                   title={t("accounts.title")}
                   hint={t("accounts.hint")}
                   trailing={<Chip>{t("accounts.count", { count: accounts.length })}</Chip>}
+                />
+              </li>
+              <li>
+                <SettingsLinkRow
+                  href={LOANS_PATH}
+                  icon="loan"
+                  title={t("loans.title")}
+                  hint={t("loans.hint")}
+                  trailing={<Chip>{t("loans.count", { count: openLoans })}</Chip>}
                 />
               </li>
               <li>

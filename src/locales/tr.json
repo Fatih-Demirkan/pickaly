@@ -364,7 +364,8 @@
     "kind": {
       "task": "Görev",
       "appointment": "Randevu",
-      "payment": "Ödeme"
+      "payment": "Ödeme",
+      "loan": "Alacak"
     },
     "legend": "Gösterge",
     "matrix": {
@@ -378,7 +379,8 @@
       "tasks": "{count} Görev",
       "appointments": "{count} Randevu",
       "payments": "{count} Ödeme",
-      "none": "Bu gün için kayıt yok."
+      "none": "Bu gün için kayıt yok.",
+      "loans": "{count} Alacak"
     },
     "agenda": {
       "todo": "Yapılacaklar",
@@ -905,6 +907,11 @@
       "title": "Hesaplarım",
       "hint": "Banka hesapları ve hesaplar arası aktarım",
       "count": "{count, plural, one {# hesap} other {# hesap}}"
+    },
+    "loans": {
+      "title": "Alacaklarım",
+      "hint": "Borç verdiğim para ve geri alınacak tarihler",
+      "count": "{count, plural, one {# açık} other {# açık}}"
     }
   },
   "auth": {
@@ -1007,7 +1014,10 @@
     "accountUpdated": "Hesap güncellendi.",
     "accountArchived": "Hesap arşivlendi.",
     "accountDeleted": "Hesap silindi.",
-    "transferCreated": "Para aktarımı tamamlandı."
+    "transferCreated": "Para aktarımı tamamlandı.",
+    "loanCreated": "Alacak kaydedildi.",
+    "loanUpdated": "Alacak güncellendi.",
+    "loanDeleted": "Alacak silindi."
   },
   "accounts": {
     "title": "Hesaplarım",
@@ -1084,6 +1094,92 @@
         "time": "Geçerli bir saat seçin.",
         "note": "Not en fazla {max} karakter olabilir.",
         "summary": "Aktarılamadı. İşaretli alanları kontrol edin."
+      }
+    }
+  },
+  "loans": {
+    "title": "Alacaklarım",
+    "back": "Profil'e dön",
+    "add": "Borç ver",
+    "total": "Açık alacaklar",
+    "openCount": "{count, plural, one {# açık alacak} other {# açık alacak}}",
+    "overdueCount": "{count} gecikmiş",
+    "openTitle": "Açık",
+    "empty": "Açık alacağın yok. Birine borç verdiğinde \"Borç ver\" ile kaydet; geri alacağın gün takvimde görünür.",
+    "closedTitle": "Kapananlar ({count})",
+    "dueOn": "Geri alınacak: {date}",
+    "overdueBy": "{count, plural, one {# gün gecikti} other {# gün gecikti}}",
+    "repaidOn": "Geri alındı: {date}",
+    "markRepaid": "Geri alındı",
+    "reopen": "Yeniden aç",
+    "status": {
+      "open": "Açık",
+      "due": "Geri alınacak",
+      "overdue": "Gecikti",
+      "repaid": "Geri alındı"
+    },
+    "toast": {
+      "repaid": "Alacak kapatıldı, tutar hesabına eklendi.",
+      "reopened": "Alacak yeniden açıldı.",
+      "undo": "Geri al",
+      "failed": "İşlem tamamlanamadı. Lütfen tekrar deneyin."
+    },
+    "detail": {
+      "title": "Alacak Detayı",
+      "back": "Alacaklarım'a dön",
+      "close": "Detayı kapat",
+      "lentOn": "Verildiği tarih",
+      "dueOn": "Geri alınacak tarih",
+      "account": "Paranın çıktığı hesap",
+      "noAccount": "Hesaptan çıkmadı",
+      "repaidOn": "Geri alındığı tarih",
+      "repaidAccount": "Paranın girdiği hesap",
+      "note": "Not",
+      "balanceHint": "Borç verilen tutar hesabın bakiyesinden düştü; geri alındığında aynı hesaba eklenir. Gelir veya gider sayılmaz.",
+      "balanceHintNoAccount": "Bu alacak hesabından para çıkmadan kaydedildi; geri alındığında tutar varsayılan hesabına eklenir. Gelir veya gider sayılmaz.",
+      "edit": "Düzenle",
+      "delete": "Alacağı sil"
+    },
+    "deleteDialog": {
+      "title": "Alacak silinsin mi?",
+      "body": "{person} kişisine ait alacak kalıcı olarak silinecek ve hesap bakiyesine etkisi kalkacak. Bu işlem geri alınamaz.",
+      "cancel": "Vazgeç",
+      "confirm": "Sil"
+    },
+    "form": {
+      "newTitle": "Borç Ver",
+      "editTitle": "Alacağı Düzenle",
+      "cancel": "İptal",
+      "save": "Kaydet",
+      "required": "zorunlu",
+      "chip": "Borç Verildi",
+      "amount": "Tutar",
+      "person": "Kime",
+      "personPlaceholder": "Örn. Ahmet Kaya",
+      "purpose": "Ne için (İsteğe Bağlı)",
+      "purposePlaceholder": "Örn. Araba tamiri",
+      "fromAccount": "Hesabımdan çıktı",
+      "fromAccountHintOn": "Tutar seçilen hesaptan düşer",
+      "fromAccountHintOff": "Yalnızca alacak kaydı; bakiye değişmez",
+      "account": "Hesap",
+      "dates": "Tarihler",
+      "lentOn": "Verildiği tarih",
+      "dueOn": "Geri alınacak tarih",
+      "chooseLentOn": "Verildiği tarihi seç",
+      "chooseDueOn": "Geri alınacak tarihi seç",
+      "note": "Not (İsteğe Bağlı)",
+      "notePlaceholder": "Eklemek istediğin ayrıntı",
+      "errors": {
+        "summary": "Lütfen işaretli alanları kontrol edin.",
+        "notFound": "Alacak bulunamadı. Silinmiş olabilir.",
+        "person": "Kime borç verdiğini yaz.",
+        "personLength": "En fazla {max} karakter.",
+        "purposeLength": "En fazla {max} karakter.",
+        "amount": "Geçerli bir tutar gir.",
+        "account": "Bir hesap seç.",
+        "date": "Geçerli bir tarih seç.",
+        "dueBeforeLent": "Geri alınacak tarih, verildiği tarihten önce olamaz.",
+        "note": "Not en fazla {max} karakter olabilir."
       }
     }
   }
