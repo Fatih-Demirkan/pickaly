@@ -73,7 +73,7 @@ function accountPatch(patch: Partial<Omit<SavingsAccount, "id">>) {
 
 type MovementRow = {
   id: string;
-  account_id: string;
+  account_id: string | null;
   direction: SavingsMovement["direction"];
   amount: number;
   transfer_minor: number | null;
@@ -115,7 +115,11 @@ export const supabaseSavingsRepository: SavingsRepository = {
     return row ? toAccount(row as AccountRow) : null;
   },
   async removeAccount(id) {
-    unwrap(await (await db()).from("savings_accounts").delete().eq("id", id));
+    const client = await db();
+    // Banka hesabına yansımamış hareketler (açılış bakiyesi, adet / gram) hesapla birlikte silinir. Banka etkisi olanlar
+    // kalır; veritabanı hesap silinince bağlarını boşaltır (account_id = null), banka bakiyeleri değişmez.
+    unwrap(await client.from("savings_movements").delete().eq("account_id", id).is("bank_account_id", null));
+    unwrap(await client.from("savings_accounts").delete().eq("id", id));
   },
   async listMovements(accountId) {
     let query = (await db()).from("savings_movements").select(MOVEMENT_COLUMNS);

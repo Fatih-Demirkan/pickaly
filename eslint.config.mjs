@@ -59,7 +59,8 @@ const eslintConfig = defineConfig([
     rules: { "no-restricted-imports": "off" },
   },
 
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "src/styles/tokens.ts"]),
+  // pickaly-logo/: ürün sahibinin logo kiti (kendi CommonJS betikleriyle); uygulama kodu değil, lint dışında.
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "src/styles/tokens.ts", "pickaly-logo/**"]),
 ]);
 
 export default eslintConfig;

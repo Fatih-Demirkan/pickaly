@@ -13,6 +13,9 @@ export const db = cache(createSupabaseServerClient);
 /** Benzersizlik kuralı ihlali (Postgres 23505): aynı kayıt zaten var (ör. tekrar üretiminin iki kez çalışması). */
 export class DuplicateRecordError extends Error {}
 
+/** Yabancı anahtar ihlali (Postgres 23503): silinmek istenen kayda başka bir kayıt hâlâ bağlı. */
+export class ReferencedRecordError extends Error {}
+
 /**
  * Supabase yanıtını açar; hata varsa fırlatır. Veritabanı tipleri henüz üretilmediği için (supabase gen types)
  * veri `unknown` döner; her repository kendi satır tipine dönüştürür.
@@ -20,6 +23,7 @@ export class DuplicateRecordError extends Error {}
 export function unwrap(result: { data: unknown; error: PostgrestError | null }): unknown {
   if (result.error) {
     if (result.error.code === "23505") throw new DuplicateRecordError(result.error.message);
+    if (result.error.code === "23503") throw new ReferencedRecordError(result.error.message);
     throw new Error(`[Supabase] ${result.error.message}`);
   }
   return result.data;

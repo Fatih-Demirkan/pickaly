@@ -115,6 +115,11 @@ export const mockSavingsRepository: SavingsRepository = {
   async removeAccount(id) {
     const current = data();
     current.accounts = current.accounts.filter((account) => account.id !== id);
+    // Supabase ile aynı davranış: banka etkisi olmayan hareketler silinir, banka etkisi olanlar bağı kalkarak kalır.
+    current.movements = current.movements.flatMap((movement) => {
+      if (movement.accountId !== id) return [movement];
+      return movement.bankAccountId === null ? [] : [{ ...movement, accountId: null }];
+    });
   },
   async listMovements(accountId) {
     return data().movements.filter((movement) => !accountId || movement.accountId === accountId);

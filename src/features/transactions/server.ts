@@ -64,15 +64,28 @@ export const transactionRepository: TransactionRepository = {
  * Hesap kimliği → güncel bakiye (açılış + gerçekleşmiş işlemler + hesaplar arası aktarımlar + birikim aktarımları).
  * Arşivlenmiş hesaplar da dahildir (toplam bakiye arşivlemeyle değişmez). Bekleyen ödemeler etkilemez
  * (BR-PAY-001); birikime aktarım hesabı azaltır, çekme artırır (BR-SAV-001/002).
+ * Yalnızca gerçekleşmiş hareketler sayılır (BR-BAL-002, ürün sahibi onayı 2026-11-07): tarihi bugün veya geçmiş olan
+ * işlem, aktarım, birikim hareketi ve alacak bakiyeyi etkiler; gelecek tarihliler tarihi gelene kadar etkilemez.
+ * Sınır yerel gündür, saat değil: bugünkü 18:00 kaydı sabah da bakiyede görünür.
  */
-export async function getAccountBalances(): Promise<Map<string, bigint>> {
-  const [accounts, transactions, savingsTransfers, accountTransfers, loans] = await Promise.all([
+export async function getAccountBalances(now: Date = new Date()): Promise<Map<string, bigint>> {
+  const today = toDateKey(now);
+  const realized = (occurredAt: string) => toDateKey(new Date(occurredAt)) <= today;
+  const [accounts, allTransactions, savingsTransfers, allAccountTransfers, allLoans] = await Promise.all([
     listAccounts({ includeArchived: true }),
     transactionRepository.listAll(),
-    getSavingsTransfersByAccount(),
+    getSavingsTransfersByAccount(now),
     listTransfers(),
     listLoans(),
   ]);
+  const transactions = allTransactions.filter((transaction) => realized(transaction.occurredAt));
+  const accountTransfers = allAccountTransfers.filter((transfer) => realized(transfer.occurredAt));
+  // Alacak: verildiği gün hesaptan düşer, geri alındığı gün hesaba girer (tarihler yerel gün).
+  const loans = allLoans.map((loan) => ({
+    ...loan,
+    accountId: loan.lentOn <= today ? loan.accountId : null,
+    repaidOn: loan.repaidOn !== null && loan.repaidOn <= today ? loan.repaidOn : null,
+  }));
   return new Map(
     accounts.map((account) => [
       account.id,

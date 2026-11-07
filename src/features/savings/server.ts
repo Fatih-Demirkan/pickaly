@@ -86,7 +86,7 @@ export function summarizeSavings(accounts: readonly SavingsAccountView[], moveme
   const tryIds = new Set(accounts.filter((account) => account.unit === "TRY").map((account) => account.id));
   const totalMinor = accounts.filter((account) => tryIds.has(account.id)).reduce((sum, account) => sum + account.balance, BigInt(0));
   const monthAddedMinor = movements
-    .filter((movement) => tryIds.has(movement.accountId) && movement.source !== "closing" && toMonthKey(new Date(movement.occurredAt)) === month)
+    .filter((movement) => movement.accountId !== null && tryIds.has(movement.accountId) && movement.source !== "closing" && toMonthKey(new Date(movement.occurredAt)) === month)
     .reduce((sum, movement) => sum + signedMovement(movement), BigInt(0));
   const before = totalMinor - monthAddedMinor;
   // [Varsayım] Artış yüzdesi ay başındaki toplama göre (Pages: "+8.500,00 ₺ bu ay eklendi (%6,7 artış)").
@@ -104,11 +104,13 @@ export async function getSavingsOverview(today: DateKey) {
  * Banka hesabı kimliği → birikim aktarımlarının net etkisi (kuruş). Birikime ekleme hesabı azaltır, çekme artırır
  * (BR-SAV-001/002, BR-SAV-003). Hesap bakiyeleri bu etkiyle hesaplanır.
  */
-export async function getSavingsTransfersByAccount(): Promise<Map<string, bigint>> {
+export async function getSavingsTransfersByAccount(asOf?: Date): Promise<Map<string, bigint>> {
   await ensureGenerated();
   const result = new Map<string, bigint>();
   for (const movement of await savingsRepository.listMovements()) {
     if (!movement.bankAccountId || movement.transferMinor === null) continue;
+    // asOf verilirse yalnızca o güne kadar (yerel gün, dahil) gerçekleşmiş hareketler (BR-BAL-002).
+    if (asOf && toDateKey(new Date(movement.occurredAt)) > toDateKey(asOf)) continue;
     const delta = movement.direction === "in" ? -movement.transferMinor : movement.transferMinor;
     result.set(movement.bankAccountId, (result.get(movement.bankAccountId) ?? BigInt(0)) + delta);
   }

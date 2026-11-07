@@ -57,7 +57,11 @@ export type SavingsMovementSource = "initial" | "manual" | "recurring" | "closin
 /** Geçmiş Hareketler satırı (PRD FR-SAV-008). */
 export type SavingsMovement = {
   id: string;
-  accountId: string;
+  /**
+   * Birikim hesabı. null: hesap kapatılıp silindi; banka hesabına yansımış hareket, banka bakiyesi bozulmasın diye
+   * kayıtta kalır (migration 20261107180000).
+   */
+  accountId: string | null;
   direction: "in" | "out";
   /** Birim cinsinden miktar, yüzde birlik. */
   amount: bigint;

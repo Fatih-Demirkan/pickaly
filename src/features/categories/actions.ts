@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import type { CategoryIconName } from "@/config/icons";
 import { intlLocale, isLocale } from "@/i18n/config";
 import { parseMoneyInput } from "@/lib/money";
+import { ReferencedRecordError } from "@/lib/supabase/data";
 import type { Category } from "./domain/types";
 import { categoriesHref, tabOfType } from "./routes";
 import { categoryFormSchema, type CategoryFormErrorKey, type CategoryFormField, type CategoryFormState } from "./schemas";
@@ -95,7 +96,14 @@ export async function deleteCategoryAction(id: string): Promise<CategoryActionRe
   if (await isLastActive(category)) return { ok: false, reason: "lastActive" };
   const usage = (await getCategoryUsage()).get(id);
   if (usage && usage.records + usage.recurring > 0) return { ok: false, reason: "inUse" };
-  await removeCategory(id);
+  try {
+    await removeCategory(id);
+  } catch (error) {
+    // Kullanım sayımında görünmeyen bir kayıt (ör. silinmiş bir aboneliğin satırı) kategoriye hâlâ bağlıysa veritabanı
+    // silmeyi reddeder; aksiyon çökmez, kullanıcı "silinemedi" bildirimini görür.
+    if (error instanceof ReferencedRecordError) return { ok: false, reason: "inUse" };
+    throw error;
+  }
   revalidateCategories();
   return { ok: true };
 }

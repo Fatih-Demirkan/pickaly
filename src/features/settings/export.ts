@@ -46,7 +46,8 @@ function csvField(value: string): string {
 }
 
 export async function buildTransactionsCsv(locale: Locale, headers: CsvHeaders, typeLabels: { income: string; expense: string }): Promise<string> {
-  const [transactions, categories, accounts] = await Promise.all([transactionRepository.listAll(), listCategories(), listAccounts()]);
+  // Arşivlenmiş hesaplar da dahil: geçmiş işlemlerin hesap adı CSV'de boş kalmasın.
+  const [transactions, categories, accounts] = await Promise.all([transactionRepository.listAll(), listCategories(), listAccounts({ includeArchived: true })]);
   const categoryName = new Map(categories.map((category) => [category.id, category.name]));
   const accountName = new Map(accounts.map((account) => [account.id, account.name]));
   const rows = [...transactions]
