@@ -5,15 +5,17 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Icon } from "@/components/ui/Icon";
 import { getAccountMap } from "@/features/accounts/server";
 import { isLocale } from "@/i18n/config";
 import { toDateKey } from "@/lib/dates";
 import { formatMoney, splitMoneyDecimals } from "@/lib/money";
 import { progressPercent } from "../domain/types";
 import { formatPercent, formatSavingsAmount, formatSavingsShort } from "../format";
-import { savingsHref } from "../routes";
+import { movementHref, savingsHref } from "../routes";
 import { getSavingsOverview } from "../server";
 import { kindChip, SavingsIcon } from "./savingsStyle";
+import { QuickContributeButton } from "./QuickContributeButton";
 import { ProgressMeter } from "@/components/ui/ProgressMeter";
 
 // Pages → Birikimler - Ana Sayfa (129:5453) ve - Boş (136:8952), PRD FR-SAV-002/003/004, RESPONSIVE §3.4.1–3.4.2.
@@ -128,7 +130,27 @@ export async function SavingsOverview() {
                           )}
                         </div>
                       </div>
-                      {percent !== null && percent >= 100 ? <Chip variant="success">{t("list.completed")}</Chip> : <Chip variant={kindChip[account.kind]}>{t(`kindShort.${account.kind}`)}</Chip>}
+                      <div className="flex shrink-0 items-center gap-8">
+                        {percent !== null && percent >= 100 ? <Chip variant="success">{t("list.completed")}</Chip> : <Chip variant={kindChip[account.kind]}>{t(`kindShort.${account.kind}`)}</Chip>}
+                        {/* Hızlı ekleme (2026-11-07): düzenli katkı varsa o miktarı doğrudan ekler, yoksa Para ekle formunu açar. */}
+                        {account.contribution ? (
+                          <QuickContributeButton
+                            savingsId={account.id}
+                            name={account.name}
+                            amountLabel={formatSavingsAmount(account.contribution.amount, account.unit, locale)}
+                          />
+                        ) : (
+                          <Link
+                            href={movementHref(account.id)}
+                            scroll={false}
+                            aria-label={t("quickAdd.open", { name: account.name })}
+                            title={t("quickAdd.open", { name: account.name })}
+                            className="touch-target relative z-1 inline-flex size-36 shrink-0 items-center justify-center rounded-full border border-border-subtle bg-surface-card text-text-primary transition-colors hover:border-border-strong hover:bg-action-tertiary-hover"
+                          >
+                            <Icon icon="add" />
+                          </Link>
+                        )}
+                      </div>
                     </div>
                     <hr className="border-border-subtle" />
                     <div className="flex flex-col gap-8">

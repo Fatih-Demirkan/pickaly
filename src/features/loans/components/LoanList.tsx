@@ -79,7 +79,13 @@ export async function LoanList() {
           ) : (
             <ul className="divide-y divide-border-subtle overflow-hidden rounded-md bg-surface-card shadow-elev-1">
               {open.map((loan) => (
-                <LoanRow key={loan.id} loan={loan} today={today} meta={dueText(loan, today, locale, t)} amount={formatMoney(loan.amountMinor, locale)} />
+                <LoanRow
+                  key={loan.id}
+                  loan={loan}
+                  today={today}
+                  meta={[dueText(loan, today, locale, t), loan.items.length > 0 ? t("itemCount", { count: loan.items.length }) : null].filter(Boolean).join(" · ")}
+                  amount={formatMoney(loan.amountMinor, locale)}
+                />
               ))}
             </ul>
           )}

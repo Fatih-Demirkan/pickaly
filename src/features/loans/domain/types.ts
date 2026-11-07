@@ -5,6 +5,9 @@ import type { DateKey } from "@/lib/dates";
 //   accountId doluysa verildiği gün o hesaptan düşer (null: hesaptan para çıkmadı, yalnızca alacak kaydı);
 //   repaidOn doluysa (geri alındı / kapatıldı) tutar repaidAccountId hesabına eklenir. Erken geri alınabilir.
 
+/** Alacak kalemi: üst başlık altındaki tek alacak (örn. "Doğalgaz", 1.200 ₺). */
+export type LoanItem = { id: string; label: string; amountMinor: bigint };
+
 export type Loan = {
   id: string;
   /** Borç verilen kişi. */
@@ -22,11 +25,15 @@ export type Loan = {
   repaidOn: DateKey | null;
   /** Geri alınan paranın girdiği hesap. */
   repaidAccountId: string | null;
+  /** Kalemler (ürün sahibi isteği 2026-11-07). Boşsa tek tutarlı alacak; doluysa amountMinor kalemlerin toplamıdır. */
+  items: LoanItem[];
 };
 
 export const LOAN_PERSON_MAX_LENGTH = 80;
 export const LOAN_PURPOSE_MAX_LENGTH = 80;
 export const LOAN_NOTE_MAX_LENGTH = 200;
+export const LOAN_ITEMS_MAX = 20;
+export const LOAN_ITEM_LABEL_MAX_LENGTH = 60;
 
 export function isOpen(loan: Pick<Loan, "repaidOn">): boolean {
   return loan.repaidOn === null;

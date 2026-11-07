@@ -231,3 +231,28 @@ export async function closeSavingsAccountAction(id: string, formData: FormData):
   if (detail) await setFlash("savingsClosed");
   redirect("/birikimler");
 }
+
+/**
+ * Kayıtlı Birikimler kartındaki "+" (ürün sahibi isteği 2026-11-07): düzenli katkıda belirlenen sabit miktar (ör. 1 gram
+ * altın, 500 ₺) detaya girmeden bugün eklenir. TRY'de bağlı hesaptan düşer (Para ekle ile aynı kural). Düzenli katkısı
+ * olmayan birikimde kart bu aksiyonu değil Para ekle formunu açar.
+ */
+export async function quickContributeAction(id: string): Promise<{ ok: boolean }> {
+  const detail = await getSavingsDetail(id);
+  const contribution = detail?.account.contribution;
+  if (!detail || !contribution || contribution.amount <= ZERO) return { ok: false };
+  const { account } = detail;
+  const bankAccountId = account.unit === "TRY" && account.accountId && (await getAccountMap()).has(account.accountId) ? account.accountId : null;
+  const now = new Date();
+  await savingsRepository.createMovement({
+    accountId: account.id,
+    direction: "in",
+    amount: contribution.amount,
+    transferMinor: bankAccountId ? contribution.amount : null,
+    bankAccountId,
+    occurredAt: now.toISOString(),
+    source: "manual",
+  });
+  revalidateSavings();
+  return { ok: true };
+}

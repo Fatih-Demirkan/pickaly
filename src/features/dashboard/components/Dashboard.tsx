@@ -3,6 +3,7 @@ import { connection } from "next/server";
 import { listAccounts } from "@/features/accounts/server";
 import { calendarRepository } from "@/features/calendar/server";
 import { UpcomingPayments } from "@/features/payments/components/UpcomingPayments";
+import { UpcomingLoans } from "@/features/loans/components/UpcomingLoans";
 import { listPaymentsDueOn } from "@/features/payments/server";
 import { getFeaturedGoal, listSavingsAccounts } from "@/features/savings/server";
 import { summarize } from "@/features/transactions";
@@ -89,8 +90,10 @@ export async function Dashboard() {
       </div>
       {/* Pages: mobilde Bugünün Akışı ile Yaklaşan Ödemeler arasında ayırıcı çizgi. */}
       <hr className="border-border-subtle tablet:hidden" />
-      <div className="laptop:col-span-5 laptop:col-start-8 laptop:row-span-3 laptop:row-start-2 laptop:self-start">
+      <div className="flex flex-col gap-(--layout-section-gap) laptop:col-span-5 laptop:col-start-8 laptop:row-span-3 laptop:row-start-2 laptop:self-start">
         <UpcomingPayments today={today} />
+        {/* Yaklaşan Alacaklar (2026-11-07): 7 gün içinde geri alınacak veya gecikmiş açık alacak varsa görünür. */}
+        <UpcomingLoans today={today} />
       </div>
       {goal && (
         <div className="tablet:col-span-2 laptop:col-span-4 laptop:col-start-9 laptop:row-start-1">

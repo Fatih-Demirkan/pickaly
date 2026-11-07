@@ -239,12 +239,13 @@ export async function SavingsDetail({ id }: { id: string }) {
         </div>
 
         <div className="laptop:hidden">
+          {/* Ana aksiyon "Para ekle / Çek" (Primary), "Hesabı düzenle" Secondary (ürün sahibi kararı 2026-11-07). */}
           <ActionFooter>
-            <ButtonLink href={movementHref(account.id)} scroll={false} variant="tertiary" leadingIcon="transfer">
-              {t("detail.move")}
-            </ButtonLink>
-            <ButtonLink href={editHref} scroll={false} leadingIcon="edit">
+            <ButtonLink href={editHref} scroll={false} variant="secondary" leadingIcon="edit">
               {t("detail.edit")}
+            </ButtonLink>
+            <ButtonLink href={movementHref(account.id)} scroll={false} leadingIcon="transfer">
+              {t("detail.move")}
             </ButtonLink>
           </ActionFooter>
         </div>

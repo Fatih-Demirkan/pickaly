@@ -40,11 +40,13 @@ export async function LoanFormDrawer(props: LoanFormDrawerProps) {
       lentOn: loan.lentOn,
       dueOn: loan.dueOn,
       note: loan.note ?? "",
+      multi: loan.items.length > 0,
+      items: loan.items.map((item) => ({ id: item.id, label: item.label, amount: formatMoneyInput(item.amountMinor, locale) })),
     };
   } else {
     const today = toDateKey(new Date());
     cancelHref = LOANS_PATH;
-    initialValues = { person: "", purpose: "", amount: "", fromAccount: true, accountId: accounts[0]?.id ?? "", lentOn: today, dueOn: addDays(today, DEFAULT_TERM_DAYS), note: "" };
+    initialValues = { person: "", purpose: "", amount: "", fromAccount: true, accountId: accounts[0]?.id ?? "", lentOn: today, dueOn: addDays(today, DEFAULT_TERM_DAYS), note: "", multi: false, items: [] };
   }
 
   const title = props.mode === "create" ? t("newTitle") : t("editTitle");

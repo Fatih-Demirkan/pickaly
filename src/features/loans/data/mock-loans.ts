@@ -17,8 +17,24 @@ function seed(): Store {
   const day = (offset: number) => addDays(today, offset);
   return {
     loans: [
-      { id: "loan-car", person: "Ahmet Kaya", purpose: "Araba tamiri", amountMinor: majorToMinor(3000), accountId: "acc-main", lentOn: day(-10), dueOn: day(4), note: null, repaidOn: null, repaidAccountId: null },
-      { id: "loan-rent", person: "Elif", purpose: "Kira desteği", amountMinor: majorToMinor(1500), accountId: "acc-main", lentOn: day(-30), dueOn: day(-2), note: null, repaidOn: null, repaidAccountId: null },
+      { id: "loan-car", person: "Ahmet Kaya", purpose: "Araba tamiri", amountMinor: majorToMinor(3000), accountId: "acc-main", lentOn: day(-10), dueOn: day(4), note: null, repaidOn: null, repaidAccountId: null, items: [] },
+      { id: "loan-rent", person: "Elif", purpose: "Kira desteği", amountMinor: majorToMinor(1500), accountId: "acc-main", lentOn: day(-30), dueOn: day(-2), note: null, repaidOn: null, repaidAccountId: null, items: [] },
+      {
+        id: "loan-bills",
+        person: "Babam",
+        purpose: "Faturalar",
+        amountMinor: majorToMinor(1794),
+        accountId: "acc-main",
+        lentOn: day(-3),
+        dueOn: day(2),
+        note: null,
+        repaidOn: null,
+        repaidAccountId: null,
+        items: [
+          { id: "bill-gas", label: "Doğalgaz", amountMinor: majorToMinor(1200) },
+          { id: "bill-power", label: "Elektrik", amountMinor: majorToMinor(594) },
+        ],
+      },
     ],
   };
 }

@@ -19,9 +19,10 @@ type LoanRow = {
   note: string | null;
   repaid_on: string | null;
   repaid_account_id: string | null;
+  items: { id: string; label: string; amountMinor: string }[] | null;
 };
 
-const COLUMNS = "id, person, purpose, amount_minor, account_id, lent_on, due_on, note, repaid_on, repaid_account_id";
+const COLUMNS = "id, person, purpose, amount_minor, account_id, lent_on, due_on, note, repaid_on, repaid_account_id, items";
 
 function toLoan(row: LoanRow): Loan {
   return {
@@ -35,6 +36,7 @@ function toLoan(row: LoanRow): Loan {
     note: row.note,
     repaidOn: row.repaid_on,
     repaidAccountId: row.repaid_account_id,
+    items: (row.items ?? []).map((item) => ({ id: item.id, label: item.label, amountMinor: toBigInt(item.amountMinor) })),
   };
 }
 
@@ -49,6 +51,7 @@ function toRow(input: LoanInput) {
     lent_on: input.lentOn,
     due_on: input.dueOn,
     note: input.note,
+    items: input.items.map((item) => ({ id: item.id, label: item.label, amountMinor: fromBigInt(item.amountMinor) })),
   };
 }
 

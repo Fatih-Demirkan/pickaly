@@ -8,6 +8,7 @@ import { isLocale } from "@/i18n/config";
 import { toDateKey } from "@/lib/dates";
 import { setFlash } from "@/lib/flash";
 import { parseMoneyInput } from "@/lib/money";
+import { LOAN_ITEMS_MAX, LOAN_ITEM_LABEL_MAX_LENGTH, type LoanItem } from "./domain/types";
 import { LOANS_PATH, loanHref } from "./routes";
 import { loanFormSchema, type LoanFormErrorKey, type LoanFormField, type LoanFormState } from "./schemas";
 import { createLoan, deleteLoan, getLoan, setLoanRepaid, updateLoan } from "./server";
@@ -31,6 +32,7 @@ export async function saveLoan(id: string | null, _previous: LoanFormState, form
     lentOn: formData.get("lentOn") ?? "",
     dueOn: formData.get("dueOn") ?? "",
     note: formData.get("note") ?? "",
+    items: formData.get("items") ?? "[]",
   });
   const errors: Partial<Record<LoanFormField, LoanFormErrorKey>> = {};
   if (!parsed.success) {
@@ -39,7 +41,26 @@ export async function saveLoan(id: string | null, _previous: LoanFormState, form
   }
   const data = parsed.data;
   const rawLocale = await getLocale();
-  const amount = parseMoneyInput(data.amount, isLocale(rawLocale) ? rawLocale : "tr");
+  const locale = isLocale(rawLocale) ? rawLocale : "tr";
+  // Kalemler (çoklu kalem): her birinin adı ve tutarı zorunlu; toplam alacak tutarı olur.
+  const items: LoanItem[] = [];
+  let rawItems: unknown = [];
+  try {
+    rawItems = JSON.parse(data.items);
+  } catch {
+    errors.items = "items";
+  }
+  if (Array.isArray(rawItems)) {
+    if (rawItems.length > LOAN_ITEMS_MAX) errors.items = "items";
+    for (const raw of rawItems.slice(0, LOAN_ITEMS_MAX)) {
+      const label = typeof raw?.label === "string" ? raw.label.trim() : "";
+      const itemAmount = typeof raw?.amount === "string" ? parseMoneyInput(raw.amount, locale) : null;
+      if (!label || label.length > LOAN_ITEM_LABEL_MAX_LENGTH) errors.items ??= "itemLabel";
+      if (itemAmount === null) errors.items ??= "itemAmount";
+      if (label && itemAmount !== null) items.push({ id: typeof raw?.id === "string" && raw.id ? raw.id : crypto.randomUUID(), label, amountMinor: itemAmount });
+    }
+  }
+  const amount = items.length > 0 ? items.reduce((sum, item) => sum + item.amountMinor, BigInt(0)) : parseMoneyInput(data.amount, locale);
   if (amount === null) errors.amount = "amount";
   const fromAccount = data.fromAccount === "true";
   if (fromAccount) {
@@ -58,6 +79,7 @@ export async function saveLoan(id: string | null, _previous: LoanFormState, form
     lentOn: data.lentOn,
     dueOn: data.dueOn,
     note: data.note || null,
+    items,
   };
   if (id) {
     if (!(await updateLoan(id, input))) return { formError: "notFound" };

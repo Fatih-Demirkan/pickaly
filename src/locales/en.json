@@ -671,6 +671,12 @@
       "toAccountHint": "The amount is moved from the savings into {account}.",
       "noLinkedAccount": "This savings account isn't linked to an account; the movement won't affect account balances. Edit the savings to choose one.",
       "unitHint": "Piece / gram savings don't affect account balances."
+    },
+    "quickAdd": {
+      "label": "Add {amount} to {name}",
+      "open": "Add money to {name}",
+      "done": "Added {amount} to {name}.",
+      "failed": "Couldn't add. Please try again."
     }
   },
   "categories": {
@@ -1138,7 +1144,8 @@
       "balanceHint": "The amount was taken from the account balance and goes back to the same account when repaid. It isn't counted as income or expense.",
       "balanceHintNoAccount": "This loan was recorded without money leaving an account; when repaid, the amount is added to your default account. It isn't counted as income or expense.",
       "edit": "Edit",
-      "delete": "Delete loan"
+      "delete": "Delete loan",
+      "items": "Items"
     },
     "deleteDialog": {
       "title": "Delete this loan?",
@@ -1179,7 +1186,29 @@
         "account": "Choose an account.",
         "date": "Choose a valid date.",
         "dueBeforeLent": "The payback date can't be before the lending date.",
-        "note": "The note can be up to {max} characters."
+        "note": "The note can be up to {max} characters.",
+        "items": "Check the items.",
+        "itemLabel": "Every item needs a name.",
+        "itemAmount": "Enter a valid amount for every item."
+      },
+      "multi": "Multiple items",
+      "multiHint": "Several amounts under one title (e.g. bills)",
+      "items": {
+        "label": "Item {index} name",
+        "amount": "Item {index} amount",
+        "remove": "Remove item {index}",
+        "add": "Add item",
+        "labelPlaceholder": "e.g. Gas bill"
+      }
+    },
+    "itemCount": "{count} items",
+    "upcoming": {
+      "title": "Upcoming receivables",
+      "all": "All ({count})",
+      "due": {
+        "inDays": "{count} days left",
+        "today": "Due back today",
+        "overdue": "{count} days overdue"
       }
     }
   }

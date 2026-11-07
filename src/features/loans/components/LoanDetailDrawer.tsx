@@ -51,6 +51,23 @@ export async function LoanDetailDrawer({ id, closeHref = LOANS_PATH }: { id: str
             <p className="text-title-lg text-text-primary">{formatMoney(loan.amountMinor, locale)}</p>
           </section>
 
+          {loan.items.length > 0 && (
+            // Kalemler (çoklu kalem, 2026-11-07): liste grubu; ad body + tutar body-strong.
+            <section aria-labelledby={`${titleId}-items`} className="flex flex-col gap-8">
+              <h3 id={`${titleId}-items`} className="text-body-strong text-text-secondary">
+                {t("detail.items")}
+              </h3>
+              <ul className="divide-y divide-border-subtle overflow-hidden rounded-lg bg-surface-card shadow-elev-1">
+                {loan.items.map((item) => (
+                  <li key={item.id} className="flex min-h-56 items-center justify-between gap-12 px-16 py-12">
+                    <span className="min-w-0 truncate text-body text-text-primary">{item.label}</span>
+                    <span className="shrink-0 text-body-strong text-text-primary">{formatMoney(item.amountMinor, locale)}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           <dl className="overflow-hidden rounded-lg bg-surface-card shadow-elev-1">
             <DetailRow icon="calendar" label={t("detail.lentOn")}>
               <span className="text-body-strong text-text-primary">{formatDateLong(loan.lentOn, locale)}</span>

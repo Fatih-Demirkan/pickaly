@@ -15,12 +15,15 @@ import { formatMoneyInput, formatMoneyTyping, parseMoneyInput } from "@/lib/mone
 import { saveLoan } from "../actions";
 import { LOAN_NOTE_MAX_LENGTH, LOAN_PERSON_MAX_LENGTH, LOAN_PURPOSE_MAX_LENGTH } from "../domain/types";
 import type { LoanFormField, LoanFormState } from "../schemas";
+import { LoanItemsEditor, newItemDraft, type LoanItemDraft } from "./LoanItemsEditor";
 
 // Borç Ver / Alacağı Düzenle (ürün sahibi isteği 2026-11-07). Yeni İşlem formunun dili ve bileşenleri
 // (DESIGN_SYSTEM_PICKALY §5.7; yeni görsel öğe yok):
 //   Tutar kartı ("Borç Verildi" çipi, teal) · Kime* · Ne için · "Hesabımdan çıktı" kartı (Tekrar Eden İşlem kartı kalıbı:
 //   açıkken hesap seçici; kapalıyken yalnızca alacak kaydı, bakiye değişmez) · Verildiği tarih / Geri alınacak tarih ·
 //   Not (x/200) · alt bar İptal + Kaydet.
+// "Çoklu kalem" (2026-11-07): "Ne için" üst başlık olur, altında ad + tutar kalemleri; tutar kartı kalemlerin toplamını
+//   gösterir (salt okunur).
 
 export type LoanFormValues = {
   person: string;
@@ -31,6 +34,8 @@ export type LoanFormValues = {
   lentOn: string;
   dueOn: string;
   note: string;
+  multi: boolean;
+  items: LoanItemDraft[];
 };
 
 type LoanFormProps = {
@@ -95,10 +100,15 @@ export function LoanForm({ loanId, initialValues, accounts, cancelHref }: LoanFo
       </p>
     ) : null;
   const minor = parseMoneyInput(values.amount, locale);
+  // Çoklu kalemde toplam: geçerli tutarların toplamı (kart salt okunur).
+  const itemsTotal = values.items.reduce((sum, item) => sum + (parseMoneyInput(item.amount, locale) ?? BigInt(0)), BigInt(0));
+  const shownAmount = values.multi ? (itemsTotal > BigInt(0) ? formatMoneyInput(itemsTotal, locale) : "") : values.amount;
+  const submittedItems = values.multi ? values.items.filter((item) => item.label.trim() || item.amount.trim()).map(({ id, label, amount }) => ({ id, label, amount })) : [];
 
   return (
     <form action={formAction} noValidate className="flex flex-1 flex-col gap-(--layout-section-gap)">
       <input type="hidden" name="fromAccount" value={String(values.fromAccount)} />
+      <input type="hidden" name="items" value={JSON.stringify(submittedItems)} />
       {!values.fromAccount && <input type="hidden" name="accountId" value="" />}
 
       {state.formError && (
@@ -119,10 +129,11 @@ export function LoanForm({ loanId, initialValues, accounts, cancelHref }: LoanFo
             inputMode="decimal"
             autoComplete="off"
             placeholder="0"
-            value={values.amount}
+            value={shownAmount}
+            readOnly={values.multi}
             onChange={(event) => set("amount", formatMoneyTyping(event.target.value, locale))}
             onBlur={() => {
-              if (minor !== null) set("amount", formatMoneyInput(minor, locale));
+              if (!values.multi && minor !== null) set("amount", formatMoneyInput(minor, locale));
             }}
             aria-invalid={invalid("amount")}
             aria-describedby={describedBy("amount")}
@@ -166,6 +177,41 @@ export function LoanForm({ loanId, initialValues, accounts, cancelHref }: LoanFo
           className={inputClass}
         />
         {errorNode("purpose")}
+      </div>
+
+      <div className="flex flex-col gap-12 rounded-lg bg-surface-card p-12 shadow-elev-1">
+        <div className="flex items-center justify-between gap-12">
+          <div className="flex min-w-0 items-center gap-12">
+            <span aria-hidden className="inline-flex size-40 shrink-0 items-center justify-center rounded-md bg-category-slate text-category-fg-slate">
+              <Icon icon="task" />
+            </span>
+            <div className="flex min-w-0 flex-col gap-2">
+              <p id="multi-label" className="text-body-strong text-text-primary">
+                {t("multi")}
+              </p>
+              <p id="multi-hint" className="text-caption text-text-secondary">
+                {t("multiHint")}
+              </p>
+            </div>
+          </div>
+          <Switch
+            id="multi"
+            checked={values.multi}
+            onChange={(next) => {
+              set("multi", next);
+              if (next && values.items.length === 0) set("items", [newItemDraft()]);
+            }}
+            labelledBy="multi-label"
+            describedBy="multi-hint"
+          />
+        </div>
+        {values.multi && (
+          <>
+            <div className="border-t border-border-default" />
+            <LoanItemsEditor value={values.items} onChange={(next) => set("items", next)} invalid={invalid("items")} describedBy={describedBy("items")} />
+            {errorNode("items")}
+          </>
+        )}
       </div>
 
       <div className="flex flex-col gap-12 rounded-lg bg-surface-card p-12 shadow-elev-1">

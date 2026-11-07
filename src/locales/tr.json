@@ -671,6 +671,12 @@
       "toAccountHint": "Tutar birikimden {account} hesabınıza aktarılır.",
       "noLinkedAccount": "Bu birikim bir hesaba bağlı değil; hareket hesap bakiyelerine yansımaz. Hesabı birikimi düzenleyerek seçebilirsiniz.",
       "unitHint": "Adet / gram birimli birikimde hesap bakiyelerine dokunulmaz."
+    },
+    "quickAdd": {
+      "label": "{name} birikimine {amount} ekle",
+      "open": "{name} birikimine para ekle",
+      "done": "{name} birikimine {amount} eklendi.",
+      "failed": "Eklenemedi. Lütfen tekrar deneyin."
     }
   },
   "categories": {
@@ -1138,7 +1144,8 @@
       "balanceHint": "Borç verilen tutar hesabın bakiyesinden düştü; geri alındığında aynı hesaba eklenir. Gelir veya gider sayılmaz.",
       "balanceHintNoAccount": "Bu alacak hesabından para çıkmadan kaydedildi; geri alındığında tutar varsayılan hesabına eklenir. Gelir veya gider sayılmaz.",
       "edit": "Düzenle",
-      "delete": "Alacağı sil"
+      "delete": "Alacağı sil",
+      "items": "Kalemler"
     },
     "deleteDialog": {
       "title": "Alacak silinsin mi?",
@@ -1179,7 +1186,29 @@
         "account": "Bir hesap seç.",
         "date": "Geçerli bir tarih seç.",
         "dueBeforeLent": "Geri alınacak tarih, verildiği tarihten önce olamaz.",
-        "note": "Not en fazla {max} karakter olabilir."
+        "note": "Not en fazla {max} karakter olabilir.",
+        "items": "Kalemleri kontrol et.",
+        "itemLabel": "Her kalemin bir adı olmalı.",
+        "itemAmount": "Her kalem için geçerli bir tutar gir."
+      },
+      "multi": "Çoklu kalem",
+      "multiHint": "Bir başlık altında birden çok alacak (örn. faturalar)",
+      "items": {
+        "label": "{index}. kalem adı",
+        "amount": "{index}. kalem tutarı",
+        "remove": "{index}. kalemi sil",
+        "add": "Kalem ekle",
+        "labelPlaceholder": "Örn. Doğalgaz"
+      }
+    },
+    "itemCount": "{count} kalem",
+    "upcoming": {
+      "title": "Yaklaşan Alacaklar",
+      "all": "Tümü ({count})",
+      "due": {
+        "inDays": "{count} gün kaldı",
+        "today": "Bugün geri alınacak",
+        "overdue": "{count} gün gecikti"
       }
     }
   }
